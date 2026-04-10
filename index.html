@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miller Hardware — Delivery Log | Yellville</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B; --red-dark: #96281B;
+    --ink: #1A1A1A; --gray-900: #2C2C2C; --gray-700: #4A4A4A;
+    --gray-500: #7A7A7A; --gray-300: #C8C8C8; --gray-100: #F2F2F0;
+    --gray-50: #F8F8F6; --white: #FFFFFF;
+    --green: #1E6B45; --green-light: #E8F5EE;
+    --amber: #B8680A; --amber-light: #FEF3E2;
+    --blue: #1B4F8A; --blue-light: #E8F0FA;
+    --purple: #5C2D8A; --purple-light: #F0E8FA;
+    --border: #DEDEDD;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--gray-100); color: var(--ink); min-height: 100vh; }
+
+  header { background: var(--ink); border-bottom: 4px solid var(--red); }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .logo-block { display: flex; align-items: baseline; gap: 12px; }
+  .logo-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--white); line-height: 1; }
+  .logo-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--gray-300); letter-spacing: 3px; text-transform: uppercase; }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .location-badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; background: var(--red); color: var(--white); padding: 4px 10px; text-transform: uppercase; }
+  #live-clock { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gray-300); }
+
+  .tab-nav { background: var(--gray-900); }
+  .tab-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; }
+  .tab-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 28px; border: none; background: transparent; color: var(--gray-500); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .tab-btn:hover { color: var(--gray-300); }
+  .tab-btn.active { color: var(--white); border-bottom-color: var(--red); }
+  .tab-btn .count-pill { display: inline-block; background: var(--red); color: var(--white); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; margin-left: 6px; vertical-align: middle; font-weight: 600; }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 28px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .toolbar-left { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .search-box { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; padding: 8px 12px; border: 1px solid var(--border); background: var(--white); color: var(--ink); width: 220px; outline: none; }
+  .search-box:focus { border-color: var(--red); }
+  select.filter-select { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; padding: 8px 10px; border: 1px solid var(--border); background: var(--white); color: var(--ink); outline: none; cursor: pointer; }
+  .btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; padding: 9px 18px; border: none; cursor: pointer; transition: background 0.15s; text-transform: uppercase; }
+  .btn-primary { background: var(--red); color: var(--white); }
+  .btn-primary:hover { background: var(--red-dark); }
+  .btn-sm { padding: 5px 10px; font-size: 0.65rem; }
+  .btn-ghost { background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 5px 10px; font-size: 0.65rem; }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--ink); }
+
+  .table-wrap { background: var(--white); border: 1px solid var(--border); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  thead tr { background: var(--ink); color: var(--white); }
+  th { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 11px 14px; text-align: left; font-weight: 500; white-space: nowrap; }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-50); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; font-weight: 600; display: inline-block; white-space: nowrap; }
+  .badge-order-in  { background: var(--purple-light); color: var(--purple); }
+  .badge-loading   { background: var(--amber-light);  color: var(--amber); }
+  .badge-out       { background: var(--blue-light);   color: var(--blue); }
+  .badge-completed { background: var(--green-light);  color: var(--green); }
+  .badge-expected  { background: var(--blue-light);   color: var(--blue); }
+  .badge-received  { background: var(--green-light);  color: var(--green); }
+  .badge-partial   { background: var(--amber-light);  color: var(--amber); }
+  .badge-overdue   { background: #FDECEC;             color: var(--red); }
+
+  .action-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .empty-state { padding: 60px 20px; text-align: center; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; letter-spacing: 1px; }
+  .empty-state .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: 0.3; }
+
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .summary-card { background: var(--white); border: 1px solid var(--border); padding: 16px 18px; border-left: 4px solid var(--gray-300); }
+  .summary-card.red    { border-left-color: var(--red); }
+  .summary-card.green  { border-left-color: var(--green); }
+  .summary-card.amber  { border-left-color: var(--amber); }
+  .summary-card.blue   { border-left-color: var(--blue); }
+  .summary-card.purple { border-left-color: var(--purple); }
+  .sc-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 6px; }
+  .sc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; color: var(--ink); }
+
+  /* progress dots */
+  .progress-track { display: flex; gap: 4px; align-items: center; margin-top: 5px; }
+  .pdot { width: 9px; height: 9px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
+  .pdot.p-order-in  { background: var(--purple); }
+  .pdot.p-loading   { background: var(--amber); }
+  .pdot.p-out       { background: var(--blue); }
+  .pdot.p-completed { background: var(--green); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; border-top: 4px solid var(--red); animation: slideUp 0.2s ease; }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header { padding: 20px 24px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; }
+  .modal-close { font-size: 1.4rem; background: none; border: none; cursor: pointer; color: var(--gray-500); padding: 2px 6px; }
+  .modal-close:hover { color: var(--ink); }
+  .modal-body { padding: 22px 24px; }
+  .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  .form-grid { display: grid; gap: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-700); font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; padding: 9px 11px; border: 1px solid var(--border); background: var(--white); color: var(--ink); outline: none; transition: border-color 0.15s; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-divider { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding: 8px 0 2px; border-top: 1px solid var(--border); margin-top: 4px; }
+
+  /* photo upload */
+  .photo-upload-area { border: 2px dashed var(--border); background: var(--gray-50); padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s; position: relative; }
+  .photo-upload-area:hover { border-color: var(--red); }
+  .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); pointer-events: none; }
+  .upload-label .upload-icon { font-size: 2rem; display: block; margin-bottom: 6px; opacity: 0.4; }
+  .photo-preview-wrap { position: relative; display: inline-block; margin-top: 10px; }
+  .photo-preview-wrap img { max-width: 100%; max-height: 200px; display: block; border: 1px solid var(--border); }
+  .photo-clear-btn { position: absolute; top: 4px; right: 4px; background: var(--red); color: white; border: none; cursor: pointer; font-size: 0.7rem; padding: 3px 7px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
+
+  /* detail */
+  .detail-section { margin-bottom: 20px; }
+  .detail-section-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+  .di-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 2px; }
+  .di-value { font-size: 0.87rem; color: var(--ink); font-weight: 500; }
+  .photo-display img { max-width: 100%; max-height: 280px; border: 1px solid var(--border); display: block; margin-top: 6px; }
+  .no-photo { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--gray-500); font-style: italic; margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .form-row { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .summary-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <span class="logo-name">Miller Hardware</span>
+      <span class="logo-sub">Est. 1931</span>
+    </div>
+    <div class="header-right">
+      <span class="location-badge">Yellville</span>
+      <span id="live-clock"></span>
+    </div>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="switchTab('out',this)">
+      Deliveries Out <span class="count-pill" id="count-out">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('in',this)">
+      Deliveries Due In <span class="count-pill" id="count-in">0</span>
+    </button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- OUTBOUND PANEL -->
+  <div id="panel-out" class="tab-panel active">
+    <div class="summary-row" id="summary-out"></div>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <input class="search-box" type="text" placeholder="Search customer, address…" oninput="renderOut()" id="search-out">
+        <select class="filter-select" onchange="renderOut()" id="filter-out-status">
+          <option value="">All Statuses</option>
+          <option value="Order In">Order In</option>
+          <option value="Loading">Loading</option>
+          <option value="Out for Delivery">Out for Delivery</option>
+          <option value="Completed">Completed</option>
+        </select>
+        <select class="filter-select" onchange="renderOut()" id="filter-out-driver">
+          <option value="">All Drivers</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="openOutModal()">+ New Delivery</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Customer</th><th>Address</th><th>Items</th>
+            <th>Driver</th><th>Date / Window</th><th>Status</th><th>📷</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-out"></tbody>
+      </table>
+      <div id="empty-out" class="empty-state" style="display:none">
+        <span class="empty-icon">🚚</span>No outbound deliveries logged yet.
+      </div>
+    </div>
+  </div>
+
+  <!-- INBOUND PANEL -->
+  <div id="panel-in" class="tab-panel">
+    <div class="summary-row" id="summary-in"></div>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <input class="search-box" type="text" placeholder="Search vendor, PO…" oninput="renderIn()" id="search-in">
+        <select class="filter-select" onchange="renderIn()" id="filter-in-status">
+          <option value="">All Statuses</option>
+          <option value="Expected">Expected</option>
+          <option value="Partial">Partial</option>
+          <option value="Received">Received</option>
+          <option value="Overdue">Overdue</option>
+        </select>
+        <select class="filter-select" onchange="renderIn()" id="filter-in-vendor">
+          <option value="">All Vendors</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="openInModal()">+ New Inbound</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Vendor</th><th>PO Number</th><th>Items / Qty</th>
+            <th>Expected</th><th>Status</th><th>Received</th><th>Notes</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-in"></tbody>
+      </table>
+      <div id="empty-in" class="empty-state" style="display:none">
+        <span class="empty-icon">📦</span>No inbound deliveries logged yet.
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- OUTBOUND MODAL -->
+<div class="modal-overlay" id="modal-out">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-out-title">New Delivery Out</span>
+      <button class="modal-close" onclick="closeOutModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-divider">Customer Info</div>
+        <div class="form-row">
+          <div class="form-group"><label>Customer Name *</label><input type="text" id="out-customer" placeholder="Full name"></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="out-phone" placeholder="(870) 555-0000"></div>
+        </div>
+        <div class="form-group"><label>Delivery Address</label><input type="text" id="out-address" placeholder="Street, City, ZIP"></div>
+
+        <div class="form-divider">Order Details</div>
+        <div class="form-group"><label>Items / Description *</label><textarea id="out-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Driver</label><input type="text" id="out-driver" placeholder="Driver name"></div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="out-status">
+              <option>Order In</option><option>Loading</option>
+              <option>Out for Delivery</option><option>Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Delivery Date</label><input type="date" id="out-date"></div>
+          <div class="form-group"><label>Time Window</label><input type="text" id="out-window" placeholder="e.g. 8am – 11am"></div>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea id="out-notes" placeholder="Gate code, access notes, special instructions…"></textarea></div>
+
+        <div class="form-divider">Proof of Delivery — Photo</div>
+        <div class="form-group">
+          <label>Photo (tap to use camera or upload)</label>
+          <div class="photo-upload-area">
+            <input type="file" accept="image/*" capture="environment" id="out-photo-input" onchange="handlePhoto(event,'out')">
+            <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
+          </div>
+          <div id="out-photo-preview"></div>
+        </div>
+        <div class="form-group"><label>Received By (print name)</label><input type="text" id="out-received-by" placeholder="Name of person who accepted delivery"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeOutModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOut()">Save Delivery</button>
+    </div>
+  </div>
+</div>
+
+<!-- INBOUND MODAL -->
+<div class="modal-overlay" id="modal-in">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-in-title">New Inbound Order</span>
+      <button class="modal-close" onclick="closeInModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-divider">Vendor Info</div>
+        <div class="form-row">
+          <div class="form-group"><label>Vendor / Supplier *</label><input type="text" id="in-vendor" placeholder="e.g. Orgill, Prinsco, Stihl SW"></div>
+          <div class="form-group"><label>PO Number</label><input type="text" id="in-po" placeholder="PO-XXXXX"></div>
+        </div>
+        <div class="form-divider">Order Details</div>
+        <div class="form-group"><label>Items / Description</label><textarea id="in-items" placeholder="e.g. 12 boxes 15A outlets, 2 rolls 12/2 wire…"></textarea></div>
+        <div class="form-group"><label>Quantity / Units</label><input type="text" id="in-qty" placeholder="e.g. 3 pallets, 48 units, 200 lf"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Expected Delivery Date</label><input type="date" id="in-expected"></div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="in-status">
+              <option>Expected</option><option>Partial</option>
+              <option>Received</option><option>Overdue</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Received Date</label><input type="date" id="in-received-date"></div>
+          <div class="form-group"><label>Received By</label><input type="text" id="in-received-by" placeholder="Employee name"></div>
+        </div>
+        <div class="form-group"><label>Notes / Discrepancies</label><textarea id="in-notes" placeholder="Short shipped, damaged cartons, backorder items…"></textarea></div>
+        <div class="form-divider">Receiving Photo (optional)</div>
+        <div class="form-group">
+          <label>Photo (tap to use camera or upload)</label>
+          <div class="photo-upload-area">
+            <input type="file" accept="image/*" capture="environment" id="in-photo-input" onchange="handlePhoto(event,'in')">
+            <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
+          </div>
+          <div id="in-photo-preview"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeInModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveIn()">Save Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="detail-title">Record Detail</span>
+      <button class="modal-close" onclick="closeDetail()">×</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STORAGE
+const SK_OUT = 'mh_del_out_v2', SK_IN = 'mh_del_in_v2';
+function load(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } }
+function save(k, d) { localStorage.setItem(k, JSON.stringify(d)); }
+let outRecords = load(SK_OUT), inRecords = load(SK_IN);
+let editingOutId = null, editingInId = null;
+let tempOutPhoto = null, tempInPhoto = null;
+
+// ── CLOCK
+function tick() {
+  const n = new Date();
+  document.getElementById('live-clock').textContent =
+    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' +
+    n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(tick, 1000); tick();
+
+// ── TABS
+function switchTab(t, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + t).classList.add('active');
+}
+
+// ── PHOTO
+function handlePhoto(e, which) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    if (which === 'out') tempOutPhoto = ev.target.result;
+    else tempInPhoto = ev.target.result;
+    renderPhotoPreview(which, ev.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+function renderPhotoPreview(which, data) {
+  const el = document.getElementById(which + '-photo-preview');
+  if (!data) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="photo-preview-wrap">
+    <img src="${data}" alt="Photo">
+    <button class="photo-clear-btn" onclick="clearPhoto('${which}')">✕ Remove</button>
+  </div>`;
+}
+function clearPhoto(which) {
+  if (which === 'out') { tempOutPhoto = null; document.getElementById('out-photo-input').value = ''; }
+  else { tempInPhoto = null; document.getElementById('in-photo-input').value = ''; }
+  renderPhotoPreview(which, null);
+}
+
+// ── OUTBOUND
+const OUT_STATUSES = ['Order In','Loading','Out for Delivery','Completed'];
+const OUT_COLORS   = { 'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)' };
+const OUT_DOT_CLS  = { 'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed' };
+
+function nextId(arr) { return arr.length ? Math.max(...arr.map(r=>r.id)) + 1 : 1; }
+
+function openOutModal(id) {
+  editingOutId = id || null; tempOutPhoto = null;
+  document.getElementById('out-photo-preview').innerHTML = '';
+  document.getElementById('out-photo-input').value = '';
+  const r = id ? outRecords.find(x=>x.id===id) : null;
+  document.getElementById('modal-out-title').textContent = id ? 'Edit Delivery #'+id : 'New Delivery Out';
+  document.getElementById('out-customer').value    = r?.customer   || '';
+  document.getElementById('out-phone').value       = r?.phone      || '';
+  document.getElementById('out-address').value     = r?.address    || '';
+  document.getElementById('out-items').value       = r?.items      || '';
+  document.getElementById('out-driver').value      = r?.driver     || '';
+  document.getElementById('out-status').value      = r?.status     || 'Order In';
+  document.getElementById('out-date').value        = r?.date       || new Date().toISOString().slice(0,10);
+  document.getElementById('out-window').value      = r?.window     || '';
+  document.getElementById('out-notes').value       = r?.notes      || '';
+  document.getElementById('out-received-by').value = r?.receivedBy || '';
+  if (r?.photo) { tempOutPhoto = r.photo; renderPhotoPreview('out', r.photo); }
+  document.getElementById('modal-out').classList.add('open');
+}
+function closeOutModal() { document.getElementById('modal-out').classList.remove('open'); editingOutId = null; }
+
+function saveOut() {
+  const customer = document.getElementById('out-customer').value.trim();
+  const items    = document.getElementById('out-items').value.trim();
+  if (!customer || !items) { alert('Customer name and items are required.'); return; }
+  const rec = {
+    id: editingOutId || nextId(outRecords),
+    customer, items,
+    phone:      document.getElementById('out-phone').value.trim(),
+    address:    document.getElementById('out-address').value.trim(),
+    driver:     document.getElementById('out-driver').value.trim(),
+    status:     document.getElementById('out-status').value,
+    date:       document.getElementById('out-date').value,
+    window:     document.getElementById('out-window').value.trim(),
+    notes:      document.getElementById('out-notes').value.trim(),
+    receivedBy: document.getElementById('out-received-by').value.trim(),
+    photo:      tempOutPhoto,
+    created:    editingOutId ? outRecords.find(x=>x.id===editingOutId).created : new Date().toISOString(),
+    updated:    new Date().toISOString()
+  };
+  outRecords = editingOutId ? outRecords.map(r=>r.id===editingOutId?rec:r) : [...outRecords, rec];
+  save(SK_OUT, outRecords); closeOutModal(); renderOut();
+}
+
+function deleteOut(id) {
+  if (!confirm('Delete this delivery record?')) return;
+  outRecords = outRecords.filter(r=>r.id!==id); save(SK_OUT, outRecords); renderOut();
+}
+
+function advanceOut(id) {
+  const r = outRecords.find(x=>x.id===id);
+  const idx = OUT_STATUSES.indexOf(r.status);
+  if (idx < OUT_STATUSES.length - 1) {
+    outRecords = outRecords.map(x=>x.id===id?{...x,status:OUT_STATUSES[idx+1]}:x);
+    save(SK_OUT, outRecords); renderOut();
+  }
+}
+
+function renderOut() {
+  const search  = document.getElementById('search-out').value.toLowerCase();
+  const fStatus = document.getElementById('filter-out-status').value;
+  const fDriver = document.getElementById('filter-out-driver').value;
+  const drivers = [...new Set(outRecords.map(r=>r.driver).filter(Boolean))];
+  const dSel = document.getElementById('filter-out-driver'); const curD = dSel.value;
+  dSel.innerHTML = '<option value="">All Drivers</option>' +
+    drivers.map(d=>`<option value="${esc(d)}"${d===curD?' selected':''}>${esc(d)}</option>`).join('');
+  let rows = outRecords.filter(r => {
+    if (fStatus && r.status !== fStatus) return false;
+    if (fDriver && r.driver !== fDriver) return false;
+    if (search && !`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search)) return false;
+    return true;
+  }).sort((a,b) => b.id - a.id);
+  const tbody = document.getElementById('tbody-out');
+  const empty = document.getElementById('empty-out');
+  if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = rows.map(r => {
+      const idx = OUT_STATUSES.indexOf(r.status);
+      const dots = OUT_STATUSES.map((s,i) => {
+        const cls = i <= idx ? 'pdot ' + OUT_DOT_CLS[s] : 'pdot';
+        return `<div class="${cls}" title="${s}"></div>`;
+      }).join('');
+      const nextS = idx < OUT_STATUSES.length-1 ? OUT_STATUSES[idx+1] : null;
+      return `<tr>
+        <td class="mono" style="color:var(--gray-500);font-size:0.75rem">#${r.id}</td>
+        <td><strong>${esc(r.customer)}</strong>${r.phone?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.phone)}</span>`:''}</td>
+        <td style="max-width:150px;font-size:0.8rem">${esc(r.address||'—')}</td>
+        <td style="max-width:170px;font-size:0.8rem">${esc(r.items.length>55?r.items.slice(0,55)+'…':r.items)}</td>
+        <td>${r.driver?esc(r.driver):'<span style="color:var(--gray-300)">—</span>'}</td>
+        <td class="mono" style="font-size:0.75rem">${fmtDate(r.date)}${r.window?`<br><span style="color:var(--gray-500)">${esc(r.window)}</span>`:''}</td>
+        <td>${badge(r.status)}<div class="progress-track">${dots}</div></td>
+        <td style="text-align:center">${r.photo?'📷':'<span style="color:var(--gray-300)">—</span>'}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-ghost btn-sm" onclick="viewOut(${r.id})">View</button>
+            <button class="btn btn-ghost btn-sm" onclick="openOutModal(${r.id})">Edit</button>
+            ${nextS?`<button class="btn btn-sm" style="background:${OUT_COLORS[nextS]};color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="advanceOut(${r.id})">→ ${esc(nextS)}</button>`:''}
+            <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteOut(${r.id})">Del</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  const total=outRecords.length, orderIn=outRecords.filter(r=>r.status==='Order In').length,
+    loading=outRecords.filter(r=>r.status==='Loading').length,
+    enRoute=outRecords.filter(r=>r.status==='Out for Delivery').length,
+    completed=outRecords.filter(r=>r.status==='Completed').length;
+  document.getElementById('summary-out').innerHTML = `
+    <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
+    <div class="summary-card purple"><div class="sc-label">Order In</div><div class="sc-value">${orderIn}</div></div>
+    <div class="summary-card amber"><div class="sc-label">Loading</div><div class="sc-value">${loading}</div></div>
+    <div class="summary-card blue"><div class="sc-label">En Route</div><div class="sc-value">${enRoute}</div></div>
+    <div class="summary-card green"><div class="sc-label">Completed</div><div class="sc-value">${completed}</div></div>`;
+  document.getElementById('count-out').textContent = outRecords.filter(r=>r.status!=='Completed').length;
+}
+
+function viewOut(id) {
+  const r = outRecords.find(x=>x.id===id);
+  document.getElementById('detail-title').textContent = `Delivery #${r.id} — ${r.customer}`;
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Customer</div>
+      <div class="detail-grid">
+        <div><div class="di-label">Name</div><div class="di-value">${esc(r.customer)}</div></div>
+        <div><div class="di-label">Phone</div><div class="di-value">${esc(r.phone||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="di-label">Address</div><div class="di-value">${esc(r.address||'—')}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Order</div>
+      <div class="detail-grid">
+        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items)}</div></div>
+        <div><div class="di-label">Driver</div><div class="di-value">${esc(r.driver||'—')}</div></div>
+        <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
+        <div><div class="di-label">Date</div><div class="di-value">${fmtDate(r.date)}</div></div>
+        <div><div class="di-label">Window</div><div class="di-value">${esc(r.window||'—')}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Proof of Delivery</div>
+      <div class="di-label" style="margin-bottom:4px">Received By</div>
+      <div class="di-value" style="margin-bottom:12px">${esc(r.receivedBy||'—')}</div>
+      <div class="di-label">Photo</div>
+      ${r.photo?`<div class="photo-display"><img src="${r.photo}" alt="Delivery photo"></div>`:'<div class="no-photo">No photo attached</div>'}
+    </div>`;
+  document.getElementById('modal-detail').classList.add('open');
+}
+
+// ── INBOUND
+function openInModal(id) {
+  editingInId = id || null; tempInPhoto = null;
+  document.getElementById('in-photo-preview').innerHTML = '';
+  document.getElementById('in-photo-input').value = '';
+  const r = id ? inRecords.find(x=>x.id===id) : null;
+  document.getElementById('modal-in-title').textContent = id ? 'Edit Inbound #'+id : 'New Inbound Order';
+  document.getElementById('in-vendor').value        = r?.vendor       || '';
+  document.getElementById('in-po').value            = r?.po           || '';
+  document.getElementById('in-items').value         = r?.items        || '';
+  document.getElementById('in-qty').value           = r?.qty          || '';
+  document.getElementById('in-expected').value      = r?.expected     || '';
+  document.getElementById('in-status').value        = r?.status       || 'Expected';
+  document.getElementById('in-received-date').value = r?.receivedDate || '';
+  document.getElementById('in-received-by').value   = r?.receivedBy   || '';
+  document.getElementById('in-notes').value         = r?.notes        || '';
+  if (r?.photo) { tempInPhoto = r.photo; renderPhotoPreview('in', r.photo); }
+  document.getElementById('modal-in').classList.add('open');
+}
+function closeInModal() { document.getElementById('modal-in').classList.remove('open'); editingInId = null; }
+
+function saveIn() {
+  const vendor = document.getElementById('in-vendor').value.trim();
+  if (!vendor) { alert('Vendor name is required.'); return; }
+  let status = document.getElementById('in-status').value;
+  const exp  = document.getElementById('in-expected').value;
+  if (status==='Expected' && exp && exp < new Date().toISOString().slice(0,10)) status = 'Overdue';
+  const rec = {
+    id: editingInId || nextId(inRecords), vendor, status,
+    po:           document.getElementById('in-po').value.trim(),
+    items:        document.getElementById('in-items').value.trim(),
+    qty:          document.getElementById('in-qty').value.trim(),
+    expected:     exp,
+    receivedDate: document.getElementById('in-received-date').value,
+    receivedBy:   document.getElementById('in-received-by').value.trim(),
+    notes:        document.getElementById('in-notes').value.trim(),
+    photo:        tempInPhoto,
+    created:      editingInId ? inRecords.find(x=>x.id===editingInId).created : new Date().toISOString(),
+    updated:      new Date().toISOString()
+  };
+  inRecords = editingInId ? inRecords.map(r=>r.id===editingInId?rec:r) : [...inRecords, rec];
+  save(SK_IN, inRecords); closeInModal(); renderIn();
+}
+function deleteIn(id) {
+  if (!confirm('Delete this inbound record?')) return;
+  inRecords = inRecords.filter(r=>r.id!==id); save(SK_IN, inRecords); renderIn();
+}
+function statusIn(id, status) {
+  const today = new Date().toISOString().slice(0,10);
+  inRecords = inRecords.map(r=>r.id===id?{...r,status,receivedDate:status==='Received'?today:r.receivedDate}:r);
+  save(SK_IN, inRecords); renderIn();
+}
+
+function renderIn() {
+  const today = new Date().toISOString().slice(0,10);
+  inRecords = inRecords.map(r => (r.status==='Expected'&&r.expected&&r.expected<today)?{...r,status:'Overdue'}:r);
+  save(SK_IN, inRecords);
+  const search  = document.getElementById('search-in').value.toLowerCase();
+  const fStatus = document.getElementById('filter-in-status').value;
+  const fVendor = document.getElementById('filter-in-vendor').value;
+  const vendors = [...new Set(inRecords.map(r=>r.vendor).filter(Boolean))];
+  const vSel = document.getElementById('filter-in-vendor'); const curV = vSel.value;
+  vSel.innerHTML = '<option value="">All Vendors</option>' +
+    vendors.map(v=>`<option value="${esc(v)}"${v===curV?' selected':''}>${esc(v)}</option>`).join('');
+  let rows = inRecords.filter(r => {
+    if (fStatus && r.status !== fStatus) return false;
+    if (fVendor && r.vendor !== fVendor) return false;
+    if (search && !`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search)) return false;
+    return true;
+  }).sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
+  const tbody = document.getElementById('tbody-in');
+  const empty = document.getElementById('empty-in');
+  if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = rows.map(r => `<tr>
+      <td class="mono" style="color:var(--gray-500);font-size:0.75rem">#${r.id}</td>
+      <td><strong>${esc(r.vendor)}</strong></td>
+      <td class="mono" style="font-size:0.78rem">${esc(r.po||'—')}</td>
+      <td style="max-width:180px;font-size:0.8rem">${esc(r.items.length>60?r.items.slice(0,60)+'…':r.items||'—')}${r.qty?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.qty)}</span>`:''}</td>
+      <td class="mono" style="font-size:0.78rem;${r.status==='Overdue'?'color:var(--red);font-weight:600':''}">${fmtDate(r.expected)}</td>
+      <td>${badge(r.status)}</td>
+      <td class="mono" style="font-size:0.78rem">${fmtDate(r.receivedDate)}</td>
+      <td style="max-width:140px;font-size:0.8rem;color:var(--gray-700)">${esc((r.notes||'').length>45?(r.notes||'').slice(0,45)+'…':r.notes||'—')}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-ghost btn-sm" onclick="viewIn(${r.id})">View</button>
+          <button class="btn btn-ghost btn-sm" onclick="openInModal(${r.id})">Edit</button>
+          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn btn-sm" style="background:var(--amber);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn(${r.id},'Partial')">Partial</button>`:''}
+          ${r.status!=='Received'?`<button class="btn btn-sm" style="background:var(--green);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn(${r.id},'Received')">Received</button>`:''}
+          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteIn(${r.id})">Del</button>
+        </div>
+      </td>
+    </tr>`).join('');
+  }
+  const total=inRecords.length, expected=inRecords.filter(r=>r.status==='Expected').length,
+    overdue=inRecords.filter(r=>r.status==='Overdue').length,
+    received=inRecords.filter(r=>r.status==='Received').length;
+  document.getElementById('summary-in').innerHTML = `
+    <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
+    <div class="summary-card blue"><div class="sc-label">Expected</div><div class="sc-value">${expected}</div></div>
+    <div class="summary-card amber"><div class="sc-label">Overdue</div><div class="sc-value">${overdue}</div></div>
+    <div class="summary-card green"><div class="sc-label">Received</div><div class="sc-value">${received}</div></div>`;
+  document.getElementById('count-in').textContent = inRecords.filter(r=>r.status!=='Received').length;
+}
+
+function viewIn(id) {
+  const r = inRecords.find(x=>x.id===id);
+  document.getElementById('detail-title').textContent = `Inbound #${r.id} — ${r.vendor}`;
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Vendor / Order</div>
+      <div class="detail-grid">
+        <div><div class="di-label">Vendor</div><div class="di-value">${esc(r.vendor)}</div></div>
+        <div><div class="di-label">PO Number</div><div class="di-value mono">${esc(r.po||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
+        <div><div class="di-label">Quantity</div><div class="di-value">${esc(r.qty||'—')}</div></div>
+        <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
+        <div><div class="di-label">Expected Date</div><div class="di-value">${fmtDate(r.expected)}</div></div>
+        <div><div class="di-label">Received Date</div><div class="di-value">${fmtDate(r.receivedDate)}</div></div>
+        <div><div class="di-label">Received By</div><div class="di-value">${esc(r.receivedBy||'—')}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes / Discrepancies</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>
+    ${r.photo?`<div class="detail-section"><div class="detail-section-title">Receiving Photo</div><div class="photo-display"><img src="${r.photo}" alt="Receiving photo"></div></div>`:''}`;
+  document.getElementById('modal-detail').classList.add('open');
+}
+
+function closeDetail() { document.getElementById('modal-detail').classList.remove('open'); }
+
+// ── HELPERS
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;
+}
+function badge(s) {
+  const m={'Order In':'badge-order-in','Loading':'badge-loading','Out for Delivery':'badge-out',
+    'Completed':'badge-completed','Expected':'badge-expected','Received':'badge-received',
+    'Partial':'badge-partial','Overdue':'badge-overdue'};
+  return `<span class="badge ${m[s]||''}">${s}</span>`;
+}
+
+renderOut(); renderIn();
+</script>
+</body>
+</html>
