@@ -4,270 +4,258 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Miller Hardware — Delivery Log</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #C0392B; --red-dark: #96281B;
-    --ink: #1A1A1A; --gray-900: #222222; --gray-700: #444;
-    --gray-500: #777; --gray-300: #C0C0C0; --gray-100: #F0F0EE;
-    --gray-50: #F7F7F5; --white: #FFF;
-    --green: #1E6B45; --green-bg: #EAF5EE; --green-border: #A8D5B5;
-    --amber: #B8680A; --amber-bg: #FEF3E2;
-    --blue: #1B4F8A; --blue-bg: #E8F0FA;
-    --purple: #5C2D8A; --purple-bg: #F0E8FA;
-    --border: #DCDCDA;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Open Sans', sans-serif; background: var(--gray-100); color: var(--ink); min-height: 100vh; font-size: 16px; }
+:root{
+  --red:#C0392B;--red-dk:#96281B;
+  --ink:#1A1A1A;--g900:#222;--g700:#444;--g500:#777;--g300:#C0C0C0;--g100:#F0F0EE;--g50:#F7F7F5;--white:#FFF;
+  --green:#1E6B45;--green-bg:#EAF5EE;--green-bd:#A8D5B5;
+  --amber:#B8680A;--amber-bg:#FEF3E2;
+  --blue:#1B4F8A;--blue-bg:#E8F0FA;
+  --purple:#5C2D8A;--purple-bg:#F0E8FA;
+  --bd:#DCDCDA;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:var(--g100);color:var(--ink);min-height:100vh;font-size:16px}
 
-  /* ── HEADER ── */
-  header { background: var(--ink); padding: 14px 18px 10px; border-bottom: 4px solid var(--red); }
-  .header-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .logo { font-family: 'Oswald', sans-serif; font-size: 1.7rem; font-weight: 700; letter-spacing: 1px; color: var(--white); line-height: 1; }
-  .logo span { color: var(--red); }
-  .logo-sub { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 3px; font-weight: 400; margin-left: 10px; }
-  .header-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-  .sync-pill { display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; }
-  .sync-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-500); flex-shrink: 0; }
-  .sync-dot.live { background: #2ECC71; box-shadow: 0 0 7px #2ECC71; }
-  .sync-dot.error { background: var(--red); }
-  .sync-dot.connecting { background: var(--amber); animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-  #sync-text { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 1px; }
-  #live-clock { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 1px; }
-  .location-pill { background: var(--red); color: var(--white); font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; padding: 4px 12px; border-radius: 3px; }
+/* HEADER */
+header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(--red)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.logo{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:1px;color:var(--white);line-height:1}
+.logo em{color:var(--red);font-style:normal}
+.logo-tag{font-size:0.8rem;color:var(--g300);font-weight:400;letter-spacing:3px;margin-left:8px}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sync-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);padding:5px 11px;border-radius:20px}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--g500)}
+.sdot.live{background:#2ECC71;box-shadow:0 0 6px #2ECC71}
+.sdot.err{background:var(--red)}
+.sdot.conn{background:var(--amber);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+#sync-text{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--g300);letter-spacing:1px}
+.loc-pill{background:var(--red);color:var(--white);font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:2px;padding:4px 11px;border-radius:3px}
+#clock{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--g300);letter-spacing:1px;margin-top:6px}
 
-  /* ── TAB NAV ── */
-  .tab-nav { background: var(--gray-900); border-bottom: 1px solid #111; overflow-x: auto; }
-  .tab-nav-inner { display: flex; padding: 0 18px; min-width: max-content; }
-  .tab-btn { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 22px; border: none; background: transparent; color: var(--gray-500); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
-  .tab-btn:hover { color: var(--gray-300); }
-  .tab-btn.active { color: var(--white); border-bottom-color: var(--red); }
-  .count-pill { display: inline-block; background: var(--red); color: var(--white); font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; margin-left: 6px; vertical-align: middle; font-family: 'Open Sans', sans-serif; font-weight: 700; }
+/* TAB NAV */
+.tab-nav{background:var(--g900);border-bottom:1px solid #111;overflow-x:auto}
+.tab-nav-inner{display:flex;padding:0 16px;min-width:max-content}
+.tab-btn{font-family:'Oswald',sans-serif;font-size:0.98rem;letter-spacing:2px;text-transform:uppercase;padding:13px 20px;border:none;background:transparent;color:var(--g500);cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap}
+.tab-btn:hover{color:var(--g300)}
+.tab-btn.active{color:var(--white);border-bottom-color:var(--red)}
+.cpill{display:inline-block;background:var(--red);color:var(--white);font-size:0.72rem;padding:2px 7px;border-radius:12px;margin-left:5px;vertical-align:middle;font-weight:700;font-family:'Open Sans',sans-serif}
 
-  /* ── MAIN ── */
-  .main { max-width: 960px; margin: 0 auto; padding: 18px; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+/* MAIN */
+.main{max-width:700px;margin:0 auto;padding:16px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
-  /* ── MESSAGE BOARD ── */
-  .message-board { background: var(--green-bg); border: 2px solid var(--green-border); border-radius: 6px; padding: 14px 16px; margin-bottom: 18px; }
-  .message-board.empty { background: var(--gray-50); border-color: var(--border); }
-  .message-board-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
-  .message-board-label { font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600; color: var(--green); letter-spacing: 1px; text-transform: uppercase; }
-  .message-board.empty .message-board-label { color: var(--gray-500); }
-  .message-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-  .message-item { background: white; border-left: 4px solid var(--green); padding: 10px 14px; border-radius: 0 4px 4px 0; }
-  .message-item .msg-text { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
-  .message-item .msg-meta { font-size: 0.8rem; color: var(--gray-500); margin-top: 3px; }
-  .message-item .msg-delete { float: right; background: none; border: none; color: var(--gray-300); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 0 0 8px; }
-  .message-item .msg-delete:hover { color: var(--red); }
-  .msg-input-row { display: flex; gap: 8px; }
-  .msg-input { flex: 1; font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
-  .msg-input:focus { border-color: var(--green); }
-  .msg-post-btn { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: var(--green); color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
-  .msg-post-btn:hover { background: #165233; }
+/* NOTICE BOARD */
+.notice-board{background:var(--green-bg);border:2px solid var(--green-bd);border-radius:6px;padding:13px 15px;margin-bottom:16px}
+.notice-board.empty{background:var(--g50);border-color:var(--bd)}
+.nb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.nb-label{font-family:'Oswald',sans-serif;font-size:0.95rem;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.notice-board.empty .nb-label{color:var(--g500)}
+.msg-list{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
+.msg-item{background:var(--white);border-left:4px solid var(--green);padding:9px 13px;border-radius:0 4px 4px 0}
+.msg-text{font-size:1rem;font-weight:600;color:var(--ink);line-height:1.4}
+.msg-meta{font-size:0.78rem;color:var(--g500);margin-top:2px}
+.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:1rem;padding:0 0 0 8px}
+.msg-del:hover{color:var(--red)}
+.msg-row{display:flex;gap:8px}
+.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.97rem;padding:9px 11px;border:1px solid var(--bd);border-radius:4px;outline:none}
+.msg-inp:focus{border-color:var(--green)}
+.msg-post{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:9px 16px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
+.msg-post:hover{background:#155230}
 
-  /* ── HOURS BANNER ── */
-  .hours-banner { background: var(--amber-bg); border: 1px solid #E8C070; border-radius: 6px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .hours-banner-text { font-family: 'Oswald', sans-serif; font-size: 1rem; color: var(--amber); letter-spacing: 1px; }
-  .hours-banner-text strong { font-size: 1.1rem; }
-  .hours-edit-btn { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; background: transparent; border: 1px solid var(--amber); color: var(--amber); padding: 5px 12px; cursor: pointer; border-radius: 3px; }
-  .hours-edit-btn:hover { background: var(--amber); color: white; }
+/* HOURS BANNER */
+.hrs-banner{background:var(--amber-bg);border:1px solid #E8C070;border-radius:6px;padding:11px 15px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hrs-text{font-family:'Oswald',sans-serif;font-size:0.97rem;color:var(--amber);letter-spacing:1px}
+.hrs-edit{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;background:transparent;border:1px solid var(--amber);color:var(--amber);padding:4px 11px;cursor:pointer;border-radius:3px;text-transform:uppercase}
+.hrs-edit:hover{background:var(--amber);color:var(--white)}
 
-  /* ── SUMMARY CARDS ── */
-  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .summary-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; border-left: 5px solid var(--gray-300); }
-  .summary-card.red    { border-left-color: var(--red); }
-  .summary-card.green  { border-left-color: var(--green); }
-  .summary-card.amber  { border-left-color: var(--amber); }
-  .summary-card.blue   { border-left-color: var(--blue); }
-  .summary-card.purple { border-left-color: var(--purple); }
-  .sc-label { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 4px; }
-  .sc-value { font-family: 'Oswald', sans-serif; font-size: 2.4rem; font-weight: 700; line-height: 1; color: var(--ink); }
+/* SUMMARY */
+.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:16px}
+.sc{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:12px 14px;border-left:5px solid var(--g300)}
+.sc.red{border-left-color:var(--red)}.sc.green{border-left-color:var(--green)}
+.sc.amber{border-left-color:var(--amber)}.sc.blue{border-left-color:var(--blue)}.sc.purple{border-left-color:var(--purple)}
+.sc-lbl{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);margin-bottom:3px}
+.sc-val{font-family:'Oswald',sans-serif;font-size:2.2rem;font-weight:700;line-height:1;color:var(--ink)}
 
-  /* ── TOOLBAR ── */
-  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-  .toolbar-left { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .search-box { font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 10px 14px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); width: 220px; outline: none; }
-  .search-box:focus { border-color: var(--red); }
-  select.filter-select { font-family: 'Open Sans', sans-serif; font-size: 0.95rem; padding: 10px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); outline: none; cursor: pointer; }
-  .btn-new { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 1px; background: var(--red); color: white; border: none; padding: 11px 22px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-new:hover { background: var(--red-dark); }
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.tl-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-box{font-family:'Open Sans',sans-serif;font-size:0.97rem;padding:9px 12px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);width:200px;outline:none}
+.search-box:focus{border-color:var(--red)}
+.fsel{font-family:'Open Sans',sans-serif;font-size:0.92rem;padding:9px 9px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none;cursor:pointer}
+.btn-new{font-family:'Oswald',sans-serif;font-size:0.97rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:10px 20px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.btn-new:hover{background:var(--red-dk)}
 
-  /* ── CARDS (replace table on mobile) ── */
-  .card-list { display: flex; flex-direction: column; gap: 12px; }
-  .delivery-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 16px; border-left: 5px solid var(--gray-300); }
-  .delivery-card.status-order-in   { border-left-color: var(--purple); }
-  .delivery-card.status-loading    { border-left-color: var(--amber); }
-  .delivery-card.status-out        { border-left-color: var(--blue); }
-  .delivery-card.status-completed  { border-left-color: var(--green); }
-  .delivery-card.status-expected   { border-left-color: var(--blue); }
-  .delivery-card.status-received   { border-left-color: var(--green); }
-  .delivery-card.status-partial    { border-left-color: var(--amber); }
-  .delivery-card.status-overdue    { border-left-color: var(--red); }
+/* ── DELIVERY CARD (collapsed) ── */
+.card-list{display:flex;flex-direction:column;gap:10px}
+.del-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;overflow:hidden}
+.del-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.del-card.s-order-in  {border-left-color:var(--purple)}
+.del-card.s-loading   {border-left-color:var(--amber)}
+.del-card.s-out       {border-left-color:var(--blue)}
+.del-card.s-completed {border-left-color:var(--green)}
+.del-card.s-expected  {border-left-color:var(--blue)}
+.del-card.s-received  {border-left-color:var(--green)}
+.del-card.s-partial   {border-left-color:var(--amber)}
+.del-card.s-overdue   {border-left-color:var(--red)}
 
-  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
-  .card-name { font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--ink); }
-  .card-sub { font-size: 0.9rem; color: var(--gray-500); margin-top: 1px; }
-  .card-items { font-size: 1rem; color: var(--ink); margin: 8px 0; line-height: 1.5; font-weight: 600; }
-  .card-meta { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0; }
-  .card-meta-item { font-size: 0.88rem; color: var(--gray-700); }
-  .card-meta-item strong { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); display: block; margin-bottom: 1px; }
-  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--gray-100); align-items: center; }
-  .btn-advance { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; color: white; border: none; padding: 9px 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-sm-ghost { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-sm-ghost:hover { background: var(--gray-100); color: var(--ink); }
-  .btn-sm-del { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; background: transparent; color: var(--red); border: 1px solid #ECC; padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-sm-del:hover { background: #FEE; }
-  .btn-sm-status { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; color: white; border: none; padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+/* collapsed row */
+.card-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.card-row-left{flex:1;min-width:0}
+.card-name{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-line2{font-size:0.85rem;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.card-chevron{font-size:1rem;color:var(--g300);transition:transform .2s;line-height:1}
+.del-card.open .card-chevron{transform:rotate(180deg)}
 
-  .progress-track { display: flex; gap: 5px; align-items: center; }
-  .pdot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
-  .pdot.p-order-in  { background: var(--purple); }
-  .pdot.p-loading   { background: var(--amber); }
-  .pdot.p-out       { background: var(--blue); }
-  .pdot.p-completed { background: var(--green); }
-  .photo-thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); cursor: pointer; }
+/* expanded detail */
+.card-detail{display:none;border-top:1px solid var(--g100);padding:15px 15px 15px;background:var(--g50)}
+.del-card.open .card-detail{display:block}
 
-  /* BADGES */
-  .badge { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; font-weight: 600; display: inline-block; white-space: nowrap; border-radius: 3px; }
-  .badge-order-in  { background: var(--purple-bg); color: var(--purple); }
-  .badge-loading   { background: var(--amber-bg);  color: var(--amber); }
-  .badge-out       { background: var(--blue-bg);   color: var(--blue); }
-  .badge-completed { background: var(--green-bg);  color: var(--green); }
-  .badge-expected  { background: var(--blue-bg);   color: var(--blue); }
-  .badge-received  { background: var(--green-bg);  color: var(--green); }
-  .badge-partial   { background: var(--amber-bg);  color: var(--amber); }
-  .badge-overdue   { background: #FDECEC;          color: var(--red); }
+.detail-section{margin-bottom:14px}
+.ds-title{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding-bottom:5px;border-bottom:1px solid var(--bd);margin-bottom:9px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.di-lbl{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);margin-bottom:1px}
+.di-val{font-size:0.97rem;color:var(--ink);font-weight:600}
 
-  .empty-state { padding: 50px 20px; text-align: center; color: var(--gray-500); font-family: 'Oswald', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
-  .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: 0.3; }
+/* STATUS BUTTONS inside expanded card */
+.status-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.sbtn{font-family:'Oswald',sans-serif;font-size:0.92rem;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:none;padding:10px 18px;border-radius:4px;cursor:pointer;flex:1;min-width:120px;text-align:center}
+.sbtn:hover{opacity:.88}
+.sbtn.purple{background:var(--purple)}
+.sbtn.amber {background:var(--amber)}
+.sbtn.blue  {background:var(--blue)}
+.sbtn.green {background:var(--green)}
+.sbtn.outline{background:transparent;border:1px solid var(--bd);color:var(--g500);font-size:0.82rem;padding:8px 14px;flex:none}
+.sbtn.outline:hover{background:var(--g100);color:var(--ink)}
+.sbtn.red-outline{background:transparent;border:1px solid #ECC;color:var(--red);font-size:0.82rem;padding:8px 14px;flex:none}
+.sbtn.red-outline:hover{background:#FEE}
+.completed-label{font-family:'Oswald',sans-serif;font-size:0.97rem;color:var(--green);letter-spacing:1px}
 
-  /* ── MODAL ── */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--white); width: 100%; max-width: 600px; border-top: 5px solid var(--red); border-radius: 0 0 6px 6px; animation: slideUp 0.2s ease; margin: auto; }
-  @keyframes slideUp { from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1} }
-  .modal-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .modal-title { font-family: 'Oswald', sans-serif; font-size: 1.4rem; letter-spacing: 1px; font-weight: 600; }
-  .modal-close { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--gray-500); padding: 0 4px; line-height: 1; }
-  .modal-close:hover { color: var(--ink); }
-  .modal-body { padding: 20px; }
-  .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+/* photo thumb */
+.photo-thumb{width:52px;height:52px;object-fit:cover;border-radius:4px;border:1px solid var(--bd);cursor:pointer;margin-top:4px}
+.photo-full{max-width:100%;border:1px solid var(--bd);border-radius:4px;margin-top:6px;display:block}
 
-  .form-grid { display: grid; gap: 14px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group label { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-700); font-weight: 600; }
-  .form-group input, .form-group select, .form-group textarea {
-    font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 11px 12px;
-    border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); outline: none; }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); }
-  .form-group textarea { resize: vertical; min-height: 72px; }
-  .form-divider { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding: 6px 0 2px; border-top: 1px solid var(--border); margin-top: 2px; }
-  .warn-text { font-size: 0.88rem; color: var(--red); font-weight: 600; margin-top: 4px; }
+/* BADGES */
+.badge{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;display:inline-block;white-space:nowrap;border-radius:3px}
+.b-order-in {background:var(--purple-bg);color:var(--purple)}
+.b-loading  {background:var(--amber-bg); color:var(--amber)}
+.b-out      {background:var(--blue-bg);  color:var(--blue)}
+.b-completed{background:var(--green-bg); color:var(--green)}
+.b-expected {background:var(--blue-bg);  color:var(--blue)}
+.b-received {background:var(--green-bg); color:var(--green)}
+.b-partial  {background:var(--amber-bg); color:var(--amber)}
+.b-overdue  {background:#FDECEC;         color:var(--red)}
 
-  .photo-upload-area { border: 2px dashed var(--border); border-radius: 4px; background: var(--gray-50); padding: 22px 16px; text-align: center; cursor: pointer; position: relative; transition: border-color 0.15s; }
-  .photo-upload-area:hover { border-color: var(--red); }
-  .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-label { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); pointer-events: none; }
-  .upload-icon { font-size: 2rem; display: block; margin-bottom: 6px; opacity: 0.4; }
-  .photo-preview-wrap { position: relative; display: inline-block; margin-top: 10px; }
-  .photo-preview-wrap img { max-width: 100%; max-height: 200px; display: block; border: 1px solid var(--border); border-radius: 3px; }
-  .photo-clear-btn { position: absolute; top: 4px; right: 4px; background: var(--red); color: white; border: none; cursor: pointer; font-size: 0.75rem; padding: 3px 8px; border-radius: 2px; font-family: 'Oswald', sans-serif; }
+/* progress dots */
+.prog{display:flex;gap:4px;align-items:center}
+.pdot{width:9px;height:9px;border-radius:50%;background:var(--g300);flex-shrink:0}
+.pdot.po{background:var(--purple)}.pdot.pl{background:var(--amber)}
+.pdot.pd{background:var(--blue)}.pdot.pc{background:var(--green)}
 
-  .btn-cancel { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 10px 20px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-save   { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: var(--red); color: white; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
-  .btn-save:hover { background: var(--red-dark); }
+.empty-state{padding:50px 20px;text-align:center;color:var(--g500);font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:1px}
+.empty-icon{font-size:2.4rem;display:block;margin-bottom:10px;opacity:.3}
 
-  /* DETAIL */
-  .detail-section { margin-bottom: 18px; }
-  .detail-section-title { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
-  .di-label { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 2px; }
-  .di-value { font-size: 1rem; color: var(--ink); font-weight: 600; }
-  .photo-display img { max-width: 100%; border: 1px solid var(--border); border-radius: 3px; margin-top: 6px; }
-  .no-photo { font-size: 0.9rem; color: var(--gray-500); font-style: italic; margin-top: 4px; }
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--white);width:100%;max-width:580px;border-top:5px solid var(--red);border-radius:0 0 6px 6px;animation:su .2s ease;margin:auto}
+@keyframes su{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mhdr{padding:16px 18px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.mtitle{font-family:'Oswald',sans-serif;font-size:1.35rem;letter-spacing:1px;font-weight:600}
+.mclose{font-size:1.5rem;background:none;border:none;cursor:pointer;color:var(--g500);padding:0 4px;line-height:1}
+.mclose:hover{color:var(--ink)}
+.mbody{padding:18px}
+.mfoot{padding:12px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
 
-  /* HOURS MODAL */
-  .hours-grid { display: grid; gap: 10px; }
-  .hours-row { display: flex; align-items: center; gap: 12px; }
-  .hours-day { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 1px; width: 110px; color: var(--ink); }
-  .hours-row input[type="time"] { font-family: 'Open Sans', sans-serif; font-size: 0.95rem; padding: 7px 10px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
-  .hours-row input[type="time"]:focus { border-color: var(--red); }
-  .hours-closed { display: flex; align-items: center; gap: 6px; font-family: 'Oswald', sans-serif; font-size: 0.9rem; color: var(--gray-500); cursor: pointer; }
-  .hours-closed input { width: auto; cursor: pointer; }
+/* FORM */
+.fg{display:grid;gap:13px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.fgrp{display:flex;flex-direction:column;gap:4px}
+.fgrp label{font-family:'Oswald',sans-serif;font-size:0.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--g700);font-weight:600}
+.fgrp input,.fgrp select,.fgrp textarea{font-family:'Open Sans',sans-serif;font-size:1rem;padding:10px 11px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none}
+.fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{border-color:var(--red)}
+.fgrp textarea{resize:vertical;min-height:68px}
+.fdiv{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding:6px 0 2px;border-top:1px solid var(--bd);margin-top:2px}
+.warn{font-size:0.87rem;color:var(--red);font-weight:600;margin-top:3px;display:none}
 
-  @media (max-width: 520px) {
-    .form-row { grid-template-columns: 1fr; }
-    .detail-grid { grid-template-columns: 1fr; }
-    .summary-row { grid-template-columns: 1fr 1fr; }
-  }
+.photo-area{border:2px dashed var(--bd);border-radius:4px;background:var(--g50);padding:20px 14px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
+.photo-area:hover{border-color:var(--red)}
+.photo-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-lbl{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);pointer-events:none}
+.uicon{font-size:1.9rem;display:block;margin-bottom:5px;opacity:.4}
+.prev-wrap{position:relative;display:inline-block;margin-top:9px}
+.prev-wrap img{max-width:100%;max-height:190px;display:block;border:1px solid var(--bd);border-radius:3px}
+.prev-clear{position:absolute;top:4px;right:4px;background:var(--red);color:var(--white);border:none;cursor:pointer;font-size:0.72rem;padding:3px 7px;border-radius:2px;font-family:'Oswald',sans-serif}
+
+.btn-cancel{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:transparent;color:var(--g500);border:1px solid var(--bd);padding:9px 18px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.btn-save{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:9px 22px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.btn-save:hover{background:var(--red-dk)}
+
+/* SETTINGS */
+.settings-box{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:20px;max-width:480px}
+.settings-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:600;letter-spacing:1px;margin-bottom:16px;border-bottom:1px solid var(--bd);padding-bottom:9px}
+.hrs-grid{display:grid;gap:9px}
+.hrs-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hrs-day{font-family:'Oswald',sans-serif;font-size:0.97rem;letter-spacing:1px;width:46px;color:var(--ink);font-weight:600}
+.hrs-row input[type="time"]{font-family:'Open Sans',sans-serif;font-size:0.92rem;padding:6px 9px;border:1px solid var(--bd);border-radius:4px;outline:none}
+.hrs-row input[type="time"]:focus{border-color:var(--red)}
+.hrs-closed{display:flex;align-items:center;gap:5px;font-family:'Oswald',sans-serif;font-size:0.88rem;color:var(--g500);cursor:pointer}
+.hrs-closed input{cursor:pointer}
+
+@media(max-width:480px){
+  .fr{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .summary-row{grid-template-columns:1fr 1fr}
+  .status-btns .sbtn{min-width:0}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-top">
-    <div>
-      <div class="logo">MILLER <span>HARDWARE</span> <span style="font-size:0.9rem;color:var(--gray-300);font-weight:400;letter-spacing:3px">DELIVERY</span></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <div class="sync-pill">
-        <div class="sync-dot connecting" id="sync-dot"></div>
-        <span id="sync-text">Connecting…</span>
-      </div>
-      <span class="location-pill">Yellville</span>
+  <div class="hdr-top">
+    <div class="logo">MILLER <em>HARDWARE</em><span class="logo-tag">DELIVERY</span></div>
+    <div class="hdr-right">
+      <div class="sync-pill"><div class="sdot conn" id="sdot"></div><span id="sync-text">Connecting…</span></div>
+      <span class="loc-pill">Yellville</span>
     </div>
   </div>
-  <div class="header-meta">
-    <span id="live-clock"></span>
-  </div>
+  <div id="clock"></div>
 </header>
 
 <nav class="tab-nav">
   <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('out',this)">
-      Deliveries Out <span class="count-pill" id="count-out">0</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('in',this)">
-      Due In <span class="count-pill" id="count-in">0</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('settings',this)">
-      Hours &amp; Settings
-    </button>
+    <button class="tab-btn active" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
+    <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
+    <button class="tab-btn" onclick="switchTab('settings',this)">Hours &amp; Settings</button>
   </div>
 </nav>
 
 <main class="main">
 
-  <!-- ══ OUTBOUND ══ -->
+  <!-- OUTBOUND -->
   <div id="panel-out" class="tab-panel active">
-
-    <!-- Message Board -->
-    <div class="message-board" id="msg-board-out">
-      <div class="message-board-header">
-        <span class="message-board-label" id="msg-board-label">📋 Notice Board</span>
-      </div>
-      <div class="message-list" id="msg-list"></div>
-      <div class="msg-input-row">
-        <input class="msg-input" type="text" id="msg-input" placeholder="Post a notice for the team…" maxlength="200">
-        <button class="msg-post-btn" onclick="postMessage()">Post</button>
+    <div class="notice-board empty" id="nb">
+      <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notice Board</span></div>
+      <div class="msg-list" id="msg-list"></div>
+      <div class="msg-row">
+        <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice for the team…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
+        <button class="msg-post" onclick="postMsg()">Post</button>
       </div>
     </div>
-
-    <!-- Hours banner -->
-    <div class="hours-banner" id="hours-banner" style="display:none">
-      <span class="hours-banner-text" id="hours-banner-text"></span>
-      <button class="hours-edit-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-btn')[2])">Edit Hours</button>
+    <div class="hrs-banner" id="hrs-banner">
+      <span class="hrs-text" id="hrs-text"></span>
+      <button class="hrs-edit" onclick="switchTab('settings',document.querySelectorAll('.tab-btn')[2])">Edit Hours</button>
     </div>
-
-    <div class="summary-row" id="summary-out"></div>
+    <div class="summary-row" id="sum-out"></div>
     <div class="toolbar">
-      <div class="toolbar-left">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="search-out">
-        <select class="filter-select" onchange="renderOut()" id="filter-out-status">
+      <div class="tl-left">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
+        <select class="fsel" onchange="renderOut()" id="filt-out">
           <option value="">All Statuses</option>
           <option>Order In</option><option>Loading</option>
           <option>Out for Delivery</option><option>Completed</option>
@@ -276,158 +264,113 @@
       <button class="btn-new" onclick="openOutModal()">+ New Delivery</button>
     </div>
     <div class="card-list" id="cards-out"></div>
-    <div id="empty-out" class="empty-state" style="display:none">
-      <span class="empty-icon">🚚</span>No outbound deliveries logged yet.
-    </div>
+    <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
   </div>
 
-  <!-- ══ INBOUND ══ -->
+  <!-- INBOUND -->
   <div id="panel-in" class="tab-panel">
-    <div class="summary-row" id="summary-in"></div>
+    <div class="summary-row" id="sum-in"></div>
     <div class="toolbar">
-      <div class="toolbar-left">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderIn()" id="search-in">
-        <select class="filter-select" onchange="renderIn()" id="filter-in-status">
+      <div class="tl-left">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderIn()" id="srch-in">
+        <select class="fsel" onchange="renderIn()" id="filt-in-s">
           <option value="">All Statuses</option>
-          <option>Expected</option><option>Partial</option>
-          <option>Received</option><option>Overdue</option>
+          <option>Expected</option><option>Partial</option><option>Received</option><option>Overdue</option>
         </select>
-        <select class="filter-select" onchange="renderIn()" id="filter-in-vendor">
-          <option value="">All Vendors</option>
-        </select>
+        <select class="fsel" onchange="renderIn()" id="filt-in-v"><option value="">All Vendors</option></select>
       </div>
       <button class="btn-new" onclick="openInModal()">+ New Inbound</button>
     </div>
     <div class="card-list" id="cards-in"></div>
-    <div id="empty-in" class="empty-state" style="display:none">
-      <span class="empty-icon">📦</span>No inbound deliveries logged yet.
-    </div>
+    <div id="empty-in" class="empty-state" style="display:none"><span class="empty-icon">📦</span>No inbound deliveries yet.</div>
   </div>
 
-  <!-- ══ SETTINGS ══ -->
+  <!-- SETTINGS -->
   <div id="panel-settings" class="tab-panel">
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:22px;max-width:500px">
-      <div style="font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:600;letter-spacing:1px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:10px">Delivery Hours</div>
-      <p style="font-size:0.95rem;color:var(--gray-500);margin-bottom:18px">Set the hours deliveries can be scheduled. If a delivery date falls outside these hours, a warning will show.</p>
-      <div class="hours-grid" id="hours-grid"></div>
-      <div style="margin-top:20px">
-        <button class="btn-save" onclick="saveHours()">Save Hours</button>
-      </div>
+    <div class="settings-box">
+      <div class="settings-title">Delivery Hours</div>
+      <p style="font-size:.95rem;color:var(--g500);margin-bottom:16px">Set hours deliveries can be scheduled. A warning shows if a delivery is booked on a closed day.</p>
+      <div class="hrs-grid" id="hrs-grid"></div>
+      <div style="margin-top:18px"><button class="btn-save" onclick="saveHours()">Save Hours</button></div>
     </div>
   </div>
 
 </main>
 
-<!-- OUTBOUND MODAL -->
-<div class="modal-overlay" id="modal-out">
+<!-- OUTBOUND FORM MODAL -->
+<div class="overlay" id="modal-out">
   <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-out-title">New Delivery Out</span>
-      <button class="modal-close" onclick="closeOutModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-divider">Customer Info</div>
-        <div class="form-row">
-          <div class="form-group"><label>Customer Name *</label><input type="text" id="out-customer" placeholder="Full name"></div>
-          <div class="form-group"><label>Phone</label><input type="tel" id="out-phone" placeholder="(870) 555-0000"></div>
+    <div class="mhdr"><span class="mtitle" id="mot-title">New Delivery Out</span><button class="mclose" onclick="closeOutModal()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fdiv">Customer Info</div>
+        <div class="fr">
+          <div class="fgrp"><label>Customer Name *</label><input type="text" id="o-cust" placeholder="Full name"></div>
+          <div class="fgrp"><label>Phone</label><input type="tel" id="o-phone" placeholder="(870) 555-0000"></div>
         </div>
-        <div class="form-group"><label>Delivery Address</label><input type="text" id="out-address" placeholder="Street, City, ZIP"></div>
-        <div class="form-divider">Order Details</div>
-        <div class="form-group"><label>Items / Description *</label><textarea id="out-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label>Driver</label><input type="text" id="out-driver" placeholder="Driver name"></div>
-          <div class="form-group"><label>Status</label>
-            <select id="out-status">
-              <option>Order In</option><option>Loading</option>
-              <option>Out for Delivery</option><option>Completed</option>
-            </select>
+        <div class="fgrp"><label>Delivery Address</label><input type="text" id="o-addr" placeholder="Street, City, ZIP"></div>
+        <div class="fdiv">Order Details</div>
+        <div class="fgrp"><label>Items / Description *</label><textarea id="o-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
+        <div class="fr">
+          <div class="fgrp"><label>Driver</label><input type="text" id="o-driver" placeholder="Driver name"></div>
+          <div class="fgrp"><label>Status</label>
+            <select id="o-status"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></select>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Delivery Date</label><input type="date" id="out-date" onchange="checkHoursWarning()"></div>
-          <div class="form-group"><label>Time Window</label><input type="text" id="out-window" placeholder="e.g. 8am – 11am"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Delivery Date</label><input type="date" id="o-date" onchange="chkWarn()"></div>
+          <div class="fgrp"><label>Time Window</label><input type="text" id="o-win" placeholder="e.g. 8am – 11am"></div>
         </div>
-        <div id="hours-warning" class="warn-text" style="display:none"></div>
-        <div class="form-group"><label>Notes</label><textarea id="out-notes" placeholder="Gate code, access notes…"></textarea></div>
-        <div class="form-divider">Proof of Delivery</div>
-        <div class="form-group">
+        <div class="warn" id="o-warn"></div>
+        <div class="fgrp"><label>Notes</label><textarea id="o-notes" placeholder="Gate code, access notes…"></textarea></div>
+        <div class="fdiv">Proof of Delivery</div>
+        <div class="fgrp">
           <label>Photo</label>
-          <div class="photo-upload-area">
-            <input type="file" accept="image/*" capture="environment" id="out-photo-input" onchange="handlePhoto(event,'out')">
-            <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
-          </div>
-          <div id="out-photo-preview"></div>
+          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="o-photo" onchange="handlePhoto(event,'o')">
+          <span class="upload-lbl"><span class="uicon">📷</span>Tap to take photo or choose from library</span></div>
+          <div id="o-prev"></div>
         </div>
-        <div class="form-group"><label>Received By</label><input type="text" id="out-received-by" placeholder="Name of person who accepted delivery"></div>
+        <div class="fgrp"><label>Received By</label><input type="text" id="o-rcvby" placeholder="Name of person who accepted delivery"></div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeOutModal()">Cancel</button>
-      <button class="btn-save" onclick="saveOut()">Save Delivery</button>
-    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeOutModal()">Cancel</button><button class="btn-save" onclick="saveOut()">Save Delivery</button></div>
   </div>
 </div>
 
-<!-- INBOUND MODAL -->
-<div class="modal-overlay" id="modal-in">
+<!-- INBOUND FORM MODAL -->
+<div class="overlay" id="modal-in">
   <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-in-title">New Inbound Order</span>
-      <button class="modal-close" onclick="closeInModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-divider">Vendor Info</div>
-        <div class="form-row">
-          <div class="form-group"><label>Vendor / Supplier *</label><input type="text" id="in-vendor" placeholder="e.g. Orgill, Prinsco, Stihl SW"></div>
-          <div class="form-group"><label>PO Number</label><input type="text" id="in-po" placeholder="PO-XXXXX"></div>
+    <div class="mhdr"><span class="mtitle" id="min-title">New Inbound Order</span><button class="mclose" onclick="closeInModal()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fdiv">Vendor Info</div>
+        <div class="fr">
+          <div class="fgrp"><label>Vendor / Supplier *</label><input type="text" id="i-vendor" placeholder="e.g. Orgill, Prinsco"></div>
+          <div class="fgrp"><label>PO Number</label><input type="text" id="i-po" placeholder="PO-XXXXX"></div>
         </div>
-        <div class="form-divider">Order Details</div>
-        <div class="form-group"><label>Items / Description</label><textarea id="in-items" placeholder="e.g. 12 boxes 15A outlets, 2 rolls 12/2 wire…"></textarea></div>
-        <div class="form-group"><label>Quantity / Units</label><input type="text" id="in-qty" placeholder="e.g. 3 pallets, 48 units"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Expected Date</label><input type="date" id="in-expected"></div>
-          <div class="form-group"><label>Status</label>
-            <select id="in-status">
-              <option>Expected</option><option>Partial</option>
-              <option>Received</option><option>Overdue</option>
-            </select>
+        <div class="fdiv">Order Details</div>
+        <div class="fgrp"><label>Items / Description</label><textarea id="i-items" placeholder="e.g. 12 boxes 15A outlets…"></textarea></div>
+        <div class="fgrp"><label>Quantity / Units</label><input type="text" id="i-qty" placeholder="e.g. 3 pallets, 48 units"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Expected Date</label><input type="date" id="i-exp"></div>
+          <div class="fgrp"><label>Status</label>
+            <select id="i-status"><option>Expected</option><option>Partial</option><option>Received</option><option>Overdue</option></select>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Received Date</label><input type="date" id="in-received-date"></div>
-          <div class="form-group"><label>Received By</label><input type="text" id="in-received-by" placeholder="Employee name"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Received Date</label><input type="date" id="i-rcvdate"></div>
+          <div class="fgrp"><label>Received By</label><input type="text" id="i-rcvby" placeholder="Employee name"></div>
         </div>
-        <div class="form-group"><label>Notes / Discrepancies</label><textarea id="in-notes" placeholder="Short shipped, damaged cartons…"></textarea></div>
-        <div class="form-divider">Receiving Photo (optional)</div>
-        <div class="form-group">
-          <div class="photo-upload-area">
-            <input type="file" accept="image/*" capture="environment" id="in-photo-input" onchange="handlePhoto(event,'in')">
-            <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
-          </div>
-          <div id="in-photo-preview"></div>
+        <div class="fgrp"><label>Notes / Discrepancies</label><textarea id="i-notes" placeholder="Short shipped, damaged cartons…"></textarea></div>
+        <div class="fdiv">Receiving Photo (optional)</div>
+        <div class="fgrp">
+          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="i-photo" onchange="handlePhoto(event,'i')">
+          <span class="upload-lbl"><span class="uicon">📷</span>Tap to take photo or choose from library</span></div>
+          <div id="i-prev"></div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeInModal()">Cancel</button>
-      <button class="btn-save" onclick="saveIn()">Save Order</button>
-    </div>
-  </div>
-</div>
-
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="modal-detail">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="detail-title">Detail</span>
-      <button class="modal-close" onclick="closeDetail()">×</button>
-    </div>
-    <div class="modal-body" id="detail-body"></div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeDetail()">Close</button>
-    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeInModal()">Cancel</button><button class="btn-save" onclick="saveIn()">Save Order</button></div>
   </div>
 </div>
 
@@ -436,501 +379,456 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey: "AIzaSyDNEl1mXtNLGN0nsvr1lZi7SJzsiypJFLM",
-  authDomain: "millersawshop-f716a.firebaseapp.com",
-  databaseURL: "https://millersawshop-f716a-default-rtdb.firebaseio.com",
-  projectId: "millersawshop-f716a",
-  storageBucket: "millersawshop-f716a.firebasestorage.app",
-  messagingSenderId: "187757043776",
-  appId: "1:187757043776:web:a0cce22b59172da8db7fa5"
+  apiKey:"AIzaSyDNEl1mXtNLGN0nsvr1lZi7SJzsiypJFLM",
+  authDomain:"millersawshop-f716a.firebaseapp.com",
+  databaseURL:"https://millersawshop-f716a-default-rtdb.firebaseio.com",
+  projectId:"millersawshop-f716a",
+  storageBucket:"millersawshop-f716a.firebasestorage.app",
+  messagingSenderId:"187757043776",
+  appId:"1:187757043776:web:a0cce22b59172da8db7fa5"
 });
-const db = firebase.database();
-const outRef  = db.ref('deliveries_out');
-const inRef   = db.ref('deliveries_in');
-const msgRef  = db.ref('delivery_messages');
-const hoursRef= db.ref('delivery_hours');
+const db=firebase.database();
+const outRef =db.ref('deliveries_out');
+const inRef  =db.ref('deliveries_in');
+const msgRef =db.ref('delivery_messages');
+const hrsRef =db.ref('delivery_hours');
 
-// ── SYNC STATUS
-db.ref('.info/connected').on('value', s => {
-  const on = s.val();
-  document.getElementById('sync-dot').className = 'sync-dot ' + (on?'live':'error');
-  document.getElementById('sync-text').textContent = on ? 'Live Sync On' : 'Offline';
-  document.getElementById('sync-text').style.color = on ? '#2ECC71' : 'var(--red)';
+// sync indicator
+db.ref('.info/connected').on('value',s=>{
+  const on=s.val();
+  document.getElementById('sdot').className='sdot '+(on?'live':'err');
+  const t=document.getElementById('sync-text');
+  t.textContent=on?'Live Sync On':'Offline';
+  t.style.color=on?'#2ECC71':'var(--red)';
 });
 
-// ── STATE
-let outRecords=[], inRecords=[], messages=[];
-let editingOutId=null, editingInId=null;
-let tempOutPhoto=null, tempInPhoto=null;
-let hoursConfig = {
-  Mon:{open:'07:00',close:'17:00',closed:false},
-  Tue:{open:'07:00',close:'17:00',closed:false},
-  Wed:{open:'07:00',close:'17:00',closed:false},
-  Thu:{open:'07:00',close:'17:00',closed:false},
-  Fri:{open:'07:00',close:'17:00',closed:false},
-  Sat:{open:'08:00',close:'12:00',closed:false},
+// state
+let outRecs=[],inRecs=[],msgs=[];
+let editOutKey=null,editInKey=null;
+let tmpOPhoto=null,tmpIPhoto=null;
+let openOutKey=null,openInKey=null; // which card is expanded
+let hoursConfig={
+  Mon:{open:'07:00',close:'17:00',closed:false},Tue:{open:'07:00',close:'17:00',closed:false},
+  Wed:{open:'07:00',close:'17:00',closed:false},Thu:{open:'07:00',close:'17:00',closed:false},
+  Fri:{open:'07:00',close:'17:00',closed:false},Sat:{open:'08:00',close:'12:00',closed:false},
   Sun:{open:'08:00',close:'12:00',closed:true}
 };
 
-// ── CLOCK
-function tick() {
+// clock
+function tick(){
   const n=new Date();
-  document.getElementById('live-clock').textContent =
-    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' +
+  document.getElementById('clock').textContent=
+    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+
     n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
-setInterval(tick,1000); tick();
+setInterval(tick,1000);tick();
 
-// ── TABS
-function switchTab(t,btn) {
+// tabs
+function switchTab(t,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-'+t).classList.add('active');
-  if(t==='settings') renderHoursGrid();
+  if(t==='settings')renderHrsGrid();
 }
 
-// ── FIREBASE LISTENERS
-outRef.on('value', s => {
-  outRecords=[];
-  s.forEach(c=>outRecords.push({_key:c.key,...c.val()}));
-  outRecords.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);
-  renderOut();
-});
-inRef.on('value', s => {
-  inRecords=[];
-  s.forEach(c=>inRecords.push({_key:c.key,...c.val()}));
-  inRecords.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);
-  renderIn();
-});
-msgRef.on('value', s => {
-  messages=[];
-  s.forEach(c=>messages.push({_key:c.key,...c.val()}));
-  messages.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);
-  renderMessages();
-});
-hoursRef.on('value', s => {
-  if(s.val()) hoursConfig = s.val();
-  renderHoursBanner();
-});
+// firebase listeners
+outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));outRecs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderOut();});
+inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();});
+msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
+hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 
 // ── MESSAGES
-function postMessage() {
-  const txt = document.getElementById('msg-input').value.trim();
-  if(!txt) return;
-  msgRef.push({ text:txt, created:new Date().toISOString() });
-  document.getElementById('msg-input').value='';
+function postMsg(){
+  const t=document.getElementById('msg-inp').value.trim();if(!t)return;
+  msgRef.push({text:t,created:new Date().toISOString()});
+  document.getElementById('msg-inp').value='';
 }
-function deleteMessage(key) { msgRef.child(key).remove(); }
-function renderMessages() {
-  const list = document.getElementById('msg-list');
-  if(!messages.length) {
-    list.innerHTML='';
-    document.getElementById('msg-board-out').className='message-board empty';
-    document.getElementById('msg-board-label').textContent='📋 Notice Board';
-    return;
-  }
-  document.getElementById('msg-board-out').className='message-board';
-  document.getElementById('msg-board-label').textContent='📋 Notice Board';
-  list.innerHTML = messages.map(m=>`
-    <div class="message-item">
-      <button class="msg-delete" onclick="deleteMessage('${m._key}')">✕</button>
-      <div class="msg-text">${esc(m.text)}</div>
-      <div class="msg-meta">${fmtDateTime(m.created)}</div>
-    </div>`).join('');
+function delMsg(k){msgRef.child(k).remove();}
+function renderMsgs(){
+  const list=document.getElementById('msg-list');
+  const nb=document.getElementById('nb');
+  if(!msgs.length){list.innerHTML='';nb.className='notice-board empty';document.getElementById('nb-label').textContent='📋 Notice Board';return;}
+  nb.className='notice-board';
+  list.innerHTML=msgs.map(m=>`<div class="msg-item">
+    <button class="msg-del" onclick="delMsg('${m._k}')">✕</button>
+    <div class="msg-text">${esc(m.text)}</div>
+    <div class="msg-meta">${fmtDT(m.created)}</div>
+  </div>`).join('');
 }
 
 // ── HOURS
-const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-function renderHoursGrid() {
-  document.getElementById('hours-grid').innerHTML = DAYS.map(d => {
-    const h = hoursConfig[d]||{open:'07:00',close:'17:00',closed:false};
-    return `<div class="hours-row">
-      <span class="hours-day">${d}</span>
-      <input type="time" id="h-open-${d}" value="${h.open||'07:00'}" ${h.closed?'disabled':''}>
-      <span style="font-family:'Oswald',sans-serif;color:var(--gray-500)">to</span>
-      <input type="time" id="h-close-${d}" value="${h.close||'17:00'}" ${h.closed?'disabled':''}>
-      <label class="hours-closed">
-        <input type="checkbox" id="h-closed-${d}" ${h.closed?'checked':''} onchange="toggleDayClosed('${d}')"> Closed
-      </label>
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function renderHrsGrid(){
+  document.getElementById('hrs-grid').innerHTML=DAYS.map(d=>{
+    const h=hoursConfig[d]||{open:'07:00',close:'17:00',closed:false};
+    return`<div class="hrs-row">
+      <span class="hrs-day">${d}</span>
+      <input type="time" id="ho-${d}" value="${h.open||'07:00'}" ${h.closed?'disabled':''}>
+      <span style="font-family:'Oswald',sans-serif;color:var(--g500);font-size:.9rem">to</span>
+      <input type="time" id="hc-${d}" value="${h.close||'17:00'}" ${h.closed?'disabled':''}>
+      <label class="hrs-closed"><input type="checkbox" id="hx-${d}" ${h.closed?'checked':''} onchange="toggleClosed('${d}')"> Closed</label>
     </div>`;
   }).join('');
 }
-function toggleDayClosed(d) {
-  const closed = document.getElementById('h-closed-'+d).checked;
-  document.getElementById('h-open-'+d).disabled = closed;
-  document.getElementById('h-close-'+d).disabled = closed;
+function toggleClosed(d){
+  const x=document.getElementById('hx-'+d).checked;
+  document.getElementById('ho-'+d).disabled=x;
+  document.getElementById('hc-'+d).disabled=x;
 }
-function saveHours() {
-  const cfg = {};
-  DAYS.forEach(d => {
-    cfg[d] = {
-      open:   document.getElementById('h-open-'+d).value,
-      close:  document.getElementById('h-close-'+d).value,
-      closed: document.getElementById('h-closed-'+d).checked
-    };
-  });
-  hoursRef.set(cfg);
-  alert('Hours saved!');
+function saveHours(){
+  const cfg={};
+  DAYS.forEach(d=>{cfg[d]={open:document.getElementById('ho-'+d).value,close:document.getElementById('hc-'+d).value,closed:document.getElementById('hx-'+d).checked};});
+  hrsRef.set(cfg);alert('Hours saved!');
 }
-function renderHoursBanner() {
-  const banner = document.getElementById('hours-banner');
-  const text   = document.getElementById('hours-banner-text');
-  const today  = new Date().toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
-  const h = hoursConfig[today];
-  if(!h) { banner.style.display='none'; return; }
+function renderHrsBanner(){
+  const banner=document.getElementById('hrs-banner');
+  const text=document.getElementById('hrs-text');
+  const today=new Date().toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
+  const h=hoursConfig[today];
+  if(!h){banner.style.display='none';return;}
   banner.style.display='flex';
-  if(h.closed) {
-    text.innerHTML = `<strong>🚫 No Deliveries Today (${today})</strong>`;
-  } else {
-    text.innerHTML = `<strong>Today's Delivery Hours (${today}):</strong> ${fmt12(h.open)} – ${fmt12(h.close)}`;
-  }
+  text.innerHTML=h.closed?`<strong>🚫 No Deliveries Today (${today})</strong>`:`<strong>Today's Hours (${today}):</strong> ${fmt12(h.open)} – ${fmt12(h.close)}`;
 }
-function fmt12(t) {
-  if(!t) return '';
-  const [h,m] = t.split(':');
-  const hr = +h; const ampm = hr>=12?'pm':'am';
-  return (hr%12||12) + (m!=='00'?':'+m:'') + ampm;
-}
-function checkHoursWarning() {
-  const warn = document.getElementById('hours-warning');
-  const dateVal = document.getElementById('out-date').value;
-  if(!dateVal) { warn.style.display='none'; return; }
-  const d = new Date(dateVal+'T12:00:00');
-  const dayName = d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
-  const h = hoursConfig[dayName];
-  if(h && h.closed) {
-    warn.textContent = `⚠️ ${dayName} is marked as no deliveries.`;
-    warn.style.display='block';
-  } else {
-    warn.style.display='none';
-  }
+function fmt12(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;const ap=hr>=12?'pm':'am';return(hr%12||12)+(m!=='00'?':'+m:'')+ap;}
+function chkWarn(){
+  const w=document.getElementById('o-warn');
+  const dv=document.getElementById('o-date').value;
+  if(!dv){w.style.display='none';return;}
+  const day=new Date(dv+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
+  const h=hoursConfig[day];
+  if(h&&h.closed){w.textContent=`⚠️ ${day} is marked as no deliveries.`;w.style.display='block';}
+  else w.style.display='none';
 }
 
 // ── PHOTO
-function handlePhoto(e, which) {
-  const file=e.target.files[0]; if(!file) return;
-  const img=new Image(), reader=new FileReader();
-  reader.onload = ev => {
-    img.onload = () => {
+function handlePhoto(e,which){
+  const file=e.target.files[0];if(!file)return;
+  const img=new Image(),reader=new FileReader();
+  reader.onload=ev=>{
+    img.onload=()=>{
       const canvas=document.createElement('canvas');
-      const MAX=800; let w=img.width,h=img.height;
-      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
-      if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const data=canvas.toDataURL('image/jpeg',0.7);
-      if(which==='out') tempOutPhoto=data; else tempInPhoto=data;
-      renderPhotoPreview(which,data);
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
+      const MAX=800;let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+      canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const data=canvas.toDataURL('image/jpeg',.7);
+      if(which==='o')tmpOPhoto=data;else tmpIPhoto=data;
+      renderPrev(which,data);
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);
 }
-function renderPhotoPreview(which,data) {
-  const el=document.getElementById(which+'-photo-preview');
-  if(!data){el.innerHTML='';return;}
-  el.innerHTML=`<div class="photo-preview-wrap"><img src="${data}" alt="Photo"><button class="photo-clear-btn" onclick="clearPhoto('${which}')">✕ Remove</button></div>`;
+function renderPrev(w,data){
+  const el=document.getElementById(w+'-prev');if(!data){el.innerHTML='';return;}
+  el.innerHTML=`<div class="prev-wrap"><img src="${data}" alt="photo"><button class="prev-clear" onclick="clearPrev('${w}')">✕ Remove</button></div>`;
 }
-function clearPhoto(which) {
-  if(which==='out'){tempOutPhoto=null;document.getElementById('out-photo-input').value='';}
-  else{tempInPhoto=null;document.getElementById('in-photo-input').value='';}
-  renderPhotoPreview(which,null);
+function clearPrev(w){
+  if(w==='o'){tmpOPhoto=null;document.getElementById('o-photo').value='';}
+  else{tmpIPhoto=null;document.getElementById('i-photo').value='';}
+  renderPrev(w,null);
+}
+
+// ── CARD TOGGLE
+function toggleCard(key, type){
+  if(type==='out'){
+    openOutKey = openOutKey===key ? null : key;
+    renderOut();
+  } else {
+    openInKey = openInKey===key ? null : key;
+    renderIn();
+  }
 }
 
 // ── OUTBOUND
-const OUT_STATUSES=['Order In','Loading','Out for Delivery','Completed'];
-const OUT_COLORS={'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)'};
-const OUT_DOT_CLS={'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed'};
-const OUT_CARD_CLS={'Order In':'status-order-in','Loading':'status-loading','Out for Delivery':'status-out','Completed':'status-completed'};
+const OUT_S=['Order In','Loading','Out for Delivery','Completed'];
+const OUT_COL={'Order In':'purple','Loading':'amber','Out for Delivery':'blue','Completed':'green'};
+const OUT_NEXT_LBL={'Order In':'→ Loading','Loading':'→ Out for Delivery','Out for Delivery':'→ Mark Completed'};
+const OUT_DOT={
+  'Order In':['po','','',''],
+  'Loading':['po','pl','',''],
+  'Out for Delivery':['po','pl','pd',''],
+  'Completed':['po','pl','pd','pc']
+};
+const S_CARD={'Order In':'s-order-in','Loading':'s-loading','Out for Delivery':'s-out','Completed':'s-completed'};
+const BADGE_CLS={'Order In':'b-order-in','Loading':'b-loading','Out for Delivery':'b-out','Completed':'b-completed',
+  'Expected':'b-expected','Received':'b-received','Partial':'b-partial','Overdue':'b-overdue'};
 
-function openOutModal(key) {
-  editingOutId=key||null; tempOutPhoto=null;
-  document.getElementById('out-photo-preview').innerHTML='';
-  document.getElementById('out-photo-input').value='';
-  document.getElementById('hours-warning').style.display='none';
-  const r=key?outRecords.find(x=>x._key===key):null;
-  document.getElementById('modal-out-title').textContent=key?'Edit Delivery':'New Delivery Out';
-  document.getElementById('out-customer').value   =r?.customer   ||'';
-  document.getElementById('out-phone').value      =r?.phone      ||'';
-  document.getElementById('out-address').value    =r?.address    ||'';
-  document.getElementById('out-items').value      =r?.items      ||'';
-  document.getElementById('out-driver').value     =r?.driver     ||'';
-  document.getElementById('out-status').value     =r?.status     ||'Order In';
-  document.getElementById('out-date').value       =r?.date       ||new Date().toISOString().slice(0,10);
-  document.getElementById('out-window').value     =r?.window     ||'';
-  document.getElementById('out-notes').value      =r?.notes      ||'';
-  document.getElementById('out-received-by').value=r?.receivedBy ||'';
-  if(r?.photo){tempOutPhoto=r.photo;renderPhotoPreview('out',r.photo);}
+function openOutModal(key){
+  editOutKey=key||null;tmpOPhoto=null;
+  document.getElementById('o-prev').innerHTML='';document.getElementById('o-photo').value='';
+  document.getElementById('o-warn').style.display='none';
+  const r=key?outRecs.find(x=>x._k===key):null;
+  document.getElementById('mot-title').textContent=key?'Edit Delivery':'New Delivery Out';
+  document.getElementById('o-cust').value  =r?.customer  ||'';
+  document.getElementById('o-phone').value =r?.phone     ||'';
+  document.getElementById('o-addr').value  =r?.address   ||'';
+  document.getElementById('o-items').value =r?.items     ||'';
+  document.getElementById('o-driver').value=r?.driver    ||'';
+  document.getElementById('o-status').value=r?.status    ||'Order In';
+  document.getElementById('o-date').value  =r?.date      ||new Date().toISOString().slice(0,10);
+  document.getElementById('o-win').value   =r?.window    ||'';
+  document.getElementById('o-notes').value =r?.notes     ||'';
+  document.getElementById('o-rcvby').value =r?.receivedBy||'';
+  if(r?.photo){tmpOPhoto=r.photo;renderPrev('o',r.photo);}
   document.getElementById('modal-out').classList.add('open');
-  checkHoursWarning();
+  chkWarn();
 }
-function closeOutModal(){document.getElementById('modal-out').classList.remove('open');editingOutId=null;}
+function closeOutModal(){document.getElementById('modal-out').classList.remove('open');editOutKey=null;}
 
 function saveOut(){
-  const customer=document.getElementById('out-customer').value.trim();
-  const items=document.getElementById('out-items').value.trim();
+  const customer=document.getElementById('o-cust').value.trim();
+  const items=document.getElementById('o-items').value.trim();
   if(!customer||!items){alert('Customer name and items are required.');return;}
   const rec={customer,items,
-    phone:document.getElementById('out-phone').value.trim(),
-    address:document.getElementById('out-address').value.trim(),
-    driver:document.getElementById('out-driver').value.trim(),
-    status:document.getElementById('out-status').value,
-    date:document.getElementById('out-date').value,
-    window:document.getElementById('out-window').value.trim(),
-    notes:document.getElementById('out-notes').value.trim(),
-    receivedBy:document.getElementById('out-received-by').value.trim(),
-    photo:tempOutPhoto||'',updated:new Date().toISOString()};
-  if(editingOutId){outRef.child(editingOutId).update(rec);}
+    phone:document.getElementById('o-phone').value.trim(),
+    address:document.getElementById('o-addr').value.trim(),
+    driver:document.getElementById('o-driver').value.trim(),
+    status:document.getElementById('o-status').value,
+    date:document.getElementById('o-date').value,
+    window:document.getElementById('o-win').value.trim(),
+    notes:document.getElementById('o-notes').value.trim(),
+    receivedBy:document.getElementById('o-rcvby').value.trim(),
+    photo:tmpOPhoto||'',updated:new Date().toISOString()};
+  if(editOutKey){outRef.child(editOutKey).update(rec);}
   else{rec.created=new Date().toISOString();outRef.push(rec);}
   closeOutModal();
 }
-function deleteOut(key){if(!confirm('Delete this delivery?'))return;outRef.child(key).remove();}
+
+function deleteOut(key){if(!confirm('Delete this delivery?'))return;outRef.child(key).remove();openOutKey=null;}
 function advanceOut(key){
-  const r=outRecords.find(x=>x._key===key);
-  const idx=OUT_STATUSES.indexOf(r.status);
-  if(idx<OUT_STATUSES.length-1)outRef.child(key).update({status:OUT_STATUSES[idx+1]});
+  const r=outRecs.find(x=>x._k===key);
+  const idx=OUT_S.indexOf(r.status);
+  if(idx<OUT_S.length-1)outRef.child(key).update({status:OUT_S[idx+1]});
 }
+function setOutStatus(key,status){outRef.child(key).update({status});}
 
 function renderOut(){
-  const search=document.getElementById('search-out').value.toLowerCase();
-  const fStatus=document.getElementById('filter-out-status').value;
-  let rows=outRecords.filter(r=>{
-    if(fStatus&&r.status!==fStatus)return false;
+  const search=document.getElementById('srch-out').value.toLowerCase();
+  const filt=document.getElementById('filt-out').value;
+  let rows=outRecs.filter(r=>{
+    if(filt&&r.status!==filt)return false;
     if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search))return false;
     return true;
   });
-  const cards=document.getElementById('cards-out');
+  const wrap=document.getElementById('cards-out');
   const empty=document.getElementById('empty-out');
-  if(!rows.length){cards.innerHTML='';empty.style.display='block';}
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    cards.innerHTML=rows.map(r=>{
-      const idx=OUT_STATUSES.indexOf(r.status);
-      const dots=OUT_STATUSES.map((s,i)=>`<div class="pdot${i<=idx?' '+OUT_DOT_CLS[s]:''}" title="${s}"></div>`).join('');
-      const nextS=idx<OUT_STATUSES.length-1?OUT_STATUSES[idx+1]:null;
-      return `<div class="delivery-card ${OUT_CARD_CLS[r.status]||''}">
-        <div class="card-top">
-          <div>
-            <div class="card-name">${esc(r.customer)}</div>
-            <div class="card-sub">${r.phone?esc(r.phone):''}${r.phone&&r.address?' · ':''}${r.address?esc(r.address):''}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            ${badge(r.status)}
-            <div class="progress-track" style="justify-content:flex-end;margin-top:6px">${dots}</div>
+    wrap.innerHTML=rows.map(r=>{
+      const isOpen=openOutKey===r._k;
+      const dots=OUT_DOT[r.status]||['','','',''];
+      const dotHtml=dots.map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
+      const idx=OUT_S.indexOf(r.status);
+      const nextS=idx<OUT_S.length-1?OUT_S[idx+1]:null;
+      const nextCol=nextS?OUT_COL[nextS]:'';
+
+      // collapsed row
+      const collapsed=`<div class="card-row" onclick="toggleCard('${r._k}','out')">
+        <div class="card-row-left">
+          <div class="card-name">${esc(r.customer)}</div>
+          <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
+        </div>
+        <div class="card-row-right">
+          <span class="badge ${BADGE_CLS[r.status]||''}">${r.status}</span>
+          <div class="prog">${dotHtml}</div>
+        </div>
+        <div class="card-chevron">▾</div>
+      </div>`;
+
+      // expanded detail
+      const detail=`<div class="card-detail">
+        <div class="detail-section">
+          <div class="ds-title">Customer</div>
+          <div class="detail-grid">
+            <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.customer)}</div></div>
+            <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
+            <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.address||'—')}</div></div>
           </div>
         </div>
-        <div class="card-items">${esc(r.items||'')}</div>
-        <div class="card-meta">
-          ${r.driver?`<div class="card-meta-item"><strong>Driver</strong>${esc(r.driver)}</div>`:''}
-          ${r.date?`<div class="card-meta-item"><strong>Date</strong>${fmtDate(r.date)}</div>`:''}
-          ${r.window?`<div class="card-meta-item"><strong>Window</strong>${esc(r.window)}</div>`:''}
-          ${r.photo?`<div class="card-meta-item"><strong>Photo</strong><img class="photo-thumb" src="${r.photo}" onclick="viewOut('${r._key}')" alt="photo"></div>`:''}
+        <div class="detail-section">
+          <div class="ds-title">Order</div>
+          <div class="detail-grid">
+            <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
+            <div><div class="di-lbl">Driver</div><div class="di-val">${esc(r.driver||'—')}</div></div>
+            <div><div class="di-lbl">Date</div><div class="di-val">${fmtDate(r.date)}</div></div>
+            <div><div class="di-lbl">Window</div><div class="di-val">${esc(r.window||'—')}</div></div>
+            ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+          </div>
         </div>
-        <div class="card-actions">
-          ${nextS?`<button class="btn-advance" style="background:${OUT_COLORS[nextS]}" onclick="advanceOut('${r._key}')">→ ${esc(nextS)}</button>`:'<span style="font-family:\'Oswald\',sans-serif;font-size:0.9rem;color:var(--green);letter-spacing:1px">✓ COMPLETED</span>'}
-          <button class="btn-sm-ghost" onclick="viewOut('${r._key}')">View</button>
-          <button class="btn-sm-ghost" onclick="openOutModal('${r._key}')">Edit</button>
-          <button class="btn-sm-del" onclick="deleteOut('${r._key}')">Delete</button>
+        ${r.receivedBy||r.photo?`<div class="detail-section">
+          <div class="ds-title">Proof of Delivery</div>
+          ${r.receivedBy?`<div class="di-lbl">Received By</div><div class="di-val" style="margin-bottom:8px">${esc(r.receivedBy)}</div>`:''}
+          ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Delivery photo">`:''}
+        </div>`:''}
+        <div class="detail-section">
+          <div class="ds-title">Update Status</div>
+          <div class="status-btns">
+            ${OUT_S.map(s=>s===r.status
+              ?`<span class="sbtn ${OUT_COL[s]}" style="opacity:.5;cursor:default">✓ ${esc(s)}</span>`
+              :`<button class="sbtn ${OUT_COL[s]}" onclick="setOutStatus('${r._k}','${s.replace(/'/g,"\\'")}');event.stopPropagation()">${esc(s)}</button>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="detail-section" style="border-top:1px solid var(--bd);padding-top:12px;margin-top:4px">
+          <div class="status-btns">
+            <button class="sbtn outline" onclick="openOutModal('${r._k}');event.stopPropagation()">Edit</button>
+            <button class="sbtn red-outline" onclick="deleteOut('${r._k}');event.stopPropagation()">Delete</button>
+          </div>
         </div>
       </div>`;
+
+      return`<div class="del-card ${S_CARD[r.status]||''} ${isOpen?'open':''}" id="oc-${r._k}">${collapsed}${detail}</div>`;
     }).join('');
   }
-  const total=outRecords.length,orderIn=outRecords.filter(r=>r.status==='Order In').length,
-    loading=outRecords.filter(r=>r.status==='Loading').length,
-    enRoute=outRecords.filter(r=>r.status==='Out for Delivery').length,
-    completed=outRecords.filter(r=>r.status==='Completed').length;
-  document.getElementById('summary-out').innerHTML=`
-    <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
-    <div class="summary-card purple"><div class="sc-label">Order In</div><div class="sc-value">${orderIn}</div></div>
-    <div class="summary-card amber"><div class="sc-label">Loading</div><div class="sc-value">${loading}</div></div>
-    <div class="summary-card blue"><div class="sc-label">En Route</div><div class="sc-value">${enRoute}</div></div>
-    <div class="summary-card green"><div class="sc-label">Completed</div><div class="sc-value">${completed}</div></div>`;
-  document.getElementById('count-out').textContent=outRecords.filter(r=>r.status!=='Completed').length;
-}
 
-function viewOut(key){
-  const r=outRecords.find(x=>x._key===key);
-  document.getElementById('detail-title').textContent='Delivery — '+r.customer;
-  document.getElementById('detail-body').innerHTML=`
-    <div class="detail-section">
-      <div class="detail-section-title">Customer</div>
-      <div class="detail-grid">
-        <div><div class="di-label">Name</div><div class="di-value">${esc(r.customer)}</div></div>
-        <div><div class="di-label">Phone</div><div class="di-value">${esc(r.phone||'—')}</div></div>
-        <div style="grid-column:1/-1"><div class="di-label">Address</div><div class="di-value">${esc(r.address||'—')}</div></div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">Order</div>
-      <div class="detail-grid">
-        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
-        <div><div class="di-label">Driver</div><div class="di-value">${esc(r.driver||'—')}</div></div>
-        <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
-        <div><div class="di-label">Date</div><div class="di-value">${fmtDate(r.date)}</div></div>
-        <div><div class="di-label">Window</div><div class="di-value">${esc(r.window||'—')}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">Proof of Delivery</div>
-      <div class="di-label" style="margin-bottom:4px">Received By</div>
-      <div class="di-value" style="margin-bottom:12px">${esc(r.receivedBy||'—')}</div>
-      ${r.photo?`<div class="photo-display"><img src="${r.photo}" alt="Delivery photo"></div>`:'<div class="no-photo">No photo attached</div>'}
-    </div>`;
-  document.getElementById('modal-detail').classList.add('open');
+  const total=outRecs.length,
+    orderIn=outRecs.filter(r=>r.status==='Order In').length,
+    loading=outRecs.filter(r=>r.status==='Loading').length,
+    enRoute=outRecs.filter(r=>r.status==='Out for Delivery').length,
+    completed=outRecs.filter(r=>r.status==='Completed').length;
+  document.getElementById('sum-out').innerHTML=`
+    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
+    <div class="sc purple"><div class="sc-lbl">Order In</div><div class="sc-val">${orderIn}</div></div>
+    <div class="sc amber"><div class="sc-lbl">Loading</div><div class="sc-val">${loading}</div></div>
+    <div class="sc blue"><div class="sc-lbl">En Route</div><div class="sc-val">${enRoute}</div></div>
+    <div class="sc green"><div class="sc-lbl">Completed</div><div class="sc-val">${completed}</div></div>`;
+  document.getElementById('co').textContent=outRecs.filter(r=>r.status!=='Completed').length;
 }
 
 // ── INBOUND
 function openInModal(key){
-  editingInId=key||null;tempInPhoto=null;
-  document.getElementById('in-photo-preview').innerHTML='';
-  document.getElementById('in-photo-input').value='';
-  const r=key?inRecords.find(x=>x._key===key):null;
-  document.getElementById('modal-in-title').textContent=key?'Edit Inbound':'New Inbound Order';
-  document.getElementById('in-vendor').value       =r?.vendor      ||'';
-  document.getElementById('in-po').value           =r?.po          ||'';
-  document.getElementById('in-items').value        =r?.items       ||'';
-  document.getElementById('in-qty').value          =r?.qty         ||'';
-  document.getElementById('in-expected').value     =r?.expected    ||'';
-  document.getElementById('in-status').value       =r?.status      ||'Expected';
-  document.getElementById('in-received-date').value=r?.receivedDate||'';
-  document.getElementById('in-received-by').value  =r?.receivedBy  ||'';
-  document.getElementById('in-notes').value        =r?.notes       ||'';
-  if(r?.photo){tempInPhoto=r.photo;renderPhotoPreview('in',r.photo);}
+  editInKey=key||null;tmpIPhoto=null;
+  document.getElementById('i-prev').innerHTML='';document.getElementById('i-photo').value='';
+  const r=key?inRecs.find(x=>x._k===key):null;
+  document.getElementById('min-title').textContent=key?'Edit Inbound':'New Inbound Order';
+  document.getElementById('i-vendor').value  =r?.vendor      ||'';
+  document.getElementById('i-po').value      =r?.po          ||'';
+  document.getElementById('i-items').value   =r?.items       ||'';
+  document.getElementById('i-qty').value     =r?.qty         ||'';
+  document.getElementById('i-exp').value     =r?.expected    ||'';
+  document.getElementById('i-status').value  =r?.status      ||'Expected';
+  document.getElementById('i-rcvdate').value =r?.receivedDate||'';
+  document.getElementById('i-rcvby').value   =r?.receivedBy  ||'';
+  document.getElementById('i-notes').value   =r?.notes       ||'';
+  if(r?.photo){tmpIPhoto=r.photo;renderPrev('i',r.photo);}
   document.getElementById('modal-in').classList.add('open');
 }
-function closeInModal(){document.getElementById('modal-in').classList.remove('open');editingInId=null;}
+function closeInModal(){document.getElementById('modal-in').classList.remove('open');editInKey=null;}
 
 function saveIn(){
-  const vendor=document.getElementById('in-vendor').value.trim();
+  const vendor=document.getElementById('i-vendor').value.trim();
   if(!vendor){alert('Vendor name is required.');return;}
-  let status=document.getElementById('in-status').value;
-  const exp=document.getElementById('in-expected').value;
+  let status=document.getElementById('i-status').value;
+  const exp=document.getElementById('i-exp').value;
   if(status==='Expected'&&exp&&exp<new Date().toISOString().slice(0,10))status='Overdue';
   const rec={vendor,status,
-    po:document.getElementById('in-po').value.trim(),
-    items:document.getElementById('in-items').value.trim(),
-    qty:document.getElementById('in-qty').value.trim(),
+    po:document.getElementById('i-po').value.trim(),
+    items:document.getElementById('i-items').value.trim(),
+    qty:document.getElementById('i-qty').value.trim(),
     expected:exp,
-    receivedDate:document.getElementById('in-received-date').value,
-    receivedBy:document.getElementById('in-received-by').value.trim(),
-    notes:document.getElementById('in-notes').value.trim(),
-    photo:tempInPhoto||'',updated:new Date().toISOString()};
-  if(editingInId){inRef.child(editingInId).update(rec);}
+    receivedDate:document.getElementById('i-rcvdate').value,
+    receivedBy:document.getElementById('i-rcvby').value.trim(),
+    notes:document.getElementById('i-notes').value.trim(),
+    photo:tmpIPhoto||'',updated:new Date().toISOString()};
+  if(editInKey){inRef.child(editInKey).update(rec);}
   else{rec.created=new Date().toISOString();inRef.push(rec);}
   closeInModal();
 }
-function deleteIn(key){if(!confirm('Delete this inbound record?'))return;inRef.child(key).remove();}
-function statusIn(key,status){
+
+function deleteIn(key){if(!confirm('Delete this record?'))return;inRef.child(key).remove();openInKey=null;}
+function setInStatus(key,status){
   const upd={status};
   if(status==='Received')upd.receivedDate=new Date().toISOString().slice(0,10);
   inRef.child(key).update(upd);
 }
 
+const IN_S=['Expected','Partial','Received','Overdue'];
+const IN_COL={'Expected':'blue','Partial':'amber','Received':'green','Overdue':'red-outline'};
+const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
+
 function renderIn(){
   const today=new Date().toISOString().slice(0,10);
-  inRecords.forEach(r=>{
-    if(r.status==='Expected'&&r.expected&&r.expected<today)inRef.child(r._key).update({status:'Overdue'});
-  });
-  const search=document.getElementById('search-in').value.toLowerCase();
-  const fStatus=document.getElementById('filter-in-status').value;
-  const fVendor=document.getElementById('filter-in-vendor').value;
-  const vendors=[...new Set(inRecords.map(r=>r.vendor).filter(Boolean))];
-  const vSel=document.getElementById('filter-in-vendor');const curV=vSel.value;
-  vSel.innerHTML='<option value="">All Vendors</option>'+vendors.map(v=>`<option value="${esc(v)}"${v===curV?' selected':''}>${esc(v)}</option>`).join('');
-  let rows=inRecords.filter(r=>{
-    if(fStatus&&r.status!==fStatus)return false;
-    if(fVendor&&r.vendor!==fVendor)return false;
+  inRecs.forEach(r=>{if(r.status==='Expected'&&r.expected&&r.expected<today)inRef.child(r._k).update({status:'Overdue'});});
+  const search=document.getElementById('srch-in').value.toLowerCase();
+  const fS=document.getElementById('filt-in-s').value;
+  const fV=document.getElementById('filt-in-v').value;
+  const vendors=[...new Set(inRecs.map(r=>r.vendor).filter(Boolean))];
+  const vSel=document.getElementById('filt-in-v');const cv=vSel.value;
+  vSel.innerHTML='<option value="">All Vendors</option>'+vendors.map(v=>`<option value="${esc(v)}"${v===cv?' selected':''}>${esc(v)}</option>`).join('');
+  let rows=inRecs.filter(r=>{
+    if(fS&&r.status!==fS)return false;
+    if(fV&&r.vendor!==fV)return false;
     if(search&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search))return false;
     return true;
   });
-  const IN_CARD={'Expected':'status-expected','Partial':'status-partial','Received':'status-received','Overdue':'status-overdue'};
-  const cards=document.getElementById('cards-in');
+  const wrap=document.getElementById('cards-in');
   const empty=document.getElementById('empty-in');
-  if(!rows.length){cards.innerHTML='';empty.style.display='block';}
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    cards.innerHTML=rows.map(r=>`
-      <div class="delivery-card ${IN_CARD[r.status]||''}">
-        <div class="card-top">
-          <div>
-            <div class="card-name">${esc(r.vendor)}</div>
-            <div class="card-sub">${r.po?'PO: '+esc(r.po):''}</div>
+    wrap.innerHTML=rows.map(r=>{
+      const isOpen=openInKey===r._k;
+      const collapsed=`<div class="card-row" onclick="toggleCard('${r._k}','in')">
+        <div class="card-row-left">
+          <div class="card-name">${esc(r.vendor)}</div>
+          <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?'Expected: '+fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
+        </div>
+        <div class="card-row-right">
+          <span class="badge ${BADGE_CLS[r.status]||''}">${r.status}</span>
+          ${r.expected&&r.status==='Overdue'?`<span style="font-size:.8rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
+        </div>
+        <div class="card-chevron">▾</div>
+      </div>`;
+
+      const detail=`<div class="card-detail">
+        <div class="detail-section">
+          <div class="ds-title">Order Info</div>
+          <div class="detail-grid">
+            <div><div class="di-lbl">Vendor</div><div class="di-val">${esc(r.vendor)}</div></div>
+            <div><div class="di-lbl">PO Number</div><div class="di-val">${esc(r.po||'—')}</div></div>
+            <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
+            <div><div class="di-lbl">Quantity</div><div class="di-val">${esc(r.qty||'—')}</div></div>
+            <div><div class="di-lbl">Expected</div><div class="di-val" style="${r.status==='Overdue'?'color:var(--red)':''}">${fmtDate(r.expected)}</div></div>
+            ${r.receivedDate?`<div><div class="di-lbl">Received Date</div><div class="di-val">${fmtDate(r.receivedDate)}</div></div>`:''}
+            ${r.receivedBy?`<div><div class="di-lbl">Received By</div><div class="di-val">${esc(r.receivedBy)}</div></div>`:''}
+            ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
           </div>
-          <div style="flex-shrink:0">${badge(r.status)}</div>
+          ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Receiving photo" style="margin-top:10px">`:''}
         </div>
-        <div class="card-items">${esc(r.items||'—')}</div>
-        <div class="card-meta">
-          ${r.qty?`<div class="card-meta-item"><strong>Qty</strong>${esc(r.qty)}</div>`:''}
-          ${r.expected?`<div class="card-meta-item"><strong>Expected</strong><span style="${r.status==='Overdue'?'color:var(--red);font-weight:700':''}">${fmtDate(r.expected)}</span></div>`:''}
-          ${r.receivedDate?`<div class="card-meta-item"><strong>Received</strong>${fmtDate(r.receivedDate)}</div>`:''}
-          ${r.receivedBy?`<div class="card-meta-item"><strong>Received By</strong>${esc(r.receivedBy)}</div>`:''}
-          ${r.photo?`<div class="card-meta-item"><strong>Photo</strong><img class="photo-thumb" src="${r.photo}" onclick="viewIn('${r._key}')" alt="photo"></div>`:''}
+        <div class="detail-section">
+          <div class="ds-title">Update Status</div>
+          <div class="status-btns">
+            ${['Expected','Partial','Received'].map(s=>s===r.status
+              ?`<span class="sbtn ${IN_COL[s]||'blue'}" style="opacity:.5;cursor:default">✓ ${esc(s)}</span>`
+              :`<button class="sbtn ${IN_COL[s]||'blue'}" onclick="setInStatus('${r._k}','${s}');event.stopPropagation()">${esc(s)}</button>`
+            ).join('')}
+          </div>
         </div>
-        ${r.notes?`<div style="font-size:0.9rem;color:var(--gray-700);margin-top:6px;padding-top:6px;border-top:1px solid var(--gray-100)">${esc(r.notes)}</div>`:''}
-        <div class="card-actions">
-          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn-sm-status" style="background:var(--amber)" onclick="statusIn('${r._key}','Partial')">Mark Partial</button>`:''}
-          ${r.status!=='Received'?`<button class="btn-sm-status" style="background:var(--green)" onclick="statusIn('${r._key}','Received')">Mark Received</button>`:'<span style="font-family:\'Oswald\',sans-serif;font-size:0.9rem;color:var(--green);letter-spacing:1px">✓ RECEIVED</span>'}
-          <button class="btn-sm-ghost" onclick="viewIn('${r._key}')">View</button>
-          <button class="btn-sm-ghost" onclick="openInModal('${r._key}')">Edit</button>
-          <button class="btn-sm-del" onclick="deleteIn('${r._key}')">Delete</button>
+        <div class="detail-section" style="border-top:1px solid var(--bd);padding-top:12px;margin-top:4px">
+          <div class="status-btns">
+            <button class="sbtn outline" onclick="openInModal('${r._k}');event.stopPropagation()">Edit</button>
+            <button class="sbtn red-outline" onclick="deleteIn('${r._k}');event.stopPropagation()">Delete</button>
+          </div>
         </div>
-      </div>`).join('');
+      </div>`;
+
+      return`<div class="del-card ${IN_CARD[r.status]||''} ${isOpen?'open':''}" id="ic-${r._k}">${collapsed}${detail}</div>`;
+    }).join('');
   }
-  const total=inRecords.length,expected=inRecords.filter(r=>r.status==='Expected').length,
-    overdue=inRecords.filter(r=>r.status==='Overdue').length,
-    received=inRecords.filter(r=>r.status==='Received').length;
-  document.getElementById('summary-in').innerHTML=`
-    <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
-    <div class="summary-card blue"><div class="sc-label">Expected</div><div class="sc-value">${expected}</div></div>
-    <div class="summary-card amber"><div class="sc-label">Overdue</div><div class="sc-value">${overdue}</div></div>
-    <div class="summary-card green"><div class="sc-label">Received</div><div class="sc-value">${received}</div></div>`;
-  document.getElementById('count-in').textContent=inRecords.filter(r=>r.status!=='Received').length;
+  const total=inRecs.length,exp=inRecs.filter(r=>r.status==='Expected').length,
+    over=inRecs.filter(r=>r.status==='Overdue').length,rcv=inRecs.filter(r=>r.status==='Received').length;
+  document.getElementById('sum-in').innerHTML=`
+    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
+    <div class="sc blue"><div class="sc-lbl">Expected</div><div class="sc-val">${exp}</div></div>
+    <div class="sc amber"><div class="sc-lbl">Overdue</div><div class="sc-val">${over}</div></div>
+    <div class="sc green"><div class="sc-lbl">Received</div><div class="sc-val">${rcv}</div></div>`;
+  document.getElementById('ci').textContent=inRecs.filter(r=>r.status!=='Received').length;
 }
-
-function viewIn(key){
-  const r=inRecords.find(x=>x._key===key);
-  document.getElementById('detail-title').textContent='Inbound — '+r.vendor;
-  document.getElementById('detail-body').innerHTML=`
-    <div class="detail-section">
-      <div class="detail-section-title">Vendor / Order</div>
-      <div class="detail-grid">
-        <div><div class="di-label">Vendor</div><div class="di-value">${esc(r.vendor)}</div></div>
-        <div><div class="di-label">PO Number</div><div class="di-value">${esc(r.po||'—')}</div></div>
-        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
-        <div><div class="di-label">Quantity</div><div class="di-value">${esc(r.qty||'—')}</div></div>
-        <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
-        <div><div class="di-label">Expected</div><div class="di-value">${fmtDate(r.expected)}</div></div>
-        <div><div class="di-label">Received</div><div class="di-value">${fmtDate(r.receivedDate)}</div></div>
-        <div><div class="di-label">Received By</div><div class="di-value">${esc(r.receivedBy||'—')}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
-      </div>
-    </div>
-    ${r.photo?`<div class="detail-section"><div class="detail-section-title">Photo</div><div class="photo-display"><img src="${r.photo}" alt="photo"></div></div>`:''}`;
-  document.getElementById('modal-detail').classList.add('open');
-}
-
-function closeDetail(){document.getElementById('modal-detail').classList.remove('open');}
 
 // ── HELPERS
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtDate(d){
-  if(!d)return'—';
-  const[y,m,day]=d.split('-');
-  return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;
-}
-function fmtDateTime(iso){
-  if(!iso)return'';
-  const d=new Date(iso);
-  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-}
-function badge(s){
-  const m={'Order In':'badge-order-in','Loading':'badge-loading','Out for Delivery':'badge-out',
-    'Completed':'badge-completed','Expected':'badge-expected','Received':'badge-received',
-    'Partial':'badge-partial','Overdue':'badge-overdue'};
-  return`<span class="badge ${m[s]||''}">${s}</span>`;
-}
+function fmtDate(d){if(!d)return'—';const[y,m,day]=d.split('-');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;}
+function fmtDT(iso){if(!iso)return'';const d=new Date(iso);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
 </script>
 </body>
 </html>
