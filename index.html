@@ -558,7 +558,10 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
         <div class="fgrp"><label>Ticket Number</label><input type="text" id="o-ticket" placeholder="e.g. T-1042"></div>
         <div class="fdiv">Customer Info</div>
         <div class="fgrp" style="position:relative">
-          <label>Customer Name *</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <label style="margin-bottom:0">Customer Name</label>
+            <button type="button" onclick="openCustForm()" style="font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);border:none;padding:4px 10px;border-radius:3px;cursor:pointer">+ New Customer</button>
+          </div>
           <input type="text" id="o-cust" placeholder="Start typing to search…" autocomplete="off" oninput="custSearch(this.value)" onblur="setTimeout(()=>hideCustDrop(),200)">
           <div id="cust-drop" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--bd);border-top:none;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1)"></div>
         </div>
@@ -567,7 +570,7 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
           <div class="fgrp"><label>Delivery Address</label><input type="text" id="o-addr" placeholder="Street, City, ZIP"></div>
         </div>
         <div class="fdiv">Order Details</div>
-        <div class="fgrp"><label>Items / Description *</label><textarea id="o-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
+        <div class="fgrp"><label>Items / Description</label><textarea id="o-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
         <div class="fr">
           <div class="fgrp"><label>Driver</label><input type="text" id="o-driver" placeholder="Driver name"></div>
           <div class="fgrp"><label>Status</label>
@@ -962,7 +965,6 @@ function closeOutForm(){document.getElementById('form-out').classList.remove('op
 function saveOut(){
   const customer=document.getElementById('o-cust').value.trim();
   const items=document.getElementById('o-items').value.trim();
-  if(!customer||!items){alert('Customer name and items are required.');return;}
   const rec={customer,items,
     ticketNum:document.getElementById('o-ticket').value.trim(),
     phone:document.getElementById('o-phone').value.trim(),
