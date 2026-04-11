@@ -3,148 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Miller Hardware — Delivery Log | Yellville</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Miller Hardware — Delivery Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --red: #C0392B; --red-dark: #96281B;
-    --ink: #1A1A1A; --gray-900: #2C2C2C; --gray-700: #4A4A4A;
-    --gray-500: #7A7A7A; --gray-300: #C8C8C8; --gray-100: #F2F2F0;
-    --gray-50: #F8F8F6; --white: #FFFFFF;
-    --green: #1E6B45; --green-light: #E8F5EE;
-    --amber: #B8680A; --amber-light: #FEF3E2;
-    --blue: #1B4F8A; --blue-light: #E8F0FA;
-    --purple: #5C2D8A; --purple-light: #F0E8FA;
-    --border: #DEDEDD;
+    --ink: #1A1A1A; --gray-900: #222222; --gray-700: #444;
+    --gray-500: #777; --gray-300: #C0C0C0; --gray-100: #F0F0EE;
+    --gray-50: #F7F7F5; --white: #FFF;
+    --green: #1E6B45; --green-bg: #EAF5EE; --green-border: #A8D5B5;
+    --amber: #B8680A; --amber-bg: #FEF3E2;
+    --blue: #1B4F8A; --blue-bg: #E8F0FA;
+    --purple: #5C2D8A; --purple-bg: #F0E8FA;
+    --border: #DCDCDA;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--gray-100); color: var(--ink); min-height: 100vh; }
+  body { font-family: 'Open Sans', sans-serif; background: var(--gray-100); color: var(--ink); min-height: 100vh; font-size: 16px; }
 
-  header { background: var(--ink); border-bottom: 4px solid var(--red); }
-  .header-inner { max-width: 1200px; margin: 0 auto; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .logo-block { display: flex; align-items: baseline; gap: 12px; }
-  .logo-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--white); line-height: 1; }
-  .logo-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--gray-300); letter-spacing: 3px; text-transform: uppercase; }
-  .header-right { display: flex; align-items: center; gap: 16px; }
-  .location-badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; background: var(--red); color: var(--white); padding: 4px 10px; text-transform: uppercase; }
-  #live-clock { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gray-300); }
-
-  /* SYNC INDICATOR */
-  #sync-status {
-    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1px;
-    text-transform: uppercase; padding: 4px 10px; display: flex; align-items: center; gap: 6px;
-  }
-  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-500); flex-shrink: 0; }
-  .sync-dot.live  { background: #2ECC71; box-shadow: 0 0 6px #2ECC71; }
+  /* ── HEADER ── */
+  header { background: var(--ink); padding: 14px 18px 10px; border-bottom: 4px solid var(--red); }
+  .header-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .logo { font-family: 'Oswald', sans-serif; font-size: 1.7rem; font-weight: 700; letter-spacing: 1px; color: var(--white); line-height: 1; }
+  .logo span { color: var(--red); }
+  .logo-sub { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 3px; font-weight: 400; margin-left: 10px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .sync-pill { display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; }
+  .sync-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-500); flex-shrink: 0; }
+  .sync-dot.live { background: #2ECC71; box-shadow: 0 0 7px #2ECC71; }
   .sync-dot.error { background: var(--red); }
   .sync-dot.connecting { background: var(--amber); animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+  #sync-text { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 1px; }
+  #live-clock { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray-300); letter-spacing: 1px; }
+  .location-pill { background: var(--red); color: var(--white); font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; padding: 4px 12px; border-radius: 3px; }
 
-  .tab-nav { background: var(--gray-900); }
-  .tab-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; }
-  .tab-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 28px; border: none; background: transparent; color: var(--gray-500); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  /* ── TAB NAV ── */
+  .tab-nav { background: var(--gray-900); border-bottom: 1px solid #111; overflow-x: auto; }
+  .tab-nav-inner { display: flex; padding: 0 18px; min-width: max-content; }
+  .tab-btn { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 22px; border: none; background: transparent; color: var(--gray-500); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
   .tab-btn:hover { color: var(--gray-300); }
   .tab-btn.active { color: var(--white); border-bottom-color: var(--red); }
-  .tab-btn .count-pill { display: inline-block; background: var(--red); color: var(--white); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; margin-left: 6px; vertical-align: middle; font-weight: 600; }
+  .count-pill { display: inline-block; background: var(--red); color: var(--white); font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; margin-left: 6px; vertical-align: middle; font-family: 'Open Sans', sans-serif; font-weight: 700; }
 
-  .main { max-width: 1200px; margin: 0 auto; padding: 28px; }
+  /* ── MAIN ── */
+  .main { max-width: 960px; margin: 0 auto; padding: 18px; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
-  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-  .toolbar-left { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .search-box { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; padding: 8px 12px; border: 1px solid var(--border); background: var(--white); color: var(--ink); width: 220px; outline: none; }
-  .search-box:focus { border-color: var(--red); }
-  select.filter-select { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; padding: 8px 10px; border: 1px solid var(--border); background: var(--white); color: var(--ink); outline: none; cursor: pointer; }
-  .btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; padding: 9px 18px; border: none; cursor: pointer; transition: background 0.15s; text-transform: uppercase; }
-  .btn-primary { background: var(--red); color: var(--white); }
-  .btn-primary:hover { background: var(--red-dark); }
-  .btn-sm { padding: 5px 10px; font-size: 0.65rem; }
-  .btn-ghost { background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 5px 10px; font-size: 0.65rem; }
-  .btn-ghost:hover { background: var(--gray-100); color: var(--ink); }
+  /* ── MESSAGE BOARD ── */
+  .message-board { background: var(--green-bg); border: 2px solid var(--green-border); border-radius: 6px; padding: 14px 16px; margin-bottom: 18px; }
+  .message-board.empty { background: var(--gray-50); border-color: var(--border); }
+  .message-board-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .message-board-label { font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600; color: var(--green); letter-spacing: 1px; text-transform: uppercase; }
+  .message-board.empty .message-board-label { color: var(--gray-500); }
+  .message-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .message-item { background: white; border-left: 4px solid var(--green); padding: 10px 14px; border-radius: 0 4px 4px 0; }
+  .message-item .msg-text { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  .message-item .msg-meta { font-size: 0.8rem; color: var(--gray-500); margin-top: 3px; }
+  .message-item .msg-delete { float: right; background: none; border: none; color: var(--gray-300); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 0 0 8px; }
+  .message-item .msg-delete:hover { color: var(--red); }
+  .msg-input-row { display: flex; gap: 8px; }
+  .msg-input { flex: 1; font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
+  .msg-input:focus { border-color: var(--green); }
+  .msg-post-btn { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: var(--green); color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+  .msg-post-btn:hover { background: #165233; }
 
-  .table-wrap { background: var(--white); border: 1px solid var(--border); overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-  thead tr { background: var(--ink); color: var(--white); }
-  th { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 11px 14px; text-align: left; font-weight: 500; white-space: nowrap; }
-  td { padding: 11px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--gray-50); }
-  .mono { font-family: 'IBM Plex Mono', monospace; }
+  /* ── HOURS BANNER ── */
+  .hours-banner { background: var(--amber-bg); border: 1px solid #E8C070; border-radius: 6px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .hours-banner-text { font-family: 'Oswald', sans-serif; font-size: 1rem; color: var(--amber); letter-spacing: 1px; }
+  .hours-banner-text strong { font-size: 1.1rem; }
+  .hours-edit-btn { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; background: transparent; border: 1px solid var(--amber); color: var(--amber); padding: 5px 12px; cursor: pointer; border-radius: 3px; }
+  .hours-edit-btn:hover { background: var(--amber); color: white; }
 
-  .badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; font-weight: 600; display: inline-block; white-space: nowrap; }
-  .badge-order-in  { background: var(--purple-light); color: var(--purple); }
-  .badge-loading   { background: var(--amber-light);  color: var(--amber); }
-  .badge-out       { background: var(--blue-light);   color: var(--blue); }
-  .badge-completed { background: var(--green-light);  color: var(--green); }
-  .badge-expected  { background: var(--blue-light);   color: var(--blue); }
-  .badge-received  { background: var(--green-light);  color: var(--green); }
-  .badge-partial   { background: var(--amber-light);  color: var(--amber); }
-  .badge-overdue   { background: #FDECEC;             color: var(--red); }
-
-  .action-btns { display: flex; gap: 5px; flex-wrap: wrap; }
-
-  .empty-state { padding: 60px 20px; text-align: center; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; letter-spacing: 1px; }
-  .empty-state .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: 0.3; }
-
-  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .summary-card { background: var(--white); border: 1px solid var(--border); padding: 16px 18px; border-left: 4px solid var(--gray-300); }
+  /* ── SUMMARY CARDS ── */
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .summary-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; border-left: 5px solid var(--gray-300); }
   .summary-card.red    { border-left-color: var(--red); }
   .summary-card.green  { border-left-color: var(--green); }
   .summary-card.amber  { border-left-color: var(--amber); }
   .summary-card.blue   { border-left-color: var(--blue); }
   .summary-card.purple { border-left-color: var(--purple); }
-  .sc-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 6px; }
-  .sc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; color: var(--ink); }
+  .sc-label { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 4px; }
+  .sc-value { font-family: 'Oswald', sans-serif; font-size: 2.4rem; font-weight: 700; line-height: 1; color: var(--ink); }
 
-  .progress-track { display: flex; gap: 4px; align-items: center; margin-top: 5px; }
-  .pdot { width: 9px; height: 9px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
+  /* ── TOOLBAR ── */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .toolbar-left { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .search-box { font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 10px 14px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); width: 220px; outline: none; }
+  .search-box:focus { border-color: var(--red); }
+  select.filter-select { font-family: 'Open Sans', sans-serif; font-size: 0.95rem; padding: 10px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); outline: none; cursor: pointer; }
+  .btn-new { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 1px; background: var(--red); color: white; border: none; padding: 11px 22px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-new:hover { background: var(--red-dark); }
+
+  /* ── CARDS (replace table on mobile) ── */
+  .card-list { display: flex; flex-direction: column; gap: 12px; }
+  .delivery-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 16px; border-left: 5px solid var(--gray-300); }
+  .delivery-card.status-order-in   { border-left-color: var(--purple); }
+  .delivery-card.status-loading    { border-left-color: var(--amber); }
+  .delivery-card.status-out        { border-left-color: var(--blue); }
+  .delivery-card.status-completed  { border-left-color: var(--green); }
+  .delivery-card.status-expected   { border-left-color: var(--blue); }
+  .delivery-card.status-received   { border-left-color: var(--green); }
+  .delivery-card.status-partial    { border-left-color: var(--amber); }
+  .delivery-card.status-overdue    { border-left-color: var(--red); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .card-name { font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--ink); }
+  .card-sub { font-size: 0.9rem; color: var(--gray-500); margin-top: 1px; }
+  .card-items { font-size: 1rem; color: var(--ink); margin: 8px 0; line-height: 1.5; font-weight: 600; }
+  .card-meta { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0; }
+  .card-meta-item { font-size: 0.88rem; color: var(--gray-700); }
+  .card-meta-item strong { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); display: block; margin-bottom: 1px; }
+  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--gray-100); align-items: center; }
+  .btn-advance { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; color: white; border: none; padding: 9px 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-sm-ghost { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-sm-ghost:hover { background: var(--gray-100); color: var(--ink); }
+  .btn-sm-del { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; background: transparent; color: var(--red); border: 1px solid #ECC; padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-sm-del:hover { background: #FEE; }
+  .btn-sm-status { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1px; color: white; border: none; padding: 7px 14px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+
+  .progress-track { display: flex; gap: 5px; align-items: center; }
+  .pdot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
   .pdot.p-order-in  { background: var(--purple); }
   .pdot.p-loading   { background: var(--amber); }
   .pdot.p-out       { background: var(--blue); }
   .pdot.p-completed { background: var(--green); }
+  .photo-thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); cursor: pointer; }
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  /* BADGES */
+  .badge { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; font-weight: 600; display: inline-block; white-space: nowrap; border-radius: 3px; }
+  .badge-order-in  { background: var(--purple-bg); color: var(--purple); }
+  .badge-loading   { background: var(--amber-bg);  color: var(--amber); }
+  .badge-out       { background: var(--blue-bg);   color: var(--blue); }
+  .badge-completed { background: var(--green-bg);  color: var(--green); }
+  .badge-expected  { background: var(--blue-bg);   color: var(--blue); }
+  .badge-received  { background: var(--green-bg);  color: var(--green); }
+  .badge-partial   { background: var(--amber-bg);  color: var(--amber); }
+  .badge-overdue   { background: #FDECEC;          color: var(--red); }
+
+  .empty-state { padding: 50px 20px; text-align: center; color: var(--gray-500); font-family: 'Oswald', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+  .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: 0.3; }
+
+  /* ── MODAL ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--white); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; border-top: 4px solid var(--red); animation: slideUp 0.2s ease; }
-  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  .modal-header { padding: 20px 24px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; }
-  .modal-close { font-size: 1.4rem; background: none; border: none; cursor: pointer; color: var(--gray-500); padding: 2px 6px; }
+  .modal { background: var(--white); width: 100%; max-width: 600px; border-top: 5px solid var(--red); border-radius: 0 0 6px 6px; animation: slideUp 0.2s ease; margin: auto; }
+  @keyframes slideUp { from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1} }
+  .modal-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-family: 'Oswald', sans-serif; font-size: 1.4rem; letter-spacing: 1px; font-weight: 600; }
+  .modal-close { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--gray-500); padding: 0 4px; line-height: 1; }
   .modal-close:hover { color: var(--ink); }
-  .modal-body { padding: 22px 24px; }
-  .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-body { padding: 20px; }
+  .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
 
-  .form-grid { display: grid; gap: 16px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid { display: grid; gap: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-700); font-weight: 500; }
-  .form-group input, .form-group select, .form-group textarea { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; padding: 9px 11px; border: 1px solid var(--border); background: var(--white); color: var(--ink); outline: none; transition: border-color 0.15s; }
+  .form-group label { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-700); font-weight: 600; }
+  .form-group input, .form-group select, .form-group textarea {
+    font-family: 'Open Sans', sans-serif; font-size: 1rem; padding: 11px 12px;
+    border: 1px solid var(--border); border-radius: 4px; background: var(--white); color: var(--ink); outline: none; }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); }
-  .form-group textarea { resize: vertical; min-height: 70px; }
-  .form-divider { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding: 8px 0 2px; border-top: 1px solid var(--border); margin-top: 4px; }
+  .form-group textarea { resize: vertical; min-height: 72px; }
+  .form-divider { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding: 6px 0 2px; border-top: 1px solid var(--border); margin-top: 2px; }
+  .warn-text { font-size: 0.88rem; color: var(--red); font-weight: 600; margin-top: 4px; }
 
-  .photo-upload-area { border: 2px dashed var(--border); background: var(--gray-50); padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s; position: relative; }
+  .photo-upload-area { border: 2px dashed var(--border); border-radius: 4px; background: var(--gray-50); padding: 22px 16px; text-align: center; cursor: pointer; position: relative; transition: border-color 0.15s; }
   .photo-upload-area:hover { border-color: var(--red); }
   .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); pointer-events: none; }
-  .upload-label .upload-icon { font-size: 2rem; display: block; margin-bottom: 6px; opacity: 0.4; }
+  .upload-label { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); pointer-events: none; }
+  .upload-icon { font-size: 2rem; display: block; margin-bottom: 6px; opacity: 0.4; }
   .photo-preview-wrap { position: relative; display: inline-block; margin-top: 10px; }
-  .photo-preview-wrap img { max-width: 100%; max-height: 200px; display: block; border: 1px solid var(--border); }
-  .photo-clear-btn { position: absolute; top: 4px; right: 4px; background: var(--red); color: white; border: none; cursor: pointer; font-size: 0.7rem; padding: 3px 7px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
+  .photo-preview-wrap img { max-width: 100%; max-height: 200px; display: block; border: 1px solid var(--border); border-radius: 3px; }
+  .photo-clear-btn { position: absolute; top: 4px; right: 4px; background: var(--red); color: white; border: none; cursor: pointer; font-size: 0.75rem; padding: 3px 8px; border-radius: 2px; font-family: 'Oswald', sans-serif; }
 
-  .detail-section { margin-bottom: 20px; }
-  .detail-section-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
-  .di-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 2px; }
-  .di-value { font-size: 0.87rem; color: var(--ink); font-weight: 500; }
-  .photo-display img { max-width: 100%; max-height: 280px; border: 1px solid var(--border); display: block; margin-top: 6px; }
-  .no-photo { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--gray-500); font-style: italic; margin-top: 4px; }
+  .btn-cancel { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: transparent; color: var(--gray-500); border: 1px solid var(--border); padding: 10px 20px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-save   { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; background: var(--red); color: white; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+  .btn-save:hover { background: var(--red-dark); }
 
-  @media (max-width: 640px) {
+  /* DETAIL */
+  .detail-section { margin-bottom: 18px; }
+  .detail-section-title { font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  .di-label { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 2px; }
+  .di-value { font-size: 1rem; color: var(--ink); font-weight: 600; }
+  .photo-display img { max-width: 100%; border: 1px solid var(--border); border-radius: 3px; margin-top: 6px; }
+  .no-photo { font-size: 0.9rem; color: var(--gray-500); font-style: italic; margin-top: 4px; }
+
+  /* HOURS MODAL */
+  .hours-grid { display: grid; gap: 10px; }
+  .hours-row { display: flex; align-items: center; gap: 12px; }
+  .hours-day { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 1px; width: 110px; color: var(--ink); }
+  .hours-row input[type="time"] { font-family: 'Open Sans', sans-serif; font-size: 0.95rem; padding: 7px 10px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
+  .hours-row input[type="time"]:focus { border-color: var(--red); }
+  .hours-closed { display: flex; align-items: center; gap: 6px; font-family: 'Oswald', sans-serif; font-size: 0.9rem; color: var(--gray-500); cursor: pointer; }
+  .hours-closed input { width: auto; cursor: pointer; }
+
+  @media (max-width: 520px) {
     .form-row { grid-template-columns: 1fr; }
     .detail-grid { grid-template-columns: 1fr; }
-    .header-inner { gap: 10px; }
     .summary-row { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -152,19 +209,20 @@
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="logo-block">
-      <span class="logo-name">Miller Hardware</span>
-      <span class="logo-sub">Est. 1931</span>
+  <div class="header-top">
+    <div>
+      <div class="logo">MILLER <span>HARDWARE</span> <span style="font-size:0.9rem;color:var(--gray-300);font-weight:400;letter-spacing:3px">DELIVERY</span></div>
     </div>
-    <div class="header-right">
-      <div id="sync-status">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="sync-pill">
         <div class="sync-dot connecting" id="sync-dot"></div>
-        <span id="sync-text" style="color:var(--gray-300)">Connecting…</span>
+        <span id="sync-text">Connecting…</span>
       </div>
-      <span class="location-badge">Yellville</span>
-      <span id="live-clock"></span>
+      <span class="location-pill">Yellville</span>
     </div>
+  </div>
+  <div class="header-meta">
+    <span id="live-clock"></span>
   </div>
 </header>
 
@@ -174,74 +232,90 @@
       Deliveries Out <span class="count-pill" id="count-out">0</span>
     </button>
     <button class="tab-btn" onclick="switchTab('in',this)">
-      Deliveries Due In <span class="count-pill" id="count-in">0</span>
+      Due In <span class="count-pill" id="count-in">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('settings',this)">
+      Hours &amp; Settings
     </button>
   </div>
 </nav>
 
 <main class="main">
 
+  <!-- ══ OUTBOUND ══ -->
   <div id="panel-out" class="tab-panel active">
+
+    <!-- Message Board -->
+    <div class="message-board" id="msg-board-out">
+      <div class="message-board-header">
+        <span class="message-board-label" id="msg-board-label">📋 Notice Board</span>
+      </div>
+      <div class="message-list" id="msg-list"></div>
+      <div class="msg-input-row">
+        <input class="msg-input" type="text" id="msg-input" placeholder="Post a notice for the team…" maxlength="200">
+        <button class="msg-post-btn" onclick="postMessage()">Post</button>
+      </div>
+    </div>
+
+    <!-- Hours banner -->
+    <div class="hours-banner" id="hours-banner" style="display:none">
+      <span class="hours-banner-text" id="hours-banner-text"></span>
+      <button class="hours-edit-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-btn')[2])">Edit Hours</button>
+    </div>
+
     <div class="summary-row" id="summary-out"></div>
     <div class="toolbar">
       <div class="toolbar-left">
-        <input class="search-box" type="text" placeholder="Search customer, address…" oninput="renderOut()" id="search-out">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="search-out">
         <select class="filter-select" onchange="renderOut()" id="filter-out-status">
           <option value="">All Statuses</option>
-          <option value="Order In">Order In</option>
-          <option value="Loading">Loading</option>
-          <option value="Out for Delivery">Out for Delivery</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <select class="filter-select" onchange="renderOut()" id="filter-out-driver">
-          <option value="">All Drivers</option>
+          <option>Order In</option><option>Loading</option>
+          <option>Out for Delivery</option><option>Completed</option>
         </select>
       </div>
-      <button class="btn btn-primary" onclick="openOutModal()">+ New Delivery</button>
+      <button class="btn-new" onclick="openOutModal()">+ New Delivery</button>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>Customer</th><th>Address</th><th>Items</th><th>Driver</th><th>Date / Window</th><th>Status</th><th>📷</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="tbody-out"></tbody>
-      </table>
-      <div id="empty-out" class="empty-state" style="display:none">
-        <span class="empty-icon">🚚</span>No outbound deliveries logged yet.
-      </div>
+    <div class="card-list" id="cards-out"></div>
+    <div id="empty-out" class="empty-state" style="display:none">
+      <span class="empty-icon">🚚</span>No outbound deliveries logged yet.
     </div>
   </div>
 
+  <!-- ══ INBOUND ══ -->
   <div id="panel-in" class="tab-panel">
     <div class="summary-row" id="summary-in"></div>
     <div class="toolbar">
       <div class="toolbar-left">
-        <input class="search-box" type="text" placeholder="Search vendor, PO…" oninput="renderIn()" id="search-in">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderIn()" id="search-in">
         <select class="filter-select" onchange="renderIn()" id="filter-in-status">
           <option value="">All Statuses</option>
-          <option value="Expected">Expected</option>
-          <option value="Partial">Partial</option>
-          <option value="Received">Received</option>
-          <option value="Overdue">Overdue</option>
+          <option>Expected</option><option>Partial</option>
+          <option>Received</option><option>Overdue</option>
         </select>
         <select class="filter-select" onchange="renderIn()" id="filter-in-vendor">
           <option value="">All Vendors</option>
         </select>
       </div>
-      <button class="btn btn-primary" onclick="openInModal()">+ New Inbound</button>
+      <button class="btn-new" onclick="openInModal()">+ New Inbound</button>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>Vendor</th><th>PO Number</th><th>Items / Qty</th><th>Expected</th><th>Status</th><th>Received</th><th>Notes</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="tbody-in"></tbody>
-      </table>
-      <div id="empty-in" class="empty-state" style="display:none">
-        <span class="empty-icon">📦</span>No inbound deliveries logged yet.
+    <div class="card-list" id="cards-in"></div>
+    <div id="empty-in" class="empty-state" style="display:none">
+      <span class="empty-icon">📦</span>No inbound deliveries logged yet.
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS ══ -->
+  <div id="panel-settings" class="tab-panel">
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:22px;max-width:500px">
+      <div style="font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:600;letter-spacing:1px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:10px">Delivery Hours</div>
+      <p style="font-size:0.95rem;color:var(--gray-500);margin-bottom:18px">Set the hours deliveries can be scheduled. If a delivery date falls outside these hours, a warning will show.</p>
+      <div class="hours-grid" id="hours-grid"></div>
+      <div style="margin-top:20px">
+        <button class="btn-save" onclick="saveHours()">Save Hours</button>
       </div>
     </div>
   </div>
+
 </main>
 
 <!-- OUTBOUND MODAL -->
@@ -256,7 +330,7 @@
         <div class="form-divider">Customer Info</div>
         <div class="form-row">
           <div class="form-group"><label>Customer Name *</label><input type="text" id="out-customer" placeholder="Full name"></div>
-          <div class="form-group"><label>Phone</label><input type="text" id="out-phone" placeholder="(870) 555-0000"></div>
+          <div class="form-group"><label>Phone</label><input type="tel" id="out-phone" placeholder="(870) 555-0000"></div>
         </div>
         <div class="form-group"><label>Delivery Address</label><input type="text" id="out-address" placeholder="Street, City, ZIP"></div>
         <div class="form-divider">Order Details</div>
@@ -271,25 +345,26 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Delivery Date</label><input type="date" id="out-date"></div>
+          <div class="form-group"><label>Delivery Date</label><input type="date" id="out-date" onchange="checkHoursWarning()"></div>
           <div class="form-group"><label>Time Window</label><input type="text" id="out-window" placeholder="e.g. 8am – 11am"></div>
         </div>
-        <div class="form-group"><label>Notes</label><textarea id="out-notes" placeholder="Gate code, access notes, special instructions…"></textarea></div>
-        <div class="form-divider">Proof of Delivery — Photo</div>
+        <div id="hours-warning" class="warn-text" style="display:none"></div>
+        <div class="form-group"><label>Notes</label><textarea id="out-notes" placeholder="Gate code, access notes…"></textarea></div>
+        <div class="form-divider">Proof of Delivery</div>
         <div class="form-group">
-          <label>Photo (tap to use camera or upload)</label>
+          <label>Photo</label>
           <div class="photo-upload-area">
             <input type="file" accept="image/*" capture="environment" id="out-photo-input" onchange="handlePhoto(event,'out')">
             <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
           </div>
           <div id="out-photo-preview"></div>
         </div>
-        <div class="form-group"><label>Received By (print name)</label><input type="text" id="out-received-by" placeholder="Name of person who accepted delivery"></div>
+        <div class="form-group"><label>Received By</label><input type="text" id="out-received-by" placeholder="Name of person who accepted delivery"></div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeOutModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveOut()">Save Delivery</button>
+      <button class="btn-cancel" onclick="closeOutModal()">Cancel</button>
+      <button class="btn-save" onclick="saveOut()">Save Delivery</button>
     </div>
   </div>
 </div>
@@ -310,9 +385,9 @@
         </div>
         <div class="form-divider">Order Details</div>
         <div class="form-group"><label>Items / Description</label><textarea id="in-items" placeholder="e.g. 12 boxes 15A outlets, 2 rolls 12/2 wire…"></textarea></div>
-        <div class="form-group"><label>Quantity / Units</label><input type="text" id="in-qty" placeholder="e.g. 3 pallets, 48 units, 200 lf"></div>
+        <div class="form-group"><label>Quantity / Units</label><input type="text" id="in-qty" placeholder="e.g. 3 pallets, 48 units"></div>
         <div class="form-row">
-          <div class="form-group"><label>Expected Delivery Date</label><input type="date" id="in-expected"></div>
+          <div class="form-group"><label>Expected Date</label><input type="date" id="in-expected"></div>
           <div class="form-group"><label>Status</label>
             <select id="in-status">
               <option>Expected</option><option>Partial</option>
@@ -324,10 +399,9 @@
           <div class="form-group"><label>Received Date</label><input type="date" id="in-received-date"></div>
           <div class="form-group"><label>Received By</label><input type="text" id="in-received-by" placeholder="Employee name"></div>
         </div>
-        <div class="form-group"><label>Notes / Discrepancies</label><textarea id="in-notes" placeholder="Short shipped, damaged cartons, backorder items…"></textarea></div>
+        <div class="form-group"><label>Notes / Discrepancies</label><textarea id="in-notes" placeholder="Short shipped, damaged cartons…"></textarea></div>
         <div class="form-divider">Receiving Photo (optional)</div>
         <div class="form-group">
-          <label>Photo (tap to use camera or upload)</label>
           <div class="photo-upload-area">
             <input type="file" accept="image/*" capture="environment" id="in-photo-input" onchange="handlePhoto(event,'in')">
             <span class="upload-label"><span class="upload-icon">📷</span>Tap to take photo or choose from library</span>
@@ -337,8 +411,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeInModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveIn()">Save Order</button>
+      <button class="btn-cancel" onclick="closeInModal()">Cancel</button>
+      <button class="btn-save" onclick="saveIn()">Save Order</button>
     </div>
   </div>
 </div>
@@ -347,12 +421,12 @@
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title" id="detail-title">Record Detail</span>
+      <span class="modal-title" id="detail-title">Detail</span>
       <button class="modal-close" onclick="closeDetail()">×</button>
     </div>
     <div class="modal-body" id="detail-body"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
+      <button class="btn-cancel" onclick="closeDetail()">Close</button>
     </div>
   </div>
 </div>
@@ -360,235 +434,325 @@
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
 <script>
-// ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyDNEl1mXtNLGN0nsvr1lZi7SJzsiypJFLM",
   authDomain: "millersawshop-f716a.firebaseapp.com",
   databaseURL: "https://millersawshop-f716a-default-rtdb.firebaseio.com",
   projectId: "millersawshop-f716a",
   storageBucket: "millersawshop-f716a.firebasestorage.app",
   messagingSenderId: "187757043776",
-  appId: "1:187757043776:web:a0cce22b59172da8db7fa5",
-  measurementId: "G-NGCMST4SWE"
-};
-firebase.initializeApp(firebaseConfig);
+  appId: "1:187757043776:web:a0cce22b59172da8db7fa5"
+});
 const db = firebase.database();
-const outRef = db.ref('deliveries_out');
-const inRef  = db.ref('deliveries_in');
+const outRef  = db.ref('deliveries_out');
+const inRef   = db.ref('deliveries_in');
+const msgRef  = db.ref('delivery_messages');
+const hoursRef= db.ref('delivery_hours');
 
-// ── SYNC STATUS ───────────────────────────────────────────────────────────────
-function setSyncStatus(state) {
-  const dot  = document.getElementById('sync-dot');
-  const text = document.getElementById('sync-text');
-  dot.className = 'sync-dot ' + state;
-  const labels = { live:'Live', error:'Offline', connecting:'Connecting…' };
-  text.textContent = labels[state] || state;
-  text.style.color = state === 'live' ? '#2ECC71' : state === 'error' ? 'var(--red)' : 'var(--gray-300)';
-}
-db.ref('.info/connected').on('value', snap => {
-  setSyncStatus(snap.val() ? 'live' : 'error');
+// ── SYNC STATUS
+db.ref('.info/connected').on('value', s => {
+  const on = s.val();
+  document.getElementById('sync-dot').className = 'sync-dot ' + (on?'live':'error');
+  document.getElementById('sync-text').textContent = on ? 'Live Sync On' : 'Offline';
+  document.getElementById('sync-text').style.color = on ? '#2ECC71' : 'var(--red)';
 });
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let outRecords = [], inRecords = [];
-let editingOutId = null, editingInId = null;
-let tempOutPhoto = null, tempInPhoto = null;
+// ── STATE
+let outRecords=[], inRecords=[], messages=[];
+let editingOutId=null, editingInId=null;
+let tempOutPhoto=null, tempInPhoto=null;
+let hoursConfig = {
+  Mon:{open:'07:00',close:'17:00',closed:false},
+  Tue:{open:'07:00',close:'17:00',closed:false},
+  Wed:{open:'07:00',close:'17:00',closed:false},
+  Thu:{open:'07:00',close:'17:00',closed:false},
+  Fri:{open:'07:00',close:'17:00',closed:false},
+  Sat:{open:'08:00',close:'12:00',closed:false},
+  Sun:{open:'08:00',close:'12:00',closed:true}
+};
 
-// ── FIREBASE LISTENERS ────────────────────────────────────────────────────────
-outRef.on('value', snap => {
-  outRecords = [];
-  snap.forEach(child => outRecords.push({ _key: child.key, ...child.val() }));
-  outRecords.sort((a,b) => (b.created||'') > (a.created||'') ? 1 : -1);
-  renderOut();
-});
-inRef.on('value', snap => {
-  inRecords = [];
-  snap.forEach(child => inRecords.push({ _key: child.key, ...child.val() }));
-  inRecords.sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
-  renderIn();
-});
-
-// ── CLOCK ─────────────────────────────────────────────────────────────────────
+// ── CLOCK
 function tick() {
-  const n = new Date();
+  const n=new Date();
   document.getElementById('live-clock').textContent =
     n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' +
     n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
-setInterval(tick, 1000); tick();
+setInterval(tick,1000); tick();
 
-// ── TABS ──────────────────────────────────────────────────────────────────────
-function switchTab(t, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+// ── TABS
+function switchTab(t,btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('panel-' + t).classList.add('active');
+  document.getElementById('panel-'+t).classList.add('active');
+  if(t==='settings') renderHoursGrid();
 }
 
-// ── PHOTO ─────────────────────────────────────────────────────────────────────
+// ── FIREBASE LISTENERS
+outRef.on('value', s => {
+  outRecords=[];
+  s.forEach(c=>outRecords.push({_key:c.key,...c.val()}));
+  outRecords.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);
+  renderOut();
+});
+inRef.on('value', s => {
+  inRecords=[];
+  s.forEach(c=>inRecords.push({_key:c.key,...c.val()}));
+  inRecords.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);
+  renderIn();
+});
+msgRef.on('value', s => {
+  messages=[];
+  s.forEach(c=>messages.push({_key:c.key,...c.val()}));
+  messages.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);
+  renderMessages();
+});
+hoursRef.on('value', s => {
+  if(s.val()) hoursConfig = s.val();
+  renderHoursBanner();
+});
+
+// ── MESSAGES
+function postMessage() {
+  const txt = document.getElementById('msg-input').value.trim();
+  if(!txt) return;
+  msgRef.push({ text:txt, created:new Date().toISOString() });
+  document.getElementById('msg-input').value='';
+}
+function deleteMessage(key) { msgRef.child(key).remove(); }
+function renderMessages() {
+  const list = document.getElementById('msg-list');
+  if(!messages.length) {
+    list.innerHTML='';
+    document.getElementById('msg-board-out').className='message-board empty';
+    document.getElementById('msg-board-label').textContent='📋 Notice Board';
+    return;
+  }
+  document.getElementById('msg-board-out').className='message-board';
+  document.getElementById('msg-board-label').textContent='📋 Notice Board';
+  list.innerHTML = messages.map(m=>`
+    <div class="message-item">
+      <button class="msg-delete" onclick="deleteMessage('${m._key}')">✕</button>
+      <div class="msg-text">${esc(m.text)}</div>
+      <div class="msg-meta">${fmtDateTime(m.created)}</div>
+    </div>`).join('');
+}
+
+// ── HOURS
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function renderHoursGrid() {
+  document.getElementById('hours-grid').innerHTML = DAYS.map(d => {
+    const h = hoursConfig[d]||{open:'07:00',close:'17:00',closed:false};
+    return `<div class="hours-row">
+      <span class="hours-day">${d}</span>
+      <input type="time" id="h-open-${d}" value="${h.open||'07:00'}" ${h.closed?'disabled':''}>
+      <span style="font-family:'Oswald',sans-serif;color:var(--gray-500)">to</span>
+      <input type="time" id="h-close-${d}" value="${h.close||'17:00'}" ${h.closed?'disabled':''}>
+      <label class="hours-closed">
+        <input type="checkbox" id="h-closed-${d}" ${h.closed?'checked':''} onchange="toggleDayClosed('${d}')"> Closed
+      </label>
+    </div>`;
+  }).join('');
+}
+function toggleDayClosed(d) {
+  const closed = document.getElementById('h-closed-'+d).checked;
+  document.getElementById('h-open-'+d).disabled = closed;
+  document.getElementById('h-close-'+d).disabled = closed;
+}
+function saveHours() {
+  const cfg = {};
+  DAYS.forEach(d => {
+    cfg[d] = {
+      open:   document.getElementById('h-open-'+d).value,
+      close:  document.getElementById('h-close-'+d).value,
+      closed: document.getElementById('h-closed-'+d).checked
+    };
+  });
+  hoursRef.set(cfg);
+  alert('Hours saved!');
+}
+function renderHoursBanner() {
+  const banner = document.getElementById('hours-banner');
+  const text   = document.getElementById('hours-banner-text');
+  const today  = new Date().toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
+  const h = hoursConfig[today];
+  if(!h) { banner.style.display='none'; return; }
+  banner.style.display='flex';
+  if(h.closed) {
+    text.innerHTML = `<strong>🚫 No Deliveries Today (${today})</strong>`;
+  } else {
+    text.innerHTML = `<strong>Today's Delivery Hours (${today}):</strong> ${fmt12(h.open)} – ${fmt12(h.close)}`;
+  }
+}
+function fmt12(t) {
+  if(!t) return '';
+  const [h,m] = t.split(':');
+  const hr = +h; const ampm = hr>=12?'pm':'am';
+  return (hr%12||12) + (m!=='00'?':'+m:'') + ampm;
+}
+function checkHoursWarning() {
+  const warn = document.getElementById('hours-warning');
+  const dateVal = document.getElementById('out-date').value;
+  if(!dateVal) { warn.style.display='none'; return; }
+  const d = new Date(dateVal+'T12:00:00');
+  const dayName = d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
+  const h = hoursConfig[dayName];
+  if(h && h.closed) {
+    warn.textContent = `⚠️ ${dayName} is marked as no deliveries.`;
+    warn.style.display='block';
+  } else {
+    warn.style.display='none';
+  }
+}
+
+// ── PHOTO
 function handlePhoto(e, which) {
-  const file = e.target.files[0]; if (!file) return;
-  // Compress image before storing
-  const img = new Image();
-  const reader = new FileReader();
+  const file=e.target.files[0]; if(!file) return;
+  const img=new Image(), reader=new FileReader();
   reader.onload = ev => {
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX = 800;
-      let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const data = canvas.toDataURL('image/jpeg', 0.7);
-      if (which === 'out') tempOutPhoto = data;
-      else tempInPhoto = data;
-      renderPhotoPreview(which, data);
+      const canvas=document.createElement('canvas');
+      const MAX=800; let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+      if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const data=canvas.toDataURL('image/jpeg',0.7);
+      if(which==='out') tempOutPhoto=data; else tempInPhoto=data;
+      renderPhotoPreview(which,data);
     };
-    img.src = ev.target.result;
+    img.src=ev.target.result;
   };
   reader.readAsDataURL(file);
 }
-function renderPhotoPreview(which, data) {
-  const el = document.getElementById(which + '-photo-preview');
-  if (!data) { el.innerHTML = ''; return; }
-  el.innerHTML = `<div class="photo-preview-wrap">
-    <img src="${data}" alt="Photo">
-    <button class="photo-clear-btn" onclick="clearPhoto('${which}')">✕ Remove</button>
-  </div>`;
+function renderPhotoPreview(which,data) {
+  const el=document.getElementById(which+'-photo-preview');
+  if(!data){el.innerHTML='';return;}
+  el.innerHTML=`<div class="photo-preview-wrap"><img src="${data}" alt="Photo"><button class="photo-clear-btn" onclick="clearPhoto('${which}')">✕ Remove</button></div>`;
 }
 function clearPhoto(which) {
-  if (which === 'out') { tempOutPhoto = null; document.getElementById('out-photo-input').value = ''; }
-  else { tempInPhoto = null; document.getElementById('in-photo-input').value = ''; }
-  renderPhotoPreview(which, null);
+  if(which==='out'){tempOutPhoto=null;document.getElementById('out-photo-input').value='';}
+  else{tempInPhoto=null;document.getElementById('in-photo-input').value='';}
+  renderPhotoPreview(which,null);
 }
 
-// ── OUTBOUND ──────────────────────────────────────────────────────────────────
-const OUT_STATUSES = ['Order In','Loading','Out for Delivery','Completed'];
-const OUT_COLORS   = {'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)'};
-const OUT_DOT_CLS  = {'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed'};
+// ── OUTBOUND
+const OUT_STATUSES=['Order In','Loading','Out for Delivery','Completed'];
+const OUT_COLORS={'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)'};
+const OUT_DOT_CLS={'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed'};
+const OUT_CARD_CLS={'Order In':'status-order-in','Loading':'status-loading','Out for Delivery':'status-out','Completed':'status-completed'};
 
 function openOutModal(key) {
-  editingOutId = key || null; tempOutPhoto = null;
-  document.getElementById('out-photo-preview').innerHTML = '';
-  document.getElementById('out-photo-input').value = '';
-  const r = key ? outRecords.find(x=>x._key===key) : null;
-  document.getElementById('modal-out-title').textContent = key ? 'Edit Delivery' : 'New Delivery Out';
-  document.getElementById('out-customer').value    = r?.customer   || '';
-  document.getElementById('out-phone').value       = r?.phone      || '';
-  document.getElementById('out-address').value     = r?.address    || '';
-  document.getElementById('out-items').value       = r?.items      || '';
-  document.getElementById('out-driver').value      = r?.driver     || '';
-  document.getElementById('out-status').value      = r?.status     || 'Order In';
-  document.getElementById('out-date').value        = r?.date       || new Date().toISOString().slice(0,10);
-  document.getElementById('out-window').value      = r?.window     || '';
-  document.getElementById('out-notes').value       = r?.notes      || '';
-  document.getElementById('out-received-by').value = r?.receivedBy || '';
-  if (r?.photo) { tempOutPhoto = r.photo; renderPhotoPreview('out', r.photo); }
+  editingOutId=key||null; tempOutPhoto=null;
+  document.getElementById('out-photo-preview').innerHTML='';
+  document.getElementById('out-photo-input').value='';
+  document.getElementById('hours-warning').style.display='none';
+  const r=key?outRecords.find(x=>x._key===key):null;
+  document.getElementById('modal-out-title').textContent=key?'Edit Delivery':'New Delivery Out';
+  document.getElementById('out-customer').value   =r?.customer   ||'';
+  document.getElementById('out-phone').value      =r?.phone      ||'';
+  document.getElementById('out-address').value    =r?.address    ||'';
+  document.getElementById('out-items').value      =r?.items      ||'';
+  document.getElementById('out-driver').value     =r?.driver     ||'';
+  document.getElementById('out-status').value     =r?.status     ||'Order In';
+  document.getElementById('out-date').value       =r?.date       ||new Date().toISOString().slice(0,10);
+  document.getElementById('out-window').value     =r?.window     ||'';
+  document.getElementById('out-notes').value      =r?.notes      ||'';
+  document.getElementById('out-received-by').value=r?.receivedBy ||'';
+  if(r?.photo){tempOutPhoto=r.photo;renderPhotoPreview('out',r.photo);}
   document.getElementById('modal-out').classList.add('open');
+  checkHoursWarning();
 }
-function closeOutModal() { document.getElementById('modal-out').classList.remove('open'); editingOutId = null; }
+function closeOutModal(){document.getElementById('modal-out').classList.remove('open');editingOutId=null;}
 
-function saveOut() {
-  const customer = document.getElementById('out-customer').value.trim();
-  const items    = document.getElementById('out-items').value.trim();
-  if (!customer || !items) { alert('Customer name and items are required.'); return; }
-  const rec = {
-    customer, items,
-    phone:      document.getElementById('out-phone').value.trim(),
-    address:    document.getElementById('out-address').value.trim(),
-    driver:     document.getElementById('out-driver').value.trim(),
-    status:     document.getElementById('out-status').value,
-    date:       document.getElementById('out-date').value,
-    window:     document.getElementById('out-window').value.trim(),
-    notes:      document.getElementById('out-notes').value.trim(),
-    receivedBy: document.getElementById('out-received-by').value.trim(),
-    photo:      tempOutPhoto || '',
-    updated:    new Date().toISOString()
-  };
-  if (editingOutId) {
-    outRef.child(editingOutId).update(rec);
-  } else {
-    rec.created = new Date().toISOString();
-    outRef.push(rec);
-  }
+function saveOut(){
+  const customer=document.getElementById('out-customer').value.trim();
+  const items=document.getElementById('out-items').value.trim();
+  if(!customer||!items){alert('Customer name and items are required.');return;}
+  const rec={customer,items,
+    phone:document.getElementById('out-phone').value.trim(),
+    address:document.getElementById('out-address').value.trim(),
+    driver:document.getElementById('out-driver').value.trim(),
+    status:document.getElementById('out-status').value,
+    date:document.getElementById('out-date').value,
+    window:document.getElementById('out-window').value.trim(),
+    notes:document.getElementById('out-notes').value.trim(),
+    receivedBy:document.getElementById('out-received-by').value.trim(),
+    photo:tempOutPhoto||'',updated:new Date().toISOString()};
+  if(editingOutId){outRef.child(editingOutId).update(rec);}
+  else{rec.created=new Date().toISOString();outRef.push(rec);}
   closeOutModal();
 }
-
-function deleteOut(key) {
-  if (!confirm('Delete this delivery record?')) return;
-  outRef.child(key).remove();
+function deleteOut(key){if(!confirm('Delete this delivery?'))return;outRef.child(key).remove();}
+function advanceOut(key){
+  const r=outRecords.find(x=>x._key===key);
+  const idx=OUT_STATUSES.indexOf(r.status);
+  if(idx<OUT_STATUSES.length-1)outRef.child(key).update({status:OUT_STATUSES[idx+1]});
 }
 
-function advanceOut(key) {
-  const r = outRecords.find(x=>x._key===key);
-  const idx = OUT_STATUSES.indexOf(r.status);
-  if (idx < OUT_STATUSES.length - 1) outRef.child(key).update({ status: OUT_STATUSES[idx+1] });
-}
-
-function renderOut() {
-  const search  = document.getElementById('search-out').value.toLowerCase();
-  const fStatus = document.getElementById('filter-out-status').value;
-  const fDriver = document.getElementById('filter-out-driver').value;
-  const drivers = [...new Set(outRecords.map(r=>r.driver).filter(Boolean))];
-  const dSel = document.getElementById('filter-out-driver'); const curD = dSel.value;
-  dSel.innerHTML = '<option value="">All Drivers</option>' +
-    drivers.map(d=>`<option value="${esc(d)}"${d===curD?' selected':''}>${esc(d)}</option>`).join('');
-  let rows = outRecords.filter(r => {
-    if (fStatus && r.status !== fStatus) return false;
-    if (fDriver && r.driver !== fDriver) return false;
-    if (search && !`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search)) return false;
+function renderOut(){
+  const search=document.getElementById('search-out').value.toLowerCase();
+  const fStatus=document.getElementById('filter-out-status').value;
+  let rows=outRecords.filter(r=>{
+    if(fStatus&&r.status!==fStatus)return false;
+    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search))return false;
     return true;
   });
-  const tbody = document.getElementById('tbody-out');
-  const empty = document.getElementById('empty-out');
-  if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
-  else {
-    empty.style.display = 'none';
-    tbody.innerHTML = rows.map(r => {
-      const idx = OUT_STATUSES.indexOf(r.status);
-      const dots = OUT_STATUSES.map((s,i) => `<div class="pdot${i<=idx?' '+OUT_DOT_CLS[s]:''}" title="${s}"></div>`).join('');
-      const nextS = idx < OUT_STATUSES.length-1 ? OUT_STATUSES[idx+1] : null;
-      return `<tr>
-        <td class="mono" style="color:var(--gray-500);font-size:0.75rem">${r.created?r.created.slice(0,10):'—'}</td>
-        <td><strong>${esc(r.customer)}</strong>${r.phone?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.phone)}</span>`:''}</td>
-        <td style="max-width:150px;font-size:0.8rem">${esc(r.address||'—')}</td>
-        <td style="max-width:170px;font-size:0.8rem">${esc((r.items||'').length>55?r.items.slice(0,55)+'…':r.items||'')}</td>
-        <td>${r.driver?esc(r.driver):'<span style="color:var(--gray-300)">—</span>'}</td>
-        <td class="mono" style="font-size:0.75rem">${fmtDate(r.date)}${r.window?`<br><span style="color:var(--gray-500)">${esc(r.window)}</span>`:''}</td>
-        <td>${badge(r.status)}<div class="progress-track">${dots}</div></td>
-        <td style="text-align:center">${r.photo?'📷':'<span style="color:var(--gray-300)">—</span>'}</td>
-        <td>
-          <div class="action-btns">
-            <button class="btn btn-ghost btn-sm" onclick="viewOut('${r._key}')">View</button>
-            <button class="btn btn-ghost btn-sm" onclick="openOutModal('${r._key}')">Edit</button>
-            ${nextS?`<button class="btn btn-sm" style="background:${OUT_COLORS[nextS]};color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="advanceOut('${r._key}')">→ ${esc(nextS)}</button>`:''}
-            <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteOut('${r._key}')">Del</button>
+  const cards=document.getElementById('cards-out');
+  const empty=document.getElementById('empty-out');
+  if(!rows.length){cards.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    cards.innerHTML=rows.map(r=>{
+      const idx=OUT_STATUSES.indexOf(r.status);
+      const dots=OUT_STATUSES.map((s,i)=>`<div class="pdot${i<=idx?' '+OUT_DOT_CLS[s]:''}" title="${s}"></div>`).join('');
+      const nextS=idx<OUT_STATUSES.length-1?OUT_STATUSES[idx+1]:null;
+      return `<div class="delivery-card ${OUT_CARD_CLS[r.status]||''}">
+        <div class="card-top">
+          <div>
+            <div class="card-name">${esc(r.customer)}</div>
+            <div class="card-sub">${r.phone?esc(r.phone):''}${r.phone&&r.address?' · ':''}${r.address?esc(r.address):''}</div>
           </div>
-        </td>
-      </tr>`;
+          <div style="text-align:right;flex-shrink:0">
+            ${badge(r.status)}
+            <div class="progress-track" style="justify-content:flex-end;margin-top:6px">${dots}</div>
+          </div>
+        </div>
+        <div class="card-items">${esc(r.items||'')}</div>
+        <div class="card-meta">
+          ${r.driver?`<div class="card-meta-item"><strong>Driver</strong>${esc(r.driver)}</div>`:''}
+          ${r.date?`<div class="card-meta-item"><strong>Date</strong>${fmtDate(r.date)}</div>`:''}
+          ${r.window?`<div class="card-meta-item"><strong>Window</strong>${esc(r.window)}</div>`:''}
+          ${r.photo?`<div class="card-meta-item"><strong>Photo</strong><img class="photo-thumb" src="${r.photo}" onclick="viewOut('${r._key}')" alt="photo"></div>`:''}
+        </div>
+        <div class="card-actions">
+          ${nextS?`<button class="btn-advance" style="background:${OUT_COLORS[nextS]}" onclick="advanceOut('${r._key}')">→ ${esc(nextS)}</button>`:'<span style="font-family:\'Oswald\',sans-serif;font-size:0.9rem;color:var(--green);letter-spacing:1px">✓ COMPLETED</span>'}
+          <button class="btn-sm-ghost" onclick="viewOut('${r._key}')">View</button>
+          <button class="btn-sm-ghost" onclick="openOutModal('${r._key}')">Edit</button>
+          <button class="btn-sm-del" onclick="deleteOut('${r._key}')">Delete</button>
+        </div>
+      </div>`;
     }).join('');
   }
-  const total=outRecords.length,
-    orderIn=outRecords.filter(r=>r.status==='Order In').length,
+  const total=outRecords.length,orderIn=outRecords.filter(r=>r.status==='Order In').length,
     loading=outRecords.filter(r=>r.status==='Loading').length,
     enRoute=outRecords.filter(r=>r.status==='Out for Delivery').length,
     completed=outRecords.filter(r=>r.status==='Completed').length;
-  document.getElementById('summary-out').innerHTML = `
+  document.getElementById('summary-out').innerHTML=`
     <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
     <div class="summary-card purple"><div class="sc-label">Order In</div><div class="sc-value">${orderIn}</div></div>
     <div class="summary-card amber"><div class="sc-label">Loading</div><div class="sc-value">${loading}</div></div>
     <div class="summary-card blue"><div class="sc-label">En Route</div><div class="sc-value">${enRoute}</div></div>
     <div class="summary-card green"><div class="sc-label">Completed</div><div class="sc-value">${completed}</div></div>`;
-  document.getElementById('count-out').textContent = outRecords.filter(r=>r.status!=='Completed').length;
+  document.getElementById('count-out').textContent=outRecords.filter(r=>r.status!=='Completed').length;
 }
 
-function viewOut(key) {
-  const r = outRecords.find(x=>x._key===key);
-  document.getElementById('detail-title').textContent = `Delivery — ${r.customer}`;
-  document.getElementById('detail-body').innerHTML = `
+function viewOut(key){
+  const r=outRecords.find(x=>x._key===key);
+  document.getElementById('detail-title').textContent='Delivery — '+r.customer;
+  document.getElementById('detail-body').innerHTML=`
     <div class="detail-section">
       <div class="detail-section-title">Customer</div>
       <div class="detail-grid">
@@ -612,165 +776,160 @@ function viewOut(key) {
       <div class="detail-section-title">Proof of Delivery</div>
       <div class="di-label" style="margin-bottom:4px">Received By</div>
       <div class="di-value" style="margin-bottom:12px">${esc(r.receivedBy||'—')}</div>
-      <div class="di-label">Photo</div>
       ${r.photo?`<div class="photo-display"><img src="${r.photo}" alt="Delivery photo"></div>`:'<div class="no-photo">No photo attached</div>'}
     </div>`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
-// ── INBOUND ───────────────────────────────────────────────────────────────────
-function openInModal(key) {
-  editingInId = key || null; tempInPhoto = null;
-  document.getElementById('in-photo-preview').innerHTML = '';
-  document.getElementById('in-photo-input').value = '';
-  const r = key ? inRecords.find(x=>x._key===key) : null;
-  document.getElementById('modal-in-title').textContent = key ? 'Edit Inbound' : 'New Inbound Order';
-  document.getElementById('in-vendor').value        = r?.vendor       || '';
-  document.getElementById('in-po').value            = r?.po           || '';
-  document.getElementById('in-items').value         = r?.items        || '';
-  document.getElementById('in-qty').value           = r?.qty          || '';
-  document.getElementById('in-expected').value      = r?.expected     || '';
-  document.getElementById('in-status').value        = r?.status       || 'Expected';
-  document.getElementById('in-received-date').value = r?.receivedDate || '';
-  document.getElementById('in-received-by').value   = r?.receivedBy   || '';
-  document.getElementById('in-notes').value         = r?.notes        || '';
-  if (r?.photo) { tempInPhoto = r.photo; renderPhotoPreview('in', r.photo); }
+// ── INBOUND
+function openInModal(key){
+  editingInId=key||null;tempInPhoto=null;
+  document.getElementById('in-photo-preview').innerHTML='';
+  document.getElementById('in-photo-input').value='';
+  const r=key?inRecords.find(x=>x._key===key):null;
+  document.getElementById('modal-in-title').textContent=key?'Edit Inbound':'New Inbound Order';
+  document.getElementById('in-vendor').value       =r?.vendor      ||'';
+  document.getElementById('in-po').value           =r?.po          ||'';
+  document.getElementById('in-items').value        =r?.items       ||'';
+  document.getElementById('in-qty').value          =r?.qty         ||'';
+  document.getElementById('in-expected').value     =r?.expected    ||'';
+  document.getElementById('in-status').value       =r?.status      ||'Expected';
+  document.getElementById('in-received-date').value=r?.receivedDate||'';
+  document.getElementById('in-received-by').value  =r?.receivedBy  ||'';
+  document.getElementById('in-notes').value        =r?.notes       ||'';
+  if(r?.photo){tempInPhoto=r.photo;renderPhotoPreview('in',r.photo);}
   document.getElementById('modal-in').classList.add('open');
 }
-function closeInModal() { document.getElementById('modal-in').classList.remove('open'); editingInId = null; }
+function closeInModal(){document.getElementById('modal-in').classList.remove('open');editingInId=null;}
 
-function saveIn() {
-  const vendor = document.getElementById('in-vendor').value.trim();
-  if (!vendor) { alert('Vendor name is required.'); return; }
-  let status = document.getElementById('in-status').value;
-  const exp  = document.getElementById('in-expected').value;
-  if (status==='Expected' && exp && exp < new Date().toISOString().slice(0,10)) status = 'Overdue';
-  const rec = {
-    vendor, status,
-    po:           document.getElementById('in-po').value.trim(),
-    items:        document.getElementById('in-items').value.trim(),
-    qty:          document.getElementById('in-qty').value.trim(),
-    expected:     exp,
-    receivedDate: document.getElementById('in-received-date').value,
-    receivedBy:   document.getElementById('in-received-by').value.trim(),
-    notes:        document.getElementById('in-notes').value.trim(),
-    photo:        tempInPhoto || '',
-    updated:      new Date().toISOString()
-  };
-  if (editingInId) {
-    inRef.child(editingInId).update(rec);
-  } else {
-    rec.created = new Date().toISOString();
-    inRef.push(rec);
-  }
+function saveIn(){
+  const vendor=document.getElementById('in-vendor').value.trim();
+  if(!vendor){alert('Vendor name is required.');return;}
+  let status=document.getElementById('in-status').value;
+  const exp=document.getElementById('in-expected').value;
+  if(status==='Expected'&&exp&&exp<new Date().toISOString().slice(0,10))status='Overdue';
+  const rec={vendor,status,
+    po:document.getElementById('in-po').value.trim(),
+    items:document.getElementById('in-items').value.trim(),
+    qty:document.getElementById('in-qty').value.trim(),
+    expected:exp,
+    receivedDate:document.getElementById('in-received-date').value,
+    receivedBy:document.getElementById('in-received-by').value.trim(),
+    notes:document.getElementById('in-notes').value.trim(),
+    photo:tempInPhoto||'',updated:new Date().toISOString()};
+  if(editingInId){inRef.child(editingInId).update(rec);}
+  else{rec.created=new Date().toISOString();inRef.push(rec);}
   closeInModal();
 }
-
-function deleteIn(key) {
-  if (!confirm('Delete this inbound record?')) return;
-  inRef.child(key).remove();
+function deleteIn(key){if(!confirm('Delete this inbound record?'))return;inRef.child(key).remove();}
+function statusIn(key,status){
+  const upd={status};
+  if(status==='Received')upd.receivedDate=new Date().toISOString().slice(0,10);
+  inRef.child(key).update(upd);
 }
 
-function statusIn(key, status) {
-  const today = new Date().toISOString().slice(0,10);
-  const update = { status };
-  if (status === 'Received') update.receivedDate = today;
-  inRef.child(key).update(update);
-}
-
-function renderIn() {
-  const today = new Date().toISOString().slice(0,10);
-  // auto-flag overdue in Firebase
-  inRecords.forEach(r => {
-    if (r.status==='Expected' && r.expected && r.expected < today)
-      inRef.child(r._key).update({ status: 'Overdue' });
+function renderIn(){
+  const today=new Date().toISOString().slice(0,10);
+  inRecords.forEach(r=>{
+    if(r.status==='Expected'&&r.expected&&r.expected<today)inRef.child(r._key).update({status:'Overdue'});
   });
-  const search  = document.getElementById('search-in').value.toLowerCase();
-  const fStatus = document.getElementById('filter-in-status').value;
-  const fVendor = document.getElementById('filter-in-vendor').value;
-  const vendors = [...new Set(inRecords.map(r=>r.vendor).filter(Boolean))];
-  const vSel = document.getElementById('filter-in-vendor'); const curV = vSel.value;
-  vSel.innerHTML = '<option value="">All Vendors</option>' +
-    vendors.map(v=>`<option value="${esc(v)}"${v===curV?' selected':''}>${esc(v)}</option>`).join('');
-  let rows = inRecords.filter(r => {
-    if (fStatus && r.status !== fStatus) return false;
-    if (fVendor && r.vendor !== fVendor) return false;
-    if (search && !`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search)) return false;
+  const search=document.getElementById('search-in').value.toLowerCase();
+  const fStatus=document.getElementById('filter-in-status').value;
+  const fVendor=document.getElementById('filter-in-vendor').value;
+  const vendors=[...new Set(inRecords.map(r=>r.vendor).filter(Boolean))];
+  const vSel=document.getElementById('filter-in-vendor');const curV=vSel.value;
+  vSel.innerHTML='<option value="">All Vendors</option>'+vendors.map(v=>`<option value="${esc(v)}"${v===curV?' selected':''}>${esc(v)}</option>`).join('');
+  let rows=inRecords.filter(r=>{
+    if(fStatus&&r.status!==fStatus)return false;
+    if(fVendor&&r.vendor!==fVendor)return false;
+    if(search&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search))return false;
     return true;
   });
-  const tbody = document.getElementById('tbody-in');
-  const empty = document.getElementById('empty-in');
-  if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
-  else {
-    empty.style.display = 'none';
-    tbody.innerHTML = rows.map(r => `<tr>
-      <td class="mono" style="color:var(--gray-500);font-size:0.75rem">${r.created?r.created.slice(0,10):'—'}</td>
-      <td><strong>${esc(r.vendor)}</strong></td>
-      <td class="mono" style="font-size:0.78rem">${esc(r.po||'—')}</td>
-      <td style="max-width:180px;font-size:0.8rem">${esc((r.items||'').length>60?r.items.slice(0,60)+'…':r.items||'—')}${r.qty?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.qty)}</span>`:''}</td>
-      <td class="mono" style="font-size:0.78rem;${r.status==='Overdue'?'color:var(--red);font-weight:600':''}">${fmtDate(r.expected)}</td>
-      <td>${badge(r.status)}</td>
-      <td class="mono" style="font-size:0.78rem">${fmtDate(r.receivedDate)}</td>
-      <td style="max-width:140px;font-size:0.8rem;color:var(--gray-700)">${esc((r.notes||'').length>45?(r.notes||'').slice(0,45)+'…':r.notes||'—')}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn btn-ghost btn-sm" onclick="viewIn('${r._key}')">View</button>
-          <button class="btn btn-ghost btn-sm" onclick="openInModal('${r._key}')">Edit</button>
-          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn btn-sm" style="background:var(--amber);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn('${r._key}','Partial')">Partial</button>`:''}
-          ${r.status!=='Received'?`<button class="btn btn-sm" style="background:var(--green);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn('${r._key}','Received')">Received</button>`:''}
-          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteIn('${r._key}')">Del</button>
+  const IN_CARD={'Expected':'status-expected','Partial':'status-partial','Received':'status-received','Overdue':'status-overdue'};
+  const cards=document.getElementById('cards-in');
+  const empty=document.getElementById('empty-in');
+  if(!rows.length){cards.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    cards.innerHTML=rows.map(r=>`
+      <div class="delivery-card ${IN_CARD[r.status]||''}">
+        <div class="card-top">
+          <div>
+            <div class="card-name">${esc(r.vendor)}</div>
+            <div class="card-sub">${r.po?'PO: '+esc(r.po):''}</div>
+          </div>
+          <div style="flex-shrink:0">${badge(r.status)}</div>
         </div>
-      </td>
-    </tr>`).join('');
+        <div class="card-items">${esc(r.items||'—')}</div>
+        <div class="card-meta">
+          ${r.qty?`<div class="card-meta-item"><strong>Qty</strong>${esc(r.qty)}</div>`:''}
+          ${r.expected?`<div class="card-meta-item"><strong>Expected</strong><span style="${r.status==='Overdue'?'color:var(--red);font-weight:700':''}">${fmtDate(r.expected)}</span></div>`:''}
+          ${r.receivedDate?`<div class="card-meta-item"><strong>Received</strong>${fmtDate(r.receivedDate)}</div>`:''}
+          ${r.receivedBy?`<div class="card-meta-item"><strong>Received By</strong>${esc(r.receivedBy)}</div>`:''}
+          ${r.photo?`<div class="card-meta-item"><strong>Photo</strong><img class="photo-thumb" src="${r.photo}" onclick="viewIn('${r._key}')" alt="photo"></div>`:''}
+        </div>
+        ${r.notes?`<div style="font-size:0.9rem;color:var(--gray-700);margin-top:6px;padding-top:6px;border-top:1px solid var(--gray-100)">${esc(r.notes)}</div>`:''}
+        <div class="card-actions">
+          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn-sm-status" style="background:var(--amber)" onclick="statusIn('${r._key}','Partial')">Mark Partial</button>`:''}
+          ${r.status!=='Received'?`<button class="btn-sm-status" style="background:var(--green)" onclick="statusIn('${r._key}','Received')">Mark Received</button>`:'<span style="font-family:\'Oswald\',sans-serif;font-size:0.9rem;color:var(--green);letter-spacing:1px">✓ RECEIVED</span>'}
+          <button class="btn-sm-ghost" onclick="viewIn('${r._key}')">View</button>
+          <button class="btn-sm-ghost" onclick="openInModal('${r._key}')">Edit</button>
+          <button class="btn-sm-del" onclick="deleteIn('${r._key}')">Delete</button>
+        </div>
+      </div>`).join('');
   }
-  const total=inRecords.length,
-    expected=inRecords.filter(r=>r.status==='Expected').length,
+  const total=inRecords.length,expected=inRecords.filter(r=>r.status==='Expected').length,
     overdue=inRecords.filter(r=>r.status==='Overdue').length,
     received=inRecords.filter(r=>r.status==='Received').length;
-  document.getElementById('summary-in').innerHTML = `
+  document.getElementById('summary-in').innerHTML=`
     <div class="summary-card red"><div class="sc-label">Total</div><div class="sc-value">${total}</div></div>
     <div class="summary-card blue"><div class="sc-label">Expected</div><div class="sc-value">${expected}</div></div>
     <div class="summary-card amber"><div class="sc-label">Overdue</div><div class="sc-value">${overdue}</div></div>
     <div class="summary-card green"><div class="sc-label">Received</div><div class="sc-value">${received}</div></div>`;
-  document.getElementById('count-in').textContent = inRecords.filter(r=>r.status!=='Received').length;
+  document.getElementById('count-in').textContent=inRecords.filter(r=>r.status!=='Received').length;
 }
 
-function viewIn(key) {
-  const r = inRecords.find(x=>x._key===key);
-  document.getElementById('detail-title').textContent = `Inbound — ${r.vendor}`;
-  document.getElementById('detail-body').innerHTML = `
+function viewIn(key){
+  const r=inRecords.find(x=>x._key===key);
+  document.getElementById('detail-title').textContent='Inbound — '+r.vendor;
+  document.getElementById('detail-body').innerHTML=`
     <div class="detail-section">
       <div class="detail-section-title">Vendor / Order</div>
       <div class="detail-grid">
         <div><div class="di-label">Vendor</div><div class="di-value">${esc(r.vendor)}</div></div>
-        <div><div class="di-label">PO Number</div><div class="di-value mono">${esc(r.po||'—')}</div></div>
+        <div><div class="di-label">PO Number</div><div class="di-value">${esc(r.po||'—')}</div></div>
         <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
         <div><div class="di-label">Quantity</div><div class="di-value">${esc(r.qty||'—')}</div></div>
         <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
-        <div><div class="di-label">Expected Date</div><div class="di-value">${fmtDate(r.expected)}</div></div>
-        <div><div class="di-label">Received Date</div><div class="di-value">${fmtDate(r.receivedDate)}</div></div>
+        <div><div class="di-label">Expected</div><div class="di-value">${fmtDate(r.expected)}</div></div>
+        <div><div class="di-label">Received</div><div class="di-value">${fmtDate(r.receivedDate)}</div></div>
         <div><div class="di-label">Received By</div><div class="di-value">${esc(r.receivedBy||'—')}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes / Discrepancies</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-label">Notes</div><div class="di-value" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
       </div>
     </div>
-    ${r.photo?`<div class="detail-section"><div class="detail-section-title">Receiving Photo</div><div class="photo-display"><img src="${r.photo}" alt="Receiving photo"></div></div>`:''}`;
+    ${r.photo?`<div class="detail-section"><div class="detail-section-title">Photo</div><div class="photo-display"><img src="${r.photo}" alt="photo"></div></div>`:''}`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
-function closeDetail() { document.getElementById('modal-detail').classList.remove('open'); }
+function closeDetail(){document.getElementById('modal-detail').classList.remove('open');}
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtDate(d) {
-  if (!d) return '—';
-  const [y,m,day] = d.split('-');
-  return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;
+// ── HELPERS
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(d){
+  if(!d)return'—';
+  const[y,m,day]=d.split('-');
+  return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;
 }
-function badge(s) {
+function fmtDateTime(iso){
+  if(!iso)return'';
+  const d=new Date(iso);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+function badge(s){
   const m={'Order In':'badge-order-in','Loading':'badge-loading','Out for Delivery':'badge-out',
     'Completed':'badge-completed','Expected':'badge-expected','Received':'badge-received',
     'Partial':'badge-partial','Overdue':'badge-overdue'};
-  return `<span class="badge ${m[s]||''}">${s}</span>`;
+  return`<span class="badge ${m[s]||''}">${s}</span>`;
 }
 </script>
 </body>
