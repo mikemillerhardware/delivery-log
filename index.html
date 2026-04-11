@@ -89,9 +89,9 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .btn-new{font-family:'Oswald',sans-serif;font-size:0.97rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:10px 20px;border-radius:4px;cursor:pointer;text-transform:uppercase}
 .btn-new:hover{background:var(--red-dk)}
 
-/* ── DELIVERY CARD (collapsed) ── */
+/* DELIVERY CARD (collapsed list item only) */
 .card-list{display:flex;flex-direction:column;gap:10px}
-.del-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;overflow:hidden}
+.del-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .del-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
 .del-card.s-order-in  {border-left-color:var(--purple)}
 .del-card.s-loading   {border-left-color:var(--amber)}
@@ -102,42 +102,18 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .del-card.s-partial   {border-left-color:var(--amber)}
 .del-card.s-overdue   {border-left-color:var(--red)}
 
-/* collapsed row */
-.card-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.card-row{display:flex;align-items:center;padding:14px 15px;gap:12px}
 .card-row-left{flex:1;min-width:0}
-.card-name{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-name{font-family:'Oswald',sans-serif;font-size:1.18rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-line2{font-size:0.85rem;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-.card-chevron{font-size:1rem;color:var(--g300);transition:transform .2s;line-height:1}
-.del-card.open .card-chevron{transform:rotate(180deg)}
+.card-chevron{font-size:1.1rem;color:var(--g300);flex-shrink:0;margin-left:4px}
 
-/* expanded detail */
-.card-detail{display:none;border-top:1px solid var(--g100);padding:15px 15px 15px;background:var(--g50)}
-.del-card.open .card-detail{display:block}
-
-.detail-section{margin-bottom:14px}
-.ds-title{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding-bottom:5px;border-bottom:1px solid var(--bd);margin-bottom:9px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
-.di-lbl{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);margin-bottom:1px}
-.di-val{font-size:0.97rem;color:var(--ink);font-weight:600}
-
-/* STATUS BUTTONS inside expanded card */
-.status-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-.sbtn{font-family:'Oswald',sans-serif;font-size:0.92rem;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:none;padding:10px 18px;border-radius:4px;cursor:pointer;flex:1;min-width:120px;text-align:center}
-.sbtn:hover{opacity:.88}
-.sbtn.purple{background:var(--purple)}
-.sbtn.amber {background:var(--amber)}
-.sbtn.blue  {background:var(--blue)}
-.sbtn.green {background:var(--green)}
-.sbtn.outline{background:transparent;border:1px solid var(--bd);color:var(--g500);font-size:0.82rem;padding:8px 14px;flex:none}
-.sbtn.outline:hover{background:var(--g100);color:var(--ink)}
-.sbtn.red-outline{background:transparent;border:1px solid #ECC;color:var(--red);font-size:0.82rem;padding:8px 14px;flex:none}
-.sbtn.red-outline:hover{background:#FEE}
-.completed-label{font-family:'Oswald',sans-serif;font-size:0.97rem;color:var(--green);letter-spacing:1px}
-
-/* photo thumb */
-.photo-thumb{width:52px;height:52px;object-fit:cover;border-radius:4px;border:1px solid var(--bd);cursor:pointer;margin-top:4px}
-.photo-full{max-width:100%;border:1px solid var(--bd);border-radius:4px;margin-top:6px;display:block}
+/* PROGRESS DOTS */
+.prog{display:flex;gap:4px;align-items:center}
+.pdot{width:9px;height:9px;border-radius:50%;background:var(--g300);flex-shrink:0}
+.pdot.po{background:var(--purple)}.pdot.pl{background:var(--amber)}
+.pdot.pd{background:var(--blue)}.pdot.pc{background:var(--green)}
 
 /* BADGES */
 .badge{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;display:inline-block;white-space:nowrap;border-radius:3px}
@@ -150,28 +126,45 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .b-partial  {background:var(--amber-bg); color:var(--amber)}
 .b-overdue  {background:#FDECEC;         color:var(--red)}
 
-/* progress dots */
-.prog{display:flex;gap:4px;align-items:center}
-.pdot{width:9px;height:9px;border-radius:50%;background:var(--g300);flex-shrink:0}
-.pdot.po{background:var(--purple)}.pdot.pl{background:var(--amber)}
-.pdot.pd{background:var(--blue)}.pdot.pc{background:var(--green)}
-
 .empty-state{padding:50px 20px;text-align:center;color:var(--g500);font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:1px}
 .empty-icon{font-size:2.4rem;display:block;margin-bottom:10px;opacity:.3}
 
-/* ── MODAL ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+/* ══ OVERLAYS (form + detail) ══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
 .overlay.open{display:flex}
 .modal{background:var(--white);width:100%;max-width:580px;border-top:5px solid var(--red);border-radius:0 0 6px 6px;animation:su .2s ease;margin:auto}
 @keyframes su{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
-.mhdr{padding:16px 18px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
-.mtitle{font-family:'Oswald',sans-serif;font-size:1.35rem;letter-spacing:1px;font-weight:600}
-.mclose{font-size:1.5rem;background:none;border:none;cursor:pointer;color:var(--g500);padding:0 4px;line-height:1}
+.mhdr{padding:16px 18px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mtitle{font-family:'Oswald',sans-serif;font-size:1.35rem;letter-spacing:1px;font-weight:600;flex:1;min-width:0}
+.mclose{font-size:1.6rem;background:none;border:none;cursor:pointer;color:var(--g500);padding:0 4px;line-height:1;flex-shrink:0}
 .mclose:hover{color:var(--ink)}
 .mbody{padding:18px}
-.mfoot{padding:12px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.mfoot{padding:14px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 
-/* FORM */
+/* DETAIL OVERLAY specific */
+.detail-section{margin-bottom:16px}
+.ds-title{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding-bottom:5px;border-bottom:1px solid var(--bd);margin-bottom:9px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.di-lbl{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);margin-bottom:1px}
+.di-val{font-size:1rem;color:var(--ink);font-weight:600}
+
+/* STATUS BUTTONS inside detail overlay */
+.status-btns{display:flex;gap:8px;flex-wrap:wrap}
+.sbtn{font-family:'Oswald',sans-serif;font-size:0.95rem;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:none;padding:11px 16px;border-radius:4px;cursor:pointer;flex:1;min-width:110px;text-align:center}
+.sbtn:hover{opacity:.88}
+.sbtn.purple{background:var(--purple)}.sbtn.amber{background:var(--amber)}
+.sbtn.blue{background:var(--blue)}.sbtn.green{background:var(--green)}
+.sbtn.active-status{opacity:.4;cursor:default}
+.sbtn.outline{background:transparent;border:1px solid var(--bd);color:var(--g500);font-size:0.85rem;padding:9px 14px;flex:none}
+.sbtn.outline:hover{background:var(--g100);color:var(--ink)}
+.sbtn.del-btn{background:transparent;border:1px solid #ECC;color:var(--red);font-size:0.85rem;padding:9px 14px;flex:none}
+.sbtn.del-btn:hover{background:#FEE}
+.sbtn.close-btn{background:var(--ink);color:var(--white);font-size:1rem;padding:13px;flex:1;letter-spacing:2px}
+.sbtn.close-btn:hover{background:var(--g700)}
+
+.photo-full{max-width:100%;border:1px solid var(--bd);border-radius:4px;margin-top:6px;display:block}
+
+/* FORM ELEMENTS */
 .fg{display:grid;gap:13px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .fgrp{display:flex;flex-direction:column;gap:4px}
@@ -181,7 +174,6 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .fgrp textarea{resize:vertical;min-height:68px}
 .fdiv{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding:6px 0 2px;border-top:1px solid var(--bd);margin-top:2px}
 .warn{font-size:0.87rem;color:var(--red);font-weight:600;margin-top:3px;display:none}
-
 .photo-area{border:2px dashed var(--bd);border-radius:4px;background:var(--g50);padding:20px 14px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
 .photo-area:hover{border-color:var(--red)}
 .photo-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -190,7 +182,6 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .prev-wrap{position:relative;display:inline-block;margin-top:9px}
 .prev-wrap img{max-width:100%;max-height:190px;display:block;border:1px solid var(--bd);border-radius:3px}
 .prev-clear{position:absolute;top:4px;right:4px;background:var(--red);color:var(--white);border:none;cursor:pointer;font-size:0.72rem;padding:3px 7px;border-radius:2px;font-family:'Oswald',sans-serif}
-
 .btn-cancel{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:transparent;color:var(--g500);border:1px solid var(--bd);padding:9px 18px;border-radius:4px;cursor:pointer;text-transform:uppercase}
 .btn-save{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:9px 22px;border-radius:4px;cursor:pointer;text-transform:uppercase}
 .btn-save:hover{background:var(--red-dk)}
@@ -205,6 +196,32 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .hrs-row input[type="time"]:focus{border-color:var(--red)}
 .hrs-closed{display:flex;align-items:center;gap:5px;font-family:'Oswald',sans-serif;font-size:0.88rem;color:var(--g500);cursor:pointer}
 .hrs-closed input{cursor:pointer}
+
+/* ORDER LIST */
+.ol-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.ol-title{font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:1px;color:var(--ink)}
+.ol-sub{font-size:0.85rem;color:var(--g500);margin-top:3px}
+.ol-filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+
+.ol-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.ol-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.ol-card.urg-High  {border-left-color:var(--red)}
+.ol-card.urg-Medium{border-left-color:var(--amber)}
+.ol-card.urg-Low   {border-left-color:var(--green)}
+.ol-card.is-ordered{border-left-color:var(--g300);opacity:.65}
+
+.ol-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.ol-row-left{flex:1;min-width:0}
+.ol-item-name{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ol-item-name.ordered{text-decoration:line-through;color:var(--g500)}
+.ol-meta{font-size:0.85rem;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ol-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+
+.urg-badge{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;display:inline-block;white-space:nowrap;border-radius:3px}
+.urg-High  {background:#FDECEC;color:var(--red)}
+.urg-Medium{background:var(--amber-bg);color:var(--amber)}
+.urg-Low   {background:var(--green-bg);color:var(--green)}
+.ordered-badge{background:var(--g100);color:var(--g500);font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;border-radius:3px}
 
 @media(max-width:480px){
   .fr{grid-template-columns:1fr}
@@ -231,13 +248,14 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   <div class="tab-nav-inner">
     <button class="tab-btn active" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
     <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
+    <button class="tab-btn" onclick="switchTab('order-list',this)">Order List <span class="cpill" id="col">0</span></button>
     <button class="tab-btn" onclick="switchTab('settings',this)">Hours &amp; Settings</button>
   </div>
 </nav>
 
 <main class="main">
 
-  <!-- OUTBOUND -->
+  <!-- OUTBOUND TAB -->
   <div id="panel-out" class="tab-panel active">
     <div class="notice-board empty" id="nb">
       <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notice Board</span></div>
@@ -261,13 +279,13 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
           <option>Out for Delivery</option><option>Completed</option>
         </select>
       </div>
-      <button class="btn-new" onclick="openOutModal()">+ New Delivery</button>
+      <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
     </div>
     <div class="card-list" id="cards-out"></div>
     <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
   </div>
 
-  <!-- INBOUND -->
+  <!-- INBOUND TAB -->
   <div id="panel-in" class="tab-panel">
     <div class="summary-row" id="sum-in"></div>
     <div class="toolbar">
@@ -279,13 +297,39 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
         </select>
         <select class="fsel" onchange="renderIn()" id="filt-in-v"><option value="">All Vendors</option></select>
       </div>
-      <button class="btn-new" onclick="openInModal()">+ New Inbound</button>
+      <button class="btn-new" onclick="openInForm()">+ New Inbound</button>
     </div>
     <div class="card-list" id="cards-in"></div>
     <div id="empty-in" class="empty-state" style="display:none"><span class="empty-icon">📦</span>No inbound deliveries yet.</div>
   </div>
 
-  <!-- SETTINGS -->
+  <!-- ORDER LIST TAB -->
+  <div id="panel-order-list" class="tab-panel">
+    <div class="ol-header-row">
+      <div>
+        <div class="ol-title">📋 Items to Order</div>
+        <div class="ol-sub">Added by drivers &amp; staff when stock is running low</div>
+      </div>
+      <button class="btn-new" onclick="openOLForm()">+ Add Item</button>
+    </div>
+    <div class="ol-filter-row">
+      <select class="fsel" onchange="renderOL()" id="filt-ol">
+        <option value="">All Items</option>
+        <option value="pending">Needs Ordering</option>
+        <option value="ordered">Ordered</option>
+      </select>
+      <select class="fsel" onchange="renderOL()" id="filt-ol-urg">
+        <option value="">All Urgency</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+    <div class="card-list" id="cards-ol"></div>
+    <div id="empty-ol" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No items on the order list.</div>
+  </div>
+
+  <!-- SETTINGS TAB -->
   <div id="panel-settings" class="tab-panel">
     <div class="settings-box">
       <div class="settings-title">Delivery Hours</div>
@@ -297,10 +341,42 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 
 </main>
 
-<!-- OUTBOUND FORM MODAL -->
-<div class="overlay" id="modal-out">
+<!-- ══ DETAIL OVERLAY — OUTBOUND ══ -->
+<div class="overlay" id="det-out">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="mot-title">New Delivery Out</span><button class="mclose" onclick="closeOutModal()">×</button></div>
+    <div class="mhdr">
+      <span class="mtitle" id="det-out-title">Delivery Detail</span>
+      <button class="mclose" onclick="closeDetOut()">×</button>
+    </div>
+    <div class="mbody" id="det-out-body"></div>
+    <div class="mfoot">
+      <button class="sbtn del-btn" id="det-out-del">Delete</button>
+      <button class="sbtn outline" id="det-out-edit">Edit</button>
+      <button class="sbtn close-btn" onclick="closeDetOut()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DETAIL OVERLAY — INBOUND ══ -->
+<div class="overlay" id="det-in">
+  <div class="modal">
+    <div class="mhdr">
+      <span class="mtitle" id="det-in-title">Inbound Detail</span>
+      <button class="mclose" onclick="closeDetIn()">×</button>
+    </div>
+    <div class="mbody" id="det-in-body"></div>
+    <div class="mfoot">
+      <button class="sbtn del-btn" id="det-in-del">Delete</button>
+      <button class="sbtn outline" id="det-in-edit">Edit</button>
+      <button class="sbtn close-btn" onclick="closeDetIn()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORM OVERLAY — OUTBOUND ══ -->
+<div class="overlay" id="form-out">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="fot-title">New Delivery Out</span><button class="mclose" onclick="closeOutForm()">×</button></div>
     <div class="mbody">
       <div class="fg">
         <div class="fdiv">Customer Info</div>
@@ -333,14 +409,14 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
         <div class="fgrp"><label>Received By</label><input type="text" id="o-rcvby" placeholder="Name of person who accepted delivery"></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeOutModal()">Cancel</button><button class="btn-save" onclick="saveOut()">Save Delivery</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeOutForm()">Cancel</button><button class="btn-save" onclick="saveOut()">Save Delivery</button></div>
   </div>
 </div>
 
-<!-- INBOUND FORM MODAL -->
-<div class="overlay" id="modal-in">
+<!-- ══ FORM OVERLAY — INBOUND ══ -->
+<div class="overlay" id="form-in">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="min-title">New Inbound Order</span><button class="mclose" onclick="closeInModal()">×</button></div>
+    <div class="mhdr"><span class="mtitle" id="fin-title">New Inbound Order</span><button class="mclose" onclick="closeInForm()">×</button></div>
     <div class="mbody">
       <div class="fg">
         <div class="fdiv">Vendor Info</div>
@@ -370,7 +446,48 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
         </div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeInModal()">Cancel</button><button class="btn-save" onclick="saveIn()">Save Order</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeInForm()">Cancel</button><button class="btn-save" onclick="saveIn()">Save Order</button></div>
+  </div>
+</div>
+
+<!-- ══ ORDER LIST DETAIL OVERLAY ══ -->
+<div class="overlay" id="det-ol">
+  <div class="modal">
+    <div class="mhdr">
+      <span class="mtitle" id="det-ol-title">Item Detail</span>
+      <button class="mclose" onclick="closeDetOL()">×</button>
+    </div>
+    <div class="mbody" id="det-ol-body"></div>
+    <div class="mfoot">
+      <button class="sbtn del-btn" id="det-ol-del">Delete</button>
+      <button class="sbtn outline" id="det-ol-edit">Edit</button>
+      <button class="sbtn close-btn" onclick="closeDetOL()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ORDER LIST FORM OVERLAY ══ -->
+<div class="overlay" id="form-ol">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="fol-title">Add Item to Order</span><button class="mclose" onclick="closeOLForm()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Item / Product Name *</label><input type="text" id="ol-item" placeholder="e.g. 3/4 PVC Coupling, Box 16d Nails…"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Qty on Hand</label><input type="text" id="ol-qty" placeholder="e.g. 3 left, almost out"></div>
+          <div class="fgrp"><label>Urgency</label>
+            <select id="ol-urg">
+              <option value="High">🔴 High — Order ASAP</option>
+              <option value="Medium" selected>🟡 Medium — Order Soon</option>
+              <option value="Low">🟢 Low — Next Order</option>
+            </select>
+          </div>
+        </div>
+        <div class="fgrp"><label>Added By</label><input type="text" id="ol-who" placeholder="Your name"></div>
+        <div class="fgrp"><label>Notes</label><textarea id="ol-notes" placeholder="Any extra details — aisle location, common vendor, etc."></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeOLForm()">Cancel</button><button class="btn-save" onclick="saveOL()">Add to List</button></div>
   </div>
 </div>
 
@@ -388,12 +505,13 @@ firebase.initializeApp({
   appId:"1:187757043776:web:a0cce22b59172da8db7fa5"
 });
 const db=firebase.database();
-const outRef =db.ref('deliveries_out');
-const inRef  =db.ref('deliveries_in');
-const msgRef =db.ref('delivery_messages');
-const hrsRef =db.ref('delivery_hours');
+const outRef=db.ref('deliveries_out');
+const inRef =db.ref('deliveries_in');
+const msgRef=db.ref('delivery_messages');
+const hrsRef=db.ref('delivery_hours');
+const olRef =db.ref('order_list');
 
-// sync indicator
+// sync
 db.ref('.info/connected').on('value',s=>{
   const on=s.val();
   document.getElementById('sdot').className='sdot '+(on?'live':'err');
@@ -403,10 +521,9 @@ db.ref('.info/connected').on('value',s=>{
 });
 
 // state
-let outRecs=[],inRecs=[],msgs=[];
+let outRecs=[],inRecs=[],msgs=[],olRecs=[];
 let editOutKey=null,editInKey=null;
 let tmpOPhoto=null,tmpIPhoto=null;
-let openOutKey=null,openInKey=null; // which card is expanded
 let hoursConfig={
   Mon:{open:'07:00',close:'17:00',closed:false},Tue:{open:'07:00',close:'17:00',closed:false},
   Wed:{open:'07:00',close:'17:00',closed:false},Thu:{open:'07:00',close:'17:00',closed:false},
@@ -432,11 +549,12 @@ function switchTab(t,btn){
   if(t==='settings')renderHrsGrid();
 }
 
-// firebase listeners
+// listeners
 outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));outRecs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderOut();});
 inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();});
 msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
+olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
 
 // ── MESSAGES
 function postMsg(){
@@ -448,7 +566,7 @@ function delMsg(k){msgRef.child(k).remove();}
 function renderMsgs(){
   const list=document.getElementById('msg-list');
   const nb=document.getElementById('nb');
-  if(!msgs.length){list.innerHTML='';nb.className='notice-board empty';document.getElementById('nb-label').textContent='📋 Notice Board';return;}
+  if(!msgs.length){list.innerHTML='';nb.className='notice-board empty';return;}
   nb.className='notice-board';
   list.innerHTML=msgs.map(m=>`<div class="msg-item">
     <button class="msg-del" onclick="delMsg('${m._k}')">✕</button>
@@ -527,37 +645,77 @@ function clearPrev(w){
   renderPrev(w,null);
 }
 
-// ── CARD TOGGLE
-function toggleCard(key, type){
-  if(type==='out'){
-    openOutKey = openOutKey===key ? null : key;
-    renderOut();
-  } else {
-    openInKey = openInKey===key ? null : key;
-    renderIn();
-  }
-}
-
-// ── OUTBOUND
+// ── OUTBOUND CONSTANTS
 const OUT_S=['Order In','Loading','Out for Delivery','Completed'];
 const OUT_COL={'Order In':'purple','Loading':'amber','Out for Delivery':'blue','Completed':'green'};
-const OUT_NEXT_LBL={'Order In':'→ Loading','Loading':'→ Out for Delivery','Out for Delivery':'→ Mark Completed'};
-const OUT_DOT={
-  'Order In':['po','','',''],
-  'Loading':['po','pl','',''],
-  'Out for Delivery':['po','pl','pd',''],
-  'Completed':['po','pl','pd','pc']
-};
 const S_CARD={'Order In':'s-order-in','Loading':'s-loading','Out for Delivery':'s-out','Completed':'s-completed'};
-const BADGE_CLS={'Order In':'b-order-in','Loading':'b-loading','Out for Delivery':'b-out','Completed':'b-completed',
+const BDGE={'Order In':'b-order-in','Loading':'b-loading','Out for Delivery':'b-out','Completed':'b-completed',
   'Expected':'b-expected','Received':'b-received','Partial':'b-partial','Overdue':'b-overdue'};
+const OUT_DOT={'Order In':['po','','',''],'Loading':['po','pl','',''],'Out for Delivery':['po','pl','pd',''],'Completed':['po','pl','pd','pc']};
 
-function openOutModal(key){
+// ── OUTBOUND DETAIL OVERLAY
+function openDetOut(key){
+  const r=outRecs.find(x=>x._k===key);
+  if(!r)return;
+  document.getElementById('det-out-title').textContent=r.customer;
+
+  // status buttons
+  const statusBtns=OUT_S.map(s=>`
+    <button class="sbtn ${OUT_COL[s]}${s===r.status?' active-status':''}"
+      onclick="setOutStatus('${key}','${s.replace(/'/g,"\\'")}')"
+      ${s===r.status?'disabled':''}>
+      ${s===r.status?'✓ ':''} ${esc(s)}
+    </button>`).join('');
+
+  document.getElementById('det-out-body').innerHTML=`
+    <div class="detail-section">
+      <div class="ds-title">Status</div>
+      <div class="status-btns">${statusBtns}</div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Customer</div>
+      <div class="detail-grid">
+        <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.customer)}</div></div>
+        <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.address||'—')}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Order</div>
+      <div class="detail-grid">
+        <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
+        <div><div class="di-lbl">Driver</div><div class="di-val">${esc(r.driver||'—')}</div></div>
+        <div><div class="di-lbl">Date</div><div class="di-val">${fmtDate(r.date)}</div></div>
+        <div><div class="di-lbl">Time Window</div><div class="di-val">${esc(r.window||'—')}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>
+    ${r.receivedBy||r.photo?`<div class="detail-section">
+      <div class="ds-title">Proof of Delivery</div>
+      ${r.receivedBy?`<div class="di-lbl">Received By</div><div class="di-val" style="margin-bottom:8px">${esc(r.receivedBy)}</div>`:''}
+      ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Delivery photo">`:''}
+    </div>`:''}`;
+
+  document.getElementById('det-out-edit').onclick=()=>{closeDetOut();openOutForm(key);};
+  document.getElementById('det-out-del').onclick=()=>{if(confirm('Delete this delivery?')){outRef.child(key).remove();closeDetOut();}};
+  document.getElementById('det-out').classList.add('open');
+}
+function closeDetOut(){document.getElementById('det-out').classList.remove('open');}
+
+function setOutStatus(key,status){
+  outRef.child(key).update({status});
+  // refresh the detail overlay if still open
+  const overlay=document.getElementById('det-out');
+  if(overlay.classList.contains('open')) openDetOut(key);
+}
+
+// ── OUTBOUND FORM
+function openOutForm(key){
   editOutKey=key||null;tmpOPhoto=null;
   document.getElementById('o-prev').innerHTML='';document.getElementById('o-photo').value='';
   document.getElementById('o-warn').style.display='none';
   const r=key?outRecs.find(x=>x._k===key):null;
-  document.getElementById('mot-title').textContent=key?'Edit Delivery':'New Delivery Out';
+  document.getElementById('fot-title').textContent=key?'Edit Delivery':'New Delivery Out';
   document.getElementById('o-cust').value  =r?.customer  ||'';
   document.getElementById('o-phone').value =r?.phone     ||'';
   document.getElementById('o-addr').value  =r?.address   ||'';
@@ -569,10 +727,10 @@ function openOutModal(key){
   document.getElementById('o-notes').value =r?.notes     ||'';
   document.getElementById('o-rcvby').value =r?.receivedBy||'';
   if(r?.photo){tmpOPhoto=r.photo;renderPrev('o',r.photo);}
-  document.getElementById('modal-out').classList.add('open');
+  document.getElementById('form-out').classList.add('open');
   chkWarn();
 }
-function closeOutModal(){document.getElementById('modal-out').classList.remove('open');editOutKey=null;}
+function closeOutForm(){document.getElementById('form-out').classList.remove('open');editOutKey=null;}
 
 function saveOut(){
   const customer=document.getElementById('o-cust').value.trim();
@@ -590,17 +748,10 @@ function saveOut(){
     photo:tmpOPhoto||'',updated:new Date().toISOString()};
   if(editOutKey){outRef.child(editOutKey).update(rec);}
   else{rec.created=new Date().toISOString();outRef.push(rec);}
-  closeOutModal();
+  closeOutForm();
 }
 
-function deleteOut(key){if(!confirm('Delete this delivery?'))return;outRef.child(key).remove();openOutKey=null;}
-function advanceOut(key){
-  const r=outRecs.find(x=>x._k===key);
-  const idx=OUT_S.indexOf(r.status);
-  if(idx<OUT_S.length-1)outRef.child(key).update({status:OUT_S[idx+1]});
-}
-function setOutStatus(key,status){outRef.child(key).update({status});}
-
+// ── RENDER OUTBOUND CARDS
 function renderOut(){
   const search=document.getElementById('srch-out').value.toLowerCase();
   const filt=document.getElementById('filt-out').value;
@@ -615,72 +766,22 @@ function renderOut(){
   else{
     empty.style.display='none';
     wrap.innerHTML=rows.map(r=>{
-      const isOpen=openOutKey===r._k;
-      const dots=OUT_DOT[r.status]||['','','',''];
-      const dotHtml=dots.map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
-      const idx=OUT_S.indexOf(r.status);
-      const nextS=idx<OUT_S.length-1?OUT_S[idx+1]:null;
-      const nextCol=nextS?OUT_COL[nextS]:'';
-
-      // collapsed row
-      const collapsed=`<div class="card-row" onclick="toggleCard('${r._k}','out')">
-        <div class="card-row-left">
-          <div class="card-name">${esc(r.customer)}</div>
-          <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
-        </div>
-        <div class="card-row-right">
-          <span class="badge ${BADGE_CLS[r.status]||''}">${r.status}</span>
-          <div class="prog">${dotHtml}</div>
-        </div>
-        <div class="card-chevron">▾</div>
-      </div>`;
-
-      // expanded detail
-      const detail=`<div class="card-detail">
-        <div class="detail-section">
-          <div class="ds-title">Customer</div>
-          <div class="detail-grid">
-            <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.customer)}</div></div>
-            <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
-            <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.address||'—')}</div></div>
+      const dots=(OUT_DOT[r.status]||['','','','']).map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
+      return`<div class="del-card ${S_CARD[r.status]||''}" onclick="openDetOut('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${esc(r.customer)}</div>
+            <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
           </div>
-        </div>
-        <div class="detail-section">
-          <div class="ds-title">Order</div>
-          <div class="detail-grid">
-            <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
-            <div><div class="di-lbl">Driver</div><div class="di-val">${esc(r.driver||'—')}</div></div>
-            <div><div class="di-lbl">Date</div><div class="di-val">${fmtDate(r.date)}</div></div>
-            <div><div class="di-lbl">Window</div><div class="di-val">${esc(r.window||'—')}</div></div>
-            ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+          <div class="card-row-right">
+            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
+            <div class="prog">${dots}</div>
           </div>
-        </div>
-        ${r.receivedBy||r.photo?`<div class="detail-section">
-          <div class="ds-title">Proof of Delivery</div>
-          ${r.receivedBy?`<div class="di-lbl">Received By</div><div class="di-val" style="margin-bottom:8px">${esc(r.receivedBy)}</div>`:''}
-          ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Delivery photo">`:''}
-        </div>`:''}
-        <div class="detail-section">
-          <div class="ds-title">Update Status</div>
-          <div class="status-btns">
-            ${OUT_S.map(s=>s===r.status
-              ?`<span class="sbtn ${OUT_COL[s]}" style="opacity:.5;cursor:default">✓ ${esc(s)}</span>`
-              :`<button class="sbtn ${OUT_COL[s]}" onclick="setOutStatus('${r._k}','${s.replace(/'/g,"\\'")}');event.stopPropagation()">${esc(s)}</button>`
-            ).join('')}
-          </div>
-        </div>
-        <div class="detail-section" style="border-top:1px solid var(--bd);padding-top:12px;margin-top:4px">
-          <div class="status-btns">
-            <button class="sbtn outline" onclick="openOutModal('${r._k}');event.stopPropagation()">Edit</button>
-            <button class="sbtn red-outline" onclick="deleteOut('${r._k}');event.stopPropagation()">Delete</button>
-          </div>
+          <div class="card-chevron">›</div>
         </div>
       </div>`;
-
-      return`<div class="del-card ${S_CARD[r.status]||''} ${isOpen?'open':''}" id="oc-${r._k}">${collapsed}${detail}</div>`;
     }).join('');
   }
-
   const total=outRecs.length,
     orderIn=outRecs.filter(r=>r.status==='Order In').length,
     loading=outRecs.filter(r=>r.status==='Loading').length,
@@ -695,12 +796,63 @@ function renderOut(){
   document.getElementById('co').textContent=outRecs.filter(r=>r.status!=='Completed').length;
 }
 
-// ── INBOUND
-function openInModal(key){
+// ── INBOUND DETAIL OVERLAY
+const IN_S=['Expected','Partial','Received'];
+const IN_COL={'Expected':'blue','Partial':'amber','Received':'green','Overdue':'blue'};
+const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
+
+function openDetIn(key){
+  const r=inRecs.find(x=>x._k===key);
+  if(!r)return;
+  document.getElementById('det-in-title').textContent=r.vendor;
+
+  const statusBtns=IN_S.map(s=>`
+    <button class="sbtn ${IN_COL[s]}${s===r.status?' active-status':''}"
+      onclick="setInStatus('${key}','${s}')"
+      ${s===r.status?'disabled':''}>
+      ${s===r.status?'✓ ':''} ${esc(s)}
+    </button>`).join('');
+
+  document.getElementById('det-in-body').innerHTML=`
+    <div class="detail-section">
+      <div class="ds-title">Status</div>
+      <div class="status-btns">${statusBtns}</div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Order Info</div>
+      <div class="detail-grid">
+        <div><div class="di-lbl">Vendor</div><div class="di-val">${esc(r.vendor)}</div></div>
+        <div><div class="di-lbl">PO Number</div><div class="di-val">${esc(r.po||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
+        <div><div class="di-lbl">Quantity</div><div class="di-val">${esc(r.qty||'—')}</div></div>
+        <div><div class="di-lbl">Expected</div><div class="di-val" style="${r.status==='Overdue'?'color:var(--red)':''}">${fmtDate(r.expected)}</div></div>
+        ${r.receivedDate?`<div><div class="di-lbl">Received Date</div><div class="di-val">${fmtDate(r.receivedDate)}</div></div>`:''}
+        ${r.receivedBy?`<div><div class="di-lbl">Received By</div><div class="di-val">${esc(r.receivedBy)}</div></div>`:''}
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes / Discrepancies</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+      ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Receiving photo" style="margin-top:10px">`:''}
+    </div>`;
+
+  document.getElementById('det-in-edit').onclick=()=>{closeDetIn();openInForm(key);};
+  document.getElementById('det-in-del').onclick=()=>{if(confirm('Delete this record?')){inRef.child(key).remove();closeDetIn();}};
+  document.getElementById('det-in').classList.add('open');
+}
+function closeDetIn(){document.getElementById('det-in').classList.remove('open');}
+
+function setInStatus(key,status){
+  const upd={status};
+  if(status==='Received')upd.receivedDate=new Date().toISOString().slice(0,10);
+  inRef.child(key).update(upd);
+  const overlay=document.getElementById('det-in');
+  if(overlay.classList.contains('open')) openDetIn(key);
+}
+
+// ── INBOUND FORM
+function openInForm(key){
   editInKey=key||null;tmpIPhoto=null;
   document.getElementById('i-prev').innerHTML='';document.getElementById('i-photo').value='';
   const r=key?inRecs.find(x=>x._k===key):null;
-  document.getElementById('min-title').textContent=key?'Edit Inbound':'New Inbound Order';
+  document.getElementById('fin-title').textContent=key?'Edit Inbound':'New Inbound Order';
   document.getElementById('i-vendor').value  =r?.vendor      ||'';
   document.getElementById('i-po').value      =r?.po          ||'';
   document.getElementById('i-items').value   =r?.items       ||'';
@@ -711,9 +863,9 @@ function openInModal(key){
   document.getElementById('i-rcvby').value   =r?.receivedBy  ||'';
   document.getElementById('i-notes').value   =r?.notes       ||'';
   if(r?.photo){tmpIPhoto=r.photo;renderPrev('i',r.photo);}
-  document.getElementById('modal-in').classList.add('open');
+  document.getElementById('form-in').classList.add('open');
 }
-function closeInModal(){document.getElementById('modal-in').classList.remove('open');editInKey=null;}
+function closeInForm(){document.getElementById('form-in').classList.remove('open');editInKey=null;}
 
 function saveIn(){
   const vendor=document.getElementById('i-vendor').value.trim();
@@ -732,20 +884,10 @@ function saveIn(){
     photo:tmpIPhoto||'',updated:new Date().toISOString()};
   if(editInKey){inRef.child(editInKey).update(rec);}
   else{rec.created=new Date().toISOString();inRef.push(rec);}
-  closeInModal();
+  closeInForm();
 }
 
-function deleteIn(key){if(!confirm('Delete this record?'))return;inRef.child(key).remove();openInKey=null;}
-function setInStatus(key,status){
-  const upd={status};
-  if(status==='Received')upd.receivedDate=new Date().toISOString().slice(0,10);
-  inRef.child(key).update(upd);
-}
-
-const IN_S=['Expected','Partial','Received','Overdue'];
-const IN_COL={'Expected':'blue','Partial':'amber','Received':'green','Overdue':'red-outline'};
-const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
-
+// ── RENDER INBOUND CARDS
 function renderIn(){
   const today=new Date().toISOString().slice(0,10);
   inRecs.forEach(r=>{if(r.status==='Expected'&&r.expected&&r.expected<today)inRef.child(r._k).update({status:'Overdue'});});
@@ -766,54 +908,20 @@ function renderIn(){
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    wrap.innerHTML=rows.map(r=>{
-      const isOpen=openInKey===r._k;
-      const collapsed=`<div class="card-row" onclick="toggleCard('${r._k}','in')">
-        <div class="card-row-left">
-          <div class="card-name">${esc(r.vendor)}</div>
-          <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?'Expected: '+fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
-        </div>
-        <div class="card-row-right">
-          <span class="badge ${BADGE_CLS[r.status]||''}">${r.status}</span>
-          ${r.expected&&r.status==='Overdue'?`<span style="font-size:.8rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
-        </div>
-        <div class="card-chevron">▾</div>
-      </div>`;
-
-      const detail=`<div class="card-detail">
-        <div class="detail-section">
-          <div class="ds-title">Order Info</div>
-          <div class="detail-grid">
-            <div><div class="di-lbl">Vendor</div><div class="di-val">${esc(r.vendor)}</div></div>
-            <div><div class="di-lbl">PO Number</div><div class="di-val">${esc(r.po||'—')}</div></div>
-            <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
-            <div><div class="di-lbl">Quantity</div><div class="di-val">${esc(r.qty||'—')}</div></div>
-            <div><div class="di-lbl">Expected</div><div class="di-val" style="${r.status==='Overdue'?'color:var(--red)':''}">${fmtDate(r.expected)}</div></div>
-            ${r.receivedDate?`<div><div class="di-lbl">Received Date</div><div class="di-val">${fmtDate(r.receivedDate)}</div></div>`:''}
-            ${r.receivedBy?`<div><div class="di-lbl">Received By</div><div class="di-val">${esc(r.receivedBy)}</div></div>`:''}
-            ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+    wrap.innerHTML=rows.map(r=>`
+      <div class="del-card ${IN_CARD[r.status]||''}" onclick="openDetIn('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${esc(r.vendor)}</div>
+            <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
           </div>
-          ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Receiving photo" style="margin-top:10px">`:''}
-        </div>
-        <div class="detail-section">
-          <div class="ds-title">Update Status</div>
-          <div class="status-btns">
-            ${['Expected','Partial','Received'].map(s=>s===r.status
-              ?`<span class="sbtn ${IN_COL[s]||'blue'}" style="opacity:.5;cursor:default">✓ ${esc(s)}</span>`
-              :`<button class="sbtn ${IN_COL[s]||'blue'}" onclick="setInStatus('${r._k}','${s}');event.stopPropagation()">${esc(s)}</button>`
-            ).join('')}
+          <div class="card-row-right">
+            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
+            ${r.status==='Overdue'?`<span style="font-size:.8rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
           </div>
+          <div class="card-chevron">›</div>
         </div>
-        <div class="detail-section" style="border-top:1px solid var(--bd);padding-top:12px;margin-top:4px">
-          <div class="status-btns">
-            <button class="sbtn outline" onclick="openInModal('${r._k}');event.stopPropagation()">Edit</button>
-            <button class="sbtn red-outline" onclick="deleteIn('${r._k}');event.stopPropagation()">Delete</button>
-          </div>
-        </div>
-      </div>`;
-
-      return`<div class="del-card ${IN_CARD[r.status]||''} ${isOpen?'open':''}" id="ic-${r._k}">${collapsed}${detail}</div>`;
-    }).join('');
+      </div>`).join('');
   }
   const total=inRecs.length,exp=inRecs.filter(r=>r.status==='Expected').length,
     over=inRecs.filter(r=>r.status==='Overdue').length,rcv=inRecs.filter(r=>r.status==='Received').length;
@@ -823,6 +931,113 @@ function renderIn(){
     <div class="sc amber"><div class="sc-lbl">Overdue</div><div class="sc-val">${over}</div></div>
     <div class="sc green"><div class="sc-lbl">Received</div><div class="sc-val">${rcv}</div></div>`;
   document.getElementById('ci').textContent=inRecs.filter(r=>r.status!=='Received').length;
+}
+
+// ── ORDER LIST
+let editOLKey=null;
+
+function openOLForm(key){
+  editOLKey=key||null;
+  const r=key?olRecs.find(x=>x._k===key):null;
+  document.getElementById('fol-title').textContent=key?'Edit Item':'Add Item to Order';
+  document.getElementById('ol-item').value =r?.item    ||'';
+  document.getElementById('ol-qty').value  =r?.qty     ||'';
+  document.getElementById('ol-urg').value  =r?.urgency ||'Medium';
+  document.getElementById('ol-who').value  =r?.who     ||'';
+  document.getElementById('ol-notes').value=r?.notes   ||'';
+  document.getElementById('form-ol').classList.add('open');
+}
+function closeOLForm(){document.getElementById('form-ol').classList.remove('open');editOLKey=null;}
+
+function saveOL(){
+  const item=document.getElementById('ol-item').value.trim();
+  if(!item){alert('Item name is required.');return;}
+  const rec={
+    item,
+    qty:     document.getElementById('ol-qty').value.trim(),
+    urgency: document.getElementById('ol-urg').value,
+    who:     document.getElementById('ol-who').value.trim(),
+    notes:   document.getElementById('ol-notes').value.trim(),
+    ordered: editOLKey ? (olRecs.find(x=>x._k===editOLKey)?.ordered||false) : false,
+    updated: new Date().toISOString()
+  };
+  if(editOLKey){olRef.child(editOLKey).update(rec);}
+  else{rec.created=new Date().toISOString();olRef.push(rec);}
+  closeOLForm();
+}
+
+function toggleOrdered(key){
+  const r=olRecs.find(x=>x._k===key);
+  if(!r)return;
+  olRef.child(key).update({ordered:!r.ordered});
+  const ov=document.getElementById('det-ol');
+  if(ov.classList.contains('open'))openDetOL(key);
+}
+
+function openDetOL(key){
+  const r=olRecs.find(x=>x._k===key);
+  if(!r)return;
+  document.getElementById('det-ol-title').textContent=r.item;
+  const urgIcon={High:'🔴',Medium:'🟡',Low:'🟢'};
+  document.getElementById('det-ol-body').innerHTML=`
+    <div class="detail-section">
+      <div class="ds-title">Status</div>
+      <div class="status-btns">
+        <button class="sbtn ${r.ordered?'green':'outline'}" onclick="toggleOrdered('${key}')">
+          ${r.ordered?'✓ Ordered — Mark Pending':'Mark as Ordered'}
+        </button>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Item Info</div>
+      <div class="detail-grid">
+        <div style="grid-column:1/-1"><div class="di-lbl">Item</div><div class="di-val">${esc(r.item)}</div></div>
+        <div><div class="di-lbl">Qty on Hand</div><div class="di-val">${esc(r.qty||'—')}</div></div>
+        <div><div class="di-lbl">Urgency</div><div class="di-val">${urgIcon[r.urgency]||''} ${esc(r.urgency||'—')}</div></div>
+        <div><div class="di-lbl">Added By</div><div class="di-val">${esc(r.who||'—')}</div></div>
+        <div><div class="di-lbl">Date Added</div><div class="di-val">${fmtDate(r.created?.slice(0,10))}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>`;
+  document.getElementById('det-ol-edit').onclick=()=>{closeDetOL();openOLForm(key);};
+  document.getElementById('det-ol-del').onclick=()=>{if(confirm('Remove this item?')){olRef.child(key).remove();closeDetOL();}};
+  document.getElementById('det-ol').classList.add('open');
+}
+function closeDetOL(){document.getElementById('det-ol').classList.remove('open');}
+
+function renderOL(){
+  const filt=document.getElementById('filt-ol').value;
+  const furg=document.getElementById('filt-ol-urg').value;
+  let rows=olRecs.filter(r=>{
+    if(filt==='pending'&&r.ordered)return false;
+    if(filt==='ordered'&&!r.ordered)return false;
+    if(furg&&r.urgency!==furg)return false;
+    return true;
+  });
+  const wrap=document.getElementById('cards-ol');
+  const empty=document.getElementById('empty-ol');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    const urgIcon={High:'🔴',Medium:'🟡',Low:'🟢'};
+    wrap.innerHTML=rows.map(r=>`
+      <div class="ol-card urg-${r.urgency||'Medium'}${r.ordered?' is-ordered':''}" onclick="openDetOL('${r._k}')">
+        <div class="ol-row">
+          <div class="ol-row-left">
+            <div class="ol-item-name${r.ordered?' ordered':''}">${esc(r.item)}</div>
+            <div class="ol-meta">${[r.qty?'On hand: '+r.qty:'',r.who?'Added by '+r.who:''].filter(Boolean).join(' · ')}</div>
+          </div>
+          <div class="ol-row-right">
+            ${r.ordered
+              ?'<span class="ordered-badge">✓ Ordered</span>'
+              :`<span class="urg-badge urg-${r.urgency||'Medium'}">${urgIcon[r.urgency]||''} ${esc(r.urgency||'Medium')}</span>`}
+          </div>
+          <div class="card-chevron">›</div>
+        </div>
+      </div>`).join('');
+  }
+  const pending=olRecs.filter(r=>!r.ordered).length;
+  document.getElementById('col').textContent=pending;
 }
 
 // ── HELPERS
