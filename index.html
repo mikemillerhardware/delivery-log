@@ -223,6 +223,39 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .urg-Low   {background:var(--green-bg);color:var(--green)}
 .ordered-badge{background:var(--g100);color:var(--g500);font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;border-radius:3px}
 
+/* CUSTOMER NOTE BANNER (shown in delivery detail) */
+.cust-note-banner{background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:10px 13px;margin-bottom:14px}
+.cust-note-banner-lbl{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:4px;font-weight:600}
+.cust-note-banner-text{font-size:0.97rem;color:var(--ink);font-weight:600;line-height:1.4}
+
+/* HISTORY card (same as del-card but lighter) */
+.hist-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--green);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.hist-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+
+/* PRINT */
+@media print{
+  header,nav,.tab-nav,#print-area~*,.overlay{display:none!important}
+  #print-area{display:block!important;position:fixed;inset:0;background:#fff;padding:0;z-index:9999}
+  body{background:#fff}
+}
+.print-ticket{font-family:'Open Sans',sans-serif;max-width:680px;margin:0 auto;padding:32px 36px;color:#111;font-size:14px}
+.pt-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #C0392B;padding-bottom:14px;margin-bottom:18px}
+.pt-logo{font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:1px;line-height:1.1}
+.pt-logo span{color:#C0392B}
+.pt-logo small{display:block;font-size:0.65rem;letter-spacing:3px;color:#777;font-weight:400;margin-top:2px}
+.pt-meta{text-align:right;font-size:0.82rem;color:#777;line-height:1.6}
+.pt-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin-bottom:14px}
+.pt-section{margin-bottom:16px}
+.pt-section-title{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:#999;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:8px}
+.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+.pt-field label{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:1px}
+.pt-field span{font-size:0.95rem;font-weight:600;color:#111}
+.pt-items{background:#f8f8f6;border:1px solid #ddd;padding:10px 14px;font-size:0.95rem;line-height:1.6;white-space:pre-wrap;font-weight:600}
+.pt-sig-area{border:1px solid #ddd;height:80px;margin-top:8px;display:flex;align-items:flex-end;padding:6px 10px}
+.pt-sig-line{border-top:1px solid #aaa;width:100%;margin-top:auto;padding-top:4px;font-size:0.75rem;color:#999;font-family:'Oswald',sans-serif;letter-spacing:1px}
+.pt-footer{margin-top:24px;padding-top:12px;border-top:1px solid #ddd;text-align:center;font-size:0.78rem;color:#aaa;font-family:'Oswald',sans-serif;letter-spacing:1px}
+.pt-photo{max-width:200px;max-height:150px;border:1px solid #ddd;margin-top:6px}
+
 @media(max-width:480px){
   .fr{grid-template-columns:1fr}
   .detail-grid{grid-template-columns:1fr}
@@ -249,6 +282,8 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
     <button class="tab-btn active" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
     <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
     <button class="tab-btn" onclick="switchTab('order-list',this)">Order List <span class="cpill" id="col">0</span></button>
+    <button class="tab-btn" onclick="switchTab('history',this)">History</button>
+    <button class="tab-btn" onclick="switchTab('customers',this)">Customers</button>
     <button class="tab-btn" onclick="switchTab('settings',this)">Hours &amp; Settings</button>
   </div>
 </nav>
@@ -329,6 +364,38 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
     <div id="empty-ol" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No items on the order list.</div>
   </div>
 
+  <!-- HISTORY TAB -->
+  <div id="panel-history" class="tab-panel">
+    <div class="ol-header-row">
+      <div>
+        <div class="ol-title">📦 Delivery History</div>
+        <div class="ol-sub">All completed outbound deliveries</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="tl-left">
+        <input class="search-box" type="text" placeholder="Search customer…" oninput="renderHistory()" id="srch-hist" style="width:180px">
+        <input class="fsel" type="month" id="filt-hist-month" onchange="renderHistory()" style="padding:9px 9px">
+      </div>
+    </div>
+    <div class="card-list" id="cards-hist"></div>
+    <div id="empty-hist" class="empty-state" style="display:none"><span class="empty-icon">📋</span>No completed deliveries yet.</div>
+  </div>
+
+  <!-- CUSTOMERS TAB -->
+  <div id="panel-customers" class="tab-panel">
+    <div class="ol-header-row">
+      <div>
+        <div class="ol-title">👤 Customer Notes</div>
+        <div class="ol-sub">Persistent notes shown on every delivery for that customer</div>
+      </div>
+      <button class="btn-new" onclick="openCustForm()">+ Add Customer</button>
+    </div>
+    <input class="search-box" type="text" placeholder="Search customers…" oninput="renderCusts()" id="srch-cust" style="margin-bottom:14px;width:100%">
+    <div class="card-list" id="cards-cust"></div>
+    <div id="empty-cust" class="empty-state" style="display:none"><span class="empty-icon">👤</span>No customer notes yet.</div>
+  </div>
+
   <!-- SETTINGS TAB -->
   <div id="panel-settings" class="tab-panel">
     <div class="settings-box">
@@ -352,6 +419,7 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
     <div class="mfoot">
       <button class="sbtn del-btn" id="det-out-del">Delete</button>
       <button class="sbtn outline" id="det-out-edit">Edit</button>
+      <button class="sbtn outline" id="det-out-print">🖨 Print</button>
       <button class="sbtn close-btn" onclick="closeDetOut()">Done</button>
     </div>
   </div>
@@ -491,6 +559,41 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   </div>
 </div>
 
+<!-- ══ CUSTOMER DETAIL OVERLAY ══ -->
+<div class="overlay" id="det-cust">
+  <div class="modal">
+    <div class="mhdr">
+      <span class="mtitle" id="det-cust-title">Customer</span>
+      <button class="mclose" onclick="closeDetCust()">×</button>
+    </div>
+    <div class="mbody" id="det-cust-body"></div>
+    <div class="mfoot">
+      <button class="sbtn del-btn" id="det-cust-del">Delete</button>
+      <button class="sbtn outline" id="det-cust-edit">Edit</button>
+      <button class="sbtn close-btn" onclick="closeDetCust()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CUSTOMER FORM OVERLAY ══ -->
+<div class="overlay" id="form-cust">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="fcust-title">Add Customer Notes</span><button class="mclose" onclick="closeCustForm()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Customer Name *</label><input type="text" id="c-name" placeholder="Full name — must match delivery records exactly"></div>
+        <div class="fgrp"><label>Phone</label><input type="tel" id="c-phone" placeholder="(870) 555-0000"></div>
+        <div class="fgrp"><label>Address</label><input type="text" id="c-addr" placeholder="Delivery address"></div>
+        <div class="fgrp"><label>Notes (shown on every delivery)</label><textarea id="c-notes" placeholder="e.g. Gate code 1234, call ahead, dogs in yard, deliver to back of house…" style="min-height:100px"></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeCustForm()">Cancel</button><button class="btn-save" onclick="saveCust()">Save</button></div>
+  </div>
+</div>
+
+<!-- PRINT AREA -->
+<div id="print-area" style="display:none"></div>
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -510,6 +613,7 @@ const inRef =db.ref('deliveries_in');
 const msgRef=db.ref('delivery_messages');
 const hrsRef=db.ref('delivery_hours');
 const olRef =db.ref('order_list');
+const custRef=db.ref('delivery_customers');
 
 // sync
 db.ref('.info/connected').on('value',s=>{
@@ -521,7 +625,7 @@ db.ref('.info/connected').on('value',s=>{
 });
 
 // state
-let outRecs=[],inRecs=[],msgs=[],olRecs=[];
+let outRecs=[],inRecs=[],msgs=[],olRecs=[],custRecs=[];
 let editOutKey=null,editInKey=null;
 let tmpOPhoto=null,tmpIPhoto=null;
 let hoursConfig={
@@ -555,6 +659,7 @@ inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));
 msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
+custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
 
 // ── MESSAGES
 function postMsg(){
@@ -696,8 +801,14 @@ function openDetOut(key){
       ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Delivery photo">`:''}
     </div>`:''}`;
 
+  // customer note banner
+  const custMatch=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
+  const custBanner=custMatch?.notes?`<div class="cust-note-banner"><div class="cust-note-banner-lbl">📌 Customer Note</div><div class="cust-note-banner-text">${esc(custMatch.notes)}</div></div>`:'';
+
+  document.getElementById('det-out-body').innerHTML=custBanner+document.getElementById('det-out-body').innerHTML;
   document.getElementById('det-out-edit').onclick=()=>{closeDetOut();openOutForm(key);};
   document.getElementById('det-out-del').onclick=()=>{if(confirm('Delete this delivery?')){outRef.child(key).remove();closeDetOut();}};
+  document.getElementById('det-out-print').onclick=()=>printTicket(key);
   document.getElementById('det-out').classList.add('open');
 }
 function closeDetOut(){document.getElementById('det-out').classList.remove('open');}
@@ -1038,6 +1149,158 @@ function renderOL(){
   }
   const pending=olRecs.filter(r=>!r.ordered).length;
   document.getElementById('col').textContent=pending;
+}
+
+// ── HISTORY
+function renderHistory(){
+  const search=(document.getElementById('srch-hist').value||'').toLowerCase();
+  const month=document.getElementById('filt-hist-month').value; // yyyy-mm
+  const completed=outRecs.filter(r=>{
+    if(r.status!=='Completed')return false;
+    if(search&&!`${r.customer} ${r.address} ${r.driver}`.toLowerCase().includes(search))return false;
+    if(month&&r.date&&!r.date.startsWith(month))return false;
+    return true;
+  }).sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
+  const wrap=document.getElementById('cards-hist');
+  const empty=document.getElementById('empty-hist');
+  if(!completed.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    wrap.innerHTML=completed.map(r=>`
+      <div class="hist-card" onclick="openDetOut('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${esc(r.customer)}</div>
+            <div class="card-line2">${[r.address,fmtDate(r.date),r.driver?'Driver: '+r.driver:''].filter(Boolean).join(' · ')}</div>
+          </div>
+          <div class="card-row-right">
+            <span class="badge b-completed">Completed</span>
+            ${r.photo?'<span style="font-size:.85rem">📷</span>':''}
+          </div>
+          <div class="card-chevron">›</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ── CUSTOMERS
+let editCustKey=null;
+function openCustForm(key){
+  editCustKey=key||null;
+  const r=key?custRecs.find(x=>x._k===key):null;
+  document.getElementById('fcust-title').textContent=key?'Edit Customer':'Add Customer Notes';
+  document.getElementById('c-name').value =r?.name  ||'';
+  document.getElementById('c-phone').value=r?.phone ||'';
+  document.getElementById('c-addr').value =r?.addr  ||'';
+  document.getElementById('c-notes').value=r?.notes ||'';
+  document.getElementById('form-cust').classList.add('open');
+}
+function closeCustForm(){document.getElementById('form-cust').classList.remove('open');editCustKey=null;}
+function saveCust(){
+  const name=document.getElementById('c-name').value.trim();
+  if(!name){alert('Customer name is required.');return;}
+  const rec={name,phone:document.getElementById('c-phone').value.trim(),addr:document.getElementById('c-addr').value.trim(),notes:document.getElementById('c-notes').value.trim(),updated:new Date().toISOString()};
+  if(editCustKey){custRef.child(editCustKey).update(rec);}
+  else{rec.created=new Date().toISOString();custRef.push(rec);}
+  closeCustForm();
+}
+function openDetCust(key){
+  const r=custRecs.find(x=>x._k===key);if(!r)return;
+  document.getElementById('det-cust-title').textContent=r.name;
+  // delivery count for this customer
+  const delCount=outRecs.filter(d=>(d.customer||'').toLowerCase().trim()===(r.name||'').toLowerCase().trim()).length;
+  document.getElementById('det-cust-body').innerHTML=`
+    <div class="detail-section">
+      <div class="ds-title">Customer Info</div>
+      <div class="detail-grid">
+        <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.name)}</div></div>
+        <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.addr||'—')}</div></div>
+        <div><div class="di-lbl">Total Deliveries</div><div class="di-val">${delCount}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">📌 Notes (shown on every delivery)</div>
+      <div style="background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:12px 14px;font-size:1rem;font-weight:600;line-height:1.5;white-space:pre-wrap">${esc(r.notes||'No notes yet.')}</div>
+    </div>`;
+  document.getElementById('det-cust-edit').onclick=()=>{closeDetCust();openCustForm(key);};
+  document.getElementById('det-cust-del').onclick=()=>{if(confirm('Delete this customer record?')){custRef.child(key).remove();closeDetCust();}};
+  document.getElementById('det-cust').classList.add('open');
+}
+function closeDetCust(){document.getElementById('det-cust').classList.remove('open');}
+function renderCusts(){
+  const search=(document.getElementById('srch-cust').value||'').toLowerCase();
+  let rows=custRecs.filter(r=>!search||`${r.name} ${r.phone} ${r.addr}`.toLowerCase().includes(search));
+  const wrap=document.getElementById('cards-cust');
+  const empty=document.getElementById('empty-cust');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    wrap.innerHTML=rows.map(r=>`
+      <div class="del-card" style="border-left-color:var(--amber)" onclick="openDetCust('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${esc(r.name)}</div>
+            <div class="card-line2">${[r.phone,r.addr].filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <div class="card-row-right" style="max-width:160px;text-align:right">
+            <div style="font-size:.82rem;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc((r.notes||'').slice(0,40)+(r.notes&&r.notes.length>40?'…':''))}</div>
+          </div>
+          <div class="card-chevron">›</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ── PRINT TICKET
+function printTicket(key){
+  const r=outRecs.find(x=>x._k===key);if(!r)return;
+  const now=new Date();
+  const custMatch=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
+  const pa=document.getElementById('print-area');
+  pa.style.display='block';
+  pa.innerHTML=`<div class="print-ticket">
+    <div class="pt-header">
+      <div class="pt-logo">MILLER <span>HARDWARE</span><small>EST. 1931 · YELLVILLE, AR</small></div>
+      <div class="pt-meta">
+        Delivery Ticket<br>
+        Printed: ${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}<br>
+        ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}
+      </div>
+    </div>
+    <div class="pt-title">Delivery Ticket</div>
+    <div class="pt-section">
+      <div class="pt-section-title">Customer</div>
+      <div class="pt-grid">
+        <div class="pt-field"><label>Name</label><span>${esc(r.customer)}</span></div>
+        <div class="pt-field"><label>Phone</label><span>${esc(r.phone||'—')}</span></div>
+        <div class="pt-field" style="grid-column:1/-1"><label>Delivery Address</label><span>${esc(r.address||'—')}</span></div>
+      </div>
+    </div>
+    <div class="pt-section">
+      <div class="pt-section-title">Order Details</div>
+      <div class="pt-items">${esc(r.items||'')}</div>
+    </div>
+    <div class="pt-section">
+      <div class="pt-section-title">Delivery Info</div>
+      <div class="pt-grid">
+        <div class="pt-field"><label>Date</label><span>${fmtDate(r.date)}</span></div>
+        <div class="pt-field"><label>Time Window</label><span>${esc(r.window||'—')}</span></div>
+        <div class="pt-field"><label>Driver</label><span>${esc(r.driver||'—')}</span></div>
+        <div class="pt-field"><label>Status</label><span>${esc(r.status)}</span></div>
+        ${r.notes?`<div class="pt-field" style="grid-column:1/-1"><label>Notes</label><span>${esc(r.notes)}</span></div>`:''}
+      </div>
+    </div>
+    ${custMatch?.notes?`<div class="pt-section"><div class="pt-section-title">📌 Customer Notes</div><div style="background:#FFF8E1;border:1px solid #F0C040;padding:8px 12px;font-size:.9rem;font-weight:600">${esc(custMatch.notes)}</div></div>`:''}
+    <div class="pt-section">
+      <div class="pt-section-title">Proof of Delivery</div>
+      <div class="pt-field"><label>Received By (print name)</label><span>${esc(r.receivedBy||'')}</span></div>
+      ${r.photo?`<img class="pt-photo" src="${r.photo}" alt="Delivery photo">`:
+      `<div class="pt-sig-area"><div class="pt-sig-line">Customer Signature</div></div>`}
+    </div>
+    <div class="pt-footer">MILLER HARDWARE CO. · YELLVILLE &amp; HARRISON, AR · EST. 1931</div>
+  </div>`;
+  setTimeout(()=>{window.print();pa.style.display='none';},100);
 }
 
 // ── HELPERS
