@@ -21,13 +21,24 @@
   body { font-family: 'IBM Plex Sans', sans-serif; background: var(--gray-100); color: var(--ink); min-height: 100vh; }
 
   header { background: var(--ink); border-bottom: 4px solid var(--red); }
-  .header-inner { max-width: 1200px; margin: 0 auto; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .logo-block { display: flex; align-items: baseline; gap: 12px; }
   .logo-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--white); line-height: 1; }
   .logo-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--gray-300); letter-spacing: 3px; text-transform: uppercase; }
-  .header-right { display: flex; align-items: center; gap: 20px; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
   .location-badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; background: var(--red); color: var(--white); padding: 4px 10px; text-transform: uppercase; }
   #live-clock { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gray-300); }
+
+  /* SYNC INDICATOR */
+  #sync-status {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 1px;
+    text-transform: uppercase; padding: 4px 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-500); flex-shrink: 0; }
+  .sync-dot.live  { background: #2ECC71; box-shadow: 0 0 6px #2ECC71; }
+  .sync-dot.error { background: var(--red); }
+  .sync-dot.connecting { background: var(--amber); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   .tab-nav { background: var(--gray-900); }
   .tab-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; }
@@ -86,7 +97,6 @@
   .sc-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 6px; }
   .sc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; color: var(--ink); }
 
-  /* progress dots */
   .progress-track { display: flex; gap: 4px; align-items: center; margin-top: 5px; }
   .pdot { width: 9px; height: 9px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
   .pdot.p-order-in  { background: var(--purple); }
@@ -94,7 +104,6 @@
   .pdot.p-out       { background: var(--blue); }
   .pdot.p-completed { background: var(--green); }
 
-  /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--white); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; border-top: 4px solid var(--red); animation: slideUp 0.2s ease; }
@@ -115,7 +124,6 @@
   .form-group textarea { resize: vertical; min-height: 70px; }
   .form-divider { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding: 8px 0 2px; border-top: 1px solid var(--border); margin-top: 4px; }
 
-  /* photo upload */
   .photo-upload-area { border: 2px dashed var(--border); background: var(--gray-50); padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s; position: relative; }
   .photo-upload-area:hover { border-color: var(--red); }
   .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -125,7 +133,6 @@
   .photo-preview-wrap img { max-width: 100%; max-height: 200px; display: block; border: 1px solid var(--border); }
   .photo-clear-btn { position: absolute; top: 4px; right: 4px; background: var(--red); color: white; border: none; cursor: pointer; font-size: 0.7rem; padding: 3px 7px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
 
-  /* detail */
   .detail-section { margin-bottom: 20px; }
   .detail-section-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
   .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
@@ -137,7 +144,7 @@
   @media (max-width: 640px) {
     .form-row { grid-template-columns: 1fr; }
     .detail-grid { grid-template-columns: 1fr; }
-    .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .header-inner { gap: 10px; }
     .summary-row { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -151,6 +158,10 @@
       <span class="logo-sub">Est. 1931</span>
     </div>
     <div class="header-right">
+      <div id="sync-status">
+        <div class="sync-dot connecting" id="sync-dot"></div>
+        <span id="sync-text" style="color:var(--gray-300)">Connecting…</span>
+      </div>
       <span class="location-badge">Yellville</span>
       <span id="live-clock"></span>
     </div>
@@ -170,7 +181,6 @@
 
 <main class="main">
 
-  <!-- OUTBOUND PANEL -->
   <div id="panel-out" class="tab-panel active">
     <div class="summary-row" id="summary-out"></div>
     <div class="toolbar">
@@ -192,10 +202,7 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>#</th><th>Customer</th><th>Address</th><th>Items</th>
-            <th>Driver</th><th>Date / Window</th><th>Status</th><th>📷</th><th>Actions</th>
-          </tr>
+          <tr><th>#</th><th>Customer</th><th>Address</th><th>Items</th><th>Driver</th><th>Date / Window</th><th>Status</th><th>📷</th><th>Actions</th></tr>
         </thead>
         <tbody id="tbody-out"></tbody>
       </table>
@@ -205,7 +212,6 @@
     </div>
   </div>
 
-  <!-- INBOUND PANEL -->
   <div id="panel-in" class="tab-panel">
     <div class="summary-row" id="summary-in"></div>
     <div class="toolbar">
@@ -227,10 +233,7 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>#</th><th>Vendor</th><th>PO Number</th><th>Items / Qty</th>
-            <th>Expected</th><th>Status</th><th>Received</th><th>Notes</th><th>Actions</th>
-          </tr>
+          <tr><th>#</th><th>Vendor</th><th>PO Number</th><th>Items / Qty</th><th>Expected</th><th>Status</th><th>Received</th><th>Notes</th><th>Actions</th></tr>
         </thead>
         <tbody id="tbody-in"></tbody>
       </table>
@@ -256,13 +259,11 @@
           <div class="form-group"><label>Phone</label><input type="text" id="out-phone" placeholder="(870) 555-0000"></div>
         </div>
         <div class="form-group"><label>Delivery Address</label><input type="text" id="out-address" placeholder="Street, City, ZIP"></div>
-
         <div class="form-divider">Order Details</div>
         <div class="form-group"><label>Items / Description *</label><textarea id="out-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
         <div class="form-row">
           <div class="form-group"><label>Driver</label><input type="text" id="out-driver" placeholder="Driver name"></div>
-          <div class="form-group">
-            <label>Status</label>
+          <div class="form-group"><label>Status</label>
             <select id="out-status">
               <option>Order In</option><option>Loading</option>
               <option>Out for Delivery</option><option>Completed</option>
@@ -274,7 +275,6 @@
           <div class="form-group"><label>Time Window</label><input type="text" id="out-window" placeholder="e.g. 8am – 11am"></div>
         </div>
         <div class="form-group"><label>Notes</label><textarea id="out-notes" placeholder="Gate code, access notes, special instructions…"></textarea></div>
-
         <div class="form-divider">Proof of Delivery — Photo</div>
         <div class="form-group">
           <label>Photo (tap to use camera or upload)</label>
@@ -313,8 +313,7 @@
         <div class="form-group"><label>Quantity / Units</label><input type="text" id="in-qty" placeholder="e.g. 3 pallets, 48 units, 200 lf"></div>
         <div class="form-row">
           <div class="form-group"><label>Expected Delivery Date</label><input type="date" id="in-expected"></div>
-          <div class="form-group">
-            <label>Status</label>
+          <div class="form-group"><label>Status</label>
             <select id="in-status">
               <option>Expected</option><option>Partial</option>
               <option>Received</option><option>Overdue</option>
@@ -358,16 +357,60 @@
   </div>
 </div>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script>
-// ── STORAGE
-const SK_OUT = 'mh_del_out_v2', SK_IN = 'mh_del_in_v2';
-function load(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } }
-function save(k, d) { localStorage.setItem(k, JSON.stringify(d)); }
-let outRecords = load(SK_OUT), inRecords = load(SK_IN);
+// ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDNEl1mXtNLGN0nsvr1lZi7SJzsiypJFLM",
+  authDomain: "millersawshop-f716a.firebaseapp.com",
+  databaseURL: "https://millersawshop-f716a-default-rtdb.firebaseio.com",
+  projectId: "millersawshop-f716a",
+  storageBucket: "millersawshop-f716a.firebasestorage.app",
+  messagingSenderId: "187757043776",
+  appId: "1:187757043776:web:a0cce22b59172da8db7fa5",
+  measurementId: "G-NGCMST4SWE"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const outRef = db.ref('deliveries_out');
+const inRef  = db.ref('deliveries_in');
+
+// ── SYNC STATUS ───────────────────────────────────────────────────────────────
+function setSyncStatus(state) {
+  const dot  = document.getElementById('sync-dot');
+  const text = document.getElementById('sync-text');
+  dot.className = 'sync-dot ' + state;
+  const labels = { live:'Live', error:'Offline', connecting:'Connecting…' };
+  text.textContent = labels[state] || state;
+  text.style.color = state === 'live' ? '#2ECC71' : state === 'error' ? 'var(--red)' : 'var(--gray-300)';
+}
+db.ref('.info/connected').on('value', snap => {
+  setSyncStatus(snap.val() ? 'live' : 'error');
+});
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let outRecords = [], inRecords = [];
 let editingOutId = null, editingInId = null;
 let tempOutPhoto = null, tempInPhoto = null;
 
-// ── CLOCK
+// ── FIREBASE LISTENERS ────────────────────────────────────────────────────────
+outRef.on('value', snap => {
+  outRecords = [];
+  snap.forEach(child => outRecords.push({ _key: child.key, ...child.val() }));
+  outRecords.sort((a,b) => (b.created||'') > (a.created||'') ? 1 : -1);
+  renderOut();
+});
+inRef.on('value', snap => {
+  inRecords = [];
+  snap.forEach(child => inRecords.push({ _key: child.key, ...child.val() }));
+  inRecords.sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
+  renderIn();
+});
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
 function tick() {
   const n = new Date();
   document.getElementById('live-clock').textContent =
@@ -376,7 +419,7 @@ function tick() {
 }
 setInterval(tick, 1000); tick();
 
-// ── TABS
+// ── TABS ──────────────────────────────────────────────────────────────────────
 function switchTab(t, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -384,14 +427,27 @@ function switchTab(t, btn) {
   document.getElementById('panel-' + t).classList.add('active');
 }
 
-// ── PHOTO
+// ── PHOTO ─────────────────────────────────────────────────────────────────────
 function handlePhoto(e, which) {
   const file = e.target.files[0]; if (!file) return;
+  // Compress image before storing
+  const img = new Image();
   const reader = new FileReader();
   reader.onload = ev => {
-    if (which === 'out') tempOutPhoto = ev.target.result;
-    else tempInPhoto = ev.target.result;
-    renderPhotoPreview(which, ev.target.result);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const data = canvas.toDataURL('image/jpeg', 0.7);
+      if (which === 'out') tempOutPhoto = data;
+      else tempInPhoto = data;
+      renderPhotoPreview(which, data);
+    };
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -409,19 +465,17 @@ function clearPhoto(which) {
   renderPhotoPreview(which, null);
 }
 
-// ── OUTBOUND
+// ── OUTBOUND ──────────────────────────────────────────────────────────────────
 const OUT_STATUSES = ['Order In','Loading','Out for Delivery','Completed'];
-const OUT_COLORS   = { 'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)' };
-const OUT_DOT_CLS  = { 'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed' };
+const OUT_COLORS   = {'Order In':'var(--purple)','Loading':'var(--amber)','Out for Delivery':'var(--blue)','Completed':'var(--green)'};
+const OUT_DOT_CLS  = {'Order In':'p-order-in','Loading':'p-loading','Out for Delivery':'p-out','Completed':'p-completed'};
 
-function nextId(arr) { return arr.length ? Math.max(...arr.map(r=>r.id)) + 1 : 1; }
-
-function openOutModal(id) {
-  editingOutId = id || null; tempOutPhoto = null;
+function openOutModal(key) {
+  editingOutId = key || null; tempOutPhoto = null;
   document.getElementById('out-photo-preview').innerHTML = '';
   document.getElementById('out-photo-input').value = '';
-  const r = id ? outRecords.find(x=>x.id===id) : null;
-  document.getElementById('modal-out-title').textContent = id ? 'Edit Delivery #'+id : 'New Delivery Out';
+  const r = key ? outRecords.find(x=>x._key===key) : null;
+  document.getElementById('modal-out-title').textContent = key ? 'Edit Delivery' : 'New Delivery Out';
   document.getElementById('out-customer').value    = r?.customer   || '';
   document.getElementById('out-phone').value       = r?.phone      || '';
   document.getElementById('out-address').value     = r?.address    || '';
@@ -442,7 +496,6 @@ function saveOut() {
   const items    = document.getElementById('out-items').value.trim();
   if (!customer || !items) { alert('Customer name and items are required.'); return; }
   const rec = {
-    id: editingOutId || nextId(outRecords),
     customer, items,
     phone:      document.getElementById('out-phone').value.trim(),
     address:    document.getElementById('out-address').value.trim(),
@@ -452,26 +505,27 @@ function saveOut() {
     window:     document.getElementById('out-window').value.trim(),
     notes:      document.getElementById('out-notes').value.trim(),
     receivedBy: document.getElementById('out-received-by').value.trim(),
-    photo:      tempOutPhoto,
-    created:    editingOutId ? outRecords.find(x=>x.id===editingOutId).created : new Date().toISOString(),
+    photo:      tempOutPhoto || '',
     updated:    new Date().toISOString()
   };
-  outRecords = editingOutId ? outRecords.map(r=>r.id===editingOutId?rec:r) : [...outRecords, rec];
-  save(SK_OUT, outRecords); closeOutModal(); renderOut();
-}
-
-function deleteOut(id) {
-  if (!confirm('Delete this delivery record?')) return;
-  outRecords = outRecords.filter(r=>r.id!==id); save(SK_OUT, outRecords); renderOut();
-}
-
-function advanceOut(id) {
-  const r = outRecords.find(x=>x.id===id);
-  const idx = OUT_STATUSES.indexOf(r.status);
-  if (idx < OUT_STATUSES.length - 1) {
-    outRecords = outRecords.map(x=>x.id===id?{...x,status:OUT_STATUSES[idx+1]}:x);
-    save(SK_OUT, outRecords); renderOut();
+  if (editingOutId) {
+    outRef.child(editingOutId).update(rec);
+  } else {
+    rec.created = new Date().toISOString();
+    outRef.push(rec);
   }
+  closeOutModal();
+}
+
+function deleteOut(key) {
+  if (!confirm('Delete this delivery record?')) return;
+  outRef.child(key).remove();
+}
+
+function advanceOut(key) {
+  const r = outRecords.find(x=>x._key===key);
+  const idx = OUT_STATUSES.indexOf(r.status);
+  if (idx < OUT_STATUSES.length - 1) outRef.child(key).update({ status: OUT_STATUSES[idx+1] });
 }
 
 function renderOut() {
@@ -487,7 +541,7 @@ function renderOut() {
     if (fDriver && r.driver !== fDriver) return false;
     if (search && !`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search)) return false;
     return true;
-  }).sort((a,b) => b.id - a.id);
+  });
   const tbody = document.getElementById('tbody-out');
   const empty = document.getElementById('empty-out');
   if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
@@ -495,32 +549,30 @@ function renderOut() {
     empty.style.display = 'none';
     tbody.innerHTML = rows.map(r => {
       const idx = OUT_STATUSES.indexOf(r.status);
-      const dots = OUT_STATUSES.map((s,i) => {
-        const cls = i <= idx ? 'pdot ' + OUT_DOT_CLS[s] : 'pdot';
-        return `<div class="${cls}" title="${s}"></div>`;
-      }).join('');
+      const dots = OUT_STATUSES.map((s,i) => `<div class="pdot${i<=idx?' '+OUT_DOT_CLS[s]:''}" title="${s}"></div>`).join('');
       const nextS = idx < OUT_STATUSES.length-1 ? OUT_STATUSES[idx+1] : null;
       return `<tr>
-        <td class="mono" style="color:var(--gray-500);font-size:0.75rem">#${r.id}</td>
+        <td class="mono" style="color:var(--gray-500);font-size:0.75rem">${r.created?r.created.slice(0,10):'—'}</td>
         <td><strong>${esc(r.customer)}</strong>${r.phone?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.phone)}</span>`:''}</td>
         <td style="max-width:150px;font-size:0.8rem">${esc(r.address||'—')}</td>
-        <td style="max-width:170px;font-size:0.8rem">${esc(r.items.length>55?r.items.slice(0,55)+'…':r.items)}</td>
+        <td style="max-width:170px;font-size:0.8rem">${esc((r.items||'').length>55?r.items.slice(0,55)+'…':r.items||'')}</td>
         <td>${r.driver?esc(r.driver):'<span style="color:var(--gray-300)">—</span>'}</td>
         <td class="mono" style="font-size:0.75rem">${fmtDate(r.date)}${r.window?`<br><span style="color:var(--gray-500)">${esc(r.window)}</span>`:''}</td>
         <td>${badge(r.status)}<div class="progress-track">${dots}</div></td>
         <td style="text-align:center">${r.photo?'📷':'<span style="color:var(--gray-300)">—</span>'}</td>
         <td>
           <div class="action-btns">
-            <button class="btn btn-ghost btn-sm" onclick="viewOut(${r.id})">View</button>
-            <button class="btn btn-ghost btn-sm" onclick="openOutModal(${r.id})">Edit</button>
-            ${nextS?`<button class="btn btn-sm" style="background:${OUT_COLORS[nextS]};color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="advanceOut(${r.id})">→ ${esc(nextS)}</button>`:''}
-            <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteOut(${r.id})">Del</button>
+            <button class="btn btn-ghost btn-sm" onclick="viewOut('${r._key}')">View</button>
+            <button class="btn btn-ghost btn-sm" onclick="openOutModal('${r._key}')">Edit</button>
+            ${nextS?`<button class="btn btn-sm" style="background:${OUT_COLORS[nextS]};color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="advanceOut('${r._key}')">→ ${esc(nextS)}</button>`:''}
+            <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteOut('${r._key}')">Del</button>
           </div>
         </td>
       </tr>`;
     }).join('');
   }
-  const total=outRecords.length, orderIn=outRecords.filter(r=>r.status==='Order In').length,
+  const total=outRecords.length,
+    orderIn=outRecords.filter(r=>r.status==='Order In').length,
     loading=outRecords.filter(r=>r.status==='Loading').length,
     enRoute=outRecords.filter(r=>r.status==='Out for Delivery').length,
     completed=outRecords.filter(r=>r.status==='Completed').length;
@@ -533,9 +585,9 @@ function renderOut() {
   document.getElementById('count-out').textContent = outRecords.filter(r=>r.status!=='Completed').length;
 }
 
-function viewOut(id) {
-  const r = outRecords.find(x=>x.id===id);
-  document.getElementById('detail-title').textContent = `Delivery #${r.id} — ${r.customer}`;
+function viewOut(key) {
+  const r = outRecords.find(x=>x._key===key);
+  document.getElementById('detail-title').textContent = `Delivery — ${r.customer}`;
   document.getElementById('detail-body').innerHTML = `
     <div class="detail-section">
       <div class="detail-section-title">Customer</div>
@@ -548,7 +600,7 @@ function viewOut(id) {
     <div class="detail-section">
       <div class="detail-section-title">Order</div>
       <div class="detail-grid">
-        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items)}</div></div>
+        <div style="grid-column:1/-1"><div class="di-label">Items</div><div class="di-value" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
         <div><div class="di-label">Driver</div><div class="di-value">${esc(r.driver||'—')}</div></div>
         <div><div class="di-label">Status</div><div class="di-value">${badge(r.status)}</div></div>
         <div><div class="di-label">Date</div><div class="di-value">${fmtDate(r.date)}</div></div>
@@ -566,13 +618,13 @@ function viewOut(id) {
   document.getElementById('modal-detail').classList.add('open');
 }
 
-// ── INBOUND
-function openInModal(id) {
-  editingInId = id || null; tempInPhoto = null;
+// ── INBOUND ───────────────────────────────────────────────────────────────────
+function openInModal(key) {
+  editingInId = key || null; tempInPhoto = null;
   document.getElementById('in-photo-preview').innerHTML = '';
   document.getElementById('in-photo-input').value = '';
-  const r = id ? inRecords.find(x=>x.id===id) : null;
-  document.getElementById('modal-in-title').textContent = id ? 'Edit Inbound #'+id : 'New Inbound Order';
+  const r = key ? inRecords.find(x=>x._key===key) : null;
+  document.getElementById('modal-in-title').textContent = key ? 'Edit Inbound' : 'New Inbound Order';
   document.getElementById('in-vendor').value        = r?.vendor       || '';
   document.getElementById('in-po').value            = r?.po           || '';
   document.getElementById('in-items').value         = r?.items        || '';
@@ -594,7 +646,7 @@ function saveIn() {
   const exp  = document.getElementById('in-expected').value;
   if (status==='Expected' && exp && exp < new Date().toISOString().slice(0,10)) status = 'Overdue';
   const rec = {
-    id: editingInId || nextId(inRecords), vendor, status,
+    vendor, status,
     po:           document.getElementById('in-po').value.trim(),
     items:        document.getElementById('in-items').value.trim(),
     qty:          document.getElementById('in-qty').value.trim(),
@@ -602,27 +654,37 @@ function saveIn() {
     receivedDate: document.getElementById('in-received-date').value,
     receivedBy:   document.getElementById('in-received-by').value.trim(),
     notes:        document.getElementById('in-notes').value.trim(),
-    photo:        tempInPhoto,
-    created:      editingInId ? inRecords.find(x=>x.id===editingInId).created : new Date().toISOString(),
+    photo:        tempInPhoto || '',
     updated:      new Date().toISOString()
   };
-  inRecords = editingInId ? inRecords.map(r=>r.id===editingInId?rec:r) : [...inRecords, rec];
-  save(SK_IN, inRecords); closeInModal(); renderIn();
+  if (editingInId) {
+    inRef.child(editingInId).update(rec);
+  } else {
+    rec.created = new Date().toISOString();
+    inRef.push(rec);
+  }
+  closeInModal();
 }
-function deleteIn(id) {
+
+function deleteIn(key) {
   if (!confirm('Delete this inbound record?')) return;
-  inRecords = inRecords.filter(r=>r.id!==id); save(SK_IN, inRecords); renderIn();
+  inRef.child(key).remove();
 }
-function statusIn(id, status) {
+
+function statusIn(key, status) {
   const today = new Date().toISOString().slice(0,10);
-  inRecords = inRecords.map(r=>r.id===id?{...r,status,receivedDate:status==='Received'?today:r.receivedDate}:r);
-  save(SK_IN, inRecords); renderIn();
+  const update = { status };
+  if (status === 'Received') update.receivedDate = today;
+  inRef.child(key).update(update);
 }
 
 function renderIn() {
   const today = new Date().toISOString().slice(0,10);
-  inRecords = inRecords.map(r => (r.status==='Expected'&&r.expected&&r.expected<today)?{...r,status:'Overdue'}:r);
-  save(SK_IN, inRecords);
+  // auto-flag overdue in Firebase
+  inRecords.forEach(r => {
+    if (r.status==='Expected' && r.expected && r.expected < today)
+      inRef.child(r._key).update({ status: 'Overdue' });
+  });
   const search  = document.getElementById('search-in').value.toLowerCase();
   const fStatus = document.getElementById('filter-in-status').value;
   const fVendor = document.getElementById('filter-in-vendor').value;
@@ -635,33 +697,34 @@ function renderIn() {
     if (fVendor && r.vendor !== fVendor) return false;
     if (search && !`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search)) return false;
     return true;
-  }).sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
+  });
   const tbody = document.getElementById('tbody-in');
   const empty = document.getElementById('empty-in');
   if (!rows.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
   else {
     empty.style.display = 'none';
     tbody.innerHTML = rows.map(r => `<tr>
-      <td class="mono" style="color:var(--gray-500);font-size:0.75rem">#${r.id}</td>
+      <td class="mono" style="color:var(--gray-500);font-size:0.75rem">${r.created?r.created.slice(0,10):'—'}</td>
       <td><strong>${esc(r.vendor)}</strong></td>
       <td class="mono" style="font-size:0.78rem">${esc(r.po||'—')}</td>
-      <td style="max-width:180px;font-size:0.8rem">${esc(r.items.length>60?r.items.slice(0,60)+'…':r.items||'—')}${r.qty?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.qty)}</span>`:''}</td>
+      <td style="max-width:180px;font-size:0.8rem">${esc((r.items||'').length>60?r.items.slice(0,60)+'…':r.items||'—')}${r.qty?`<br><span style="font-size:0.73rem;color:var(--gray-500)">${esc(r.qty)}</span>`:''}</td>
       <td class="mono" style="font-size:0.78rem;${r.status==='Overdue'?'color:var(--red);font-weight:600':''}">${fmtDate(r.expected)}</td>
       <td>${badge(r.status)}</td>
       <td class="mono" style="font-size:0.78rem">${fmtDate(r.receivedDate)}</td>
       <td style="max-width:140px;font-size:0.8rem;color:var(--gray-700)">${esc((r.notes||'').length>45?(r.notes||'').slice(0,45)+'…':r.notes||'—')}</td>
       <td>
         <div class="action-btns">
-          <button class="btn btn-ghost btn-sm" onclick="viewIn(${r.id})">View</button>
-          <button class="btn btn-ghost btn-sm" onclick="openInModal(${r.id})">Edit</button>
-          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn btn-sm" style="background:var(--amber);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn(${r.id},'Partial')">Partial</button>`:''}
-          ${r.status!=='Received'?`<button class="btn btn-sm" style="background:var(--green);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn(${r.id},'Received')">Received</button>`:''}
-          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteIn(${r.id})">Del</button>
+          <button class="btn btn-ghost btn-sm" onclick="viewIn('${r._key}')">View</button>
+          <button class="btn btn-ghost btn-sm" onclick="openInModal('${r._key}')">Edit</button>
+          ${(r.status==='Expected'||r.status==='Overdue')?`<button class="btn btn-sm" style="background:var(--amber);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn('${r._key}','Partial')">Partial</button>`:''}
+          ${r.status!=='Received'?`<button class="btn btn-sm" style="background:var(--green);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:5px 8px;border:none;cursor:pointer;text-transform:uppercase" onclick="statusIn('${r._key}','Received')">Received</button>`:''}
+          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteIn('${r._key}')">Del</button>
         </div>
       </td>
     </tr>`).join('');
   }
-  const total=inRecords.length, expected=inRecords.filter(r=>r.status==='Expected').length,
+  const total=inRecords.length,
+    expected=inRecords.filter(r=>r.status==='Expected').length,
     overdue=inRecords.filter(r=>r.status==='Overdue').length,
     received=inRecords.filter(r=>r.status==='Received').length;
   document.getElementById('summary-in').innerHTML = `
@@ -672,9 +735,9 @@ function renderIn() {
   document.getElementById('count-in').textContent = inRecords.filter(r=>r.status!=='Received').length;
 }
 
-function viewIn(id) {
-  const r = inRecords.find(x=>x.id===id);
-  document.getElementById('detail-title').textContent = `Inbound #${r.id} — ${r.vendor}`;
+function viewIn(key) {
+  const r = inRecords.find(x=>x._key===key);
+  document.getElementById('detail-title').textContent = `Inbound — ${r.vendor}`;
   document.getElementById('detail-body').innerHTML = `
     <div class="detail-section">
       <div class="detail-section-title">Vendor / Order</div>
@@ -696,7 +759,7 @@ function viewIn(id) {
 
 function closeDetail() { document.getElementById('modal-detail').classList.remove('open'); }
 
-// ── HELPERS
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtDate(d) {
   if (!d) return '—';
@@ -709,8 +772,6 @@ function badge(s) {
     'Partial':'badge-partial','Overdue':'badge-overdue'};
   return `<span class="badge ${m[s]||''}">${s}</span>`;
 }
-
-renderOut(); renderIn();
 </script>
 </body>
 </html>
