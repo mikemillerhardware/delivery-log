@@ -306,6 +306,11 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .person-del{background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.9rem;padding:2px 6px;font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase}
 .person-del:hover{color:var(--red)}
 
+/* DASHBOARD SECTIONS */
+.dash-section-hdr{margin-bottom:6px}
+.dash-section-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.dash-section-title::after{content:'';flex:1;height:2px;background:var(--bd);border-radius:1px}
+
 /* EXPORT ROWS */
 .export-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--g100)}
 .export-row:last-child{border-bottom:none}
@@ -344,7 +349,8 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 
 <nav class="tab-nav">
   <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
+    <button class="tab-btn active" onclick="switchTab('dash',this)">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
     <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
     <button class="tab-btn" onclick="switchTab('order-list',this)">Order List <span class="cpill" id="col">0</span></button>
     <button class="tab-btn" onclick="switchTab('workflow',this)">Workflow <span class="cpill" id="cwf">0</span></button>
@@ -356,41 +362,59 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 
 <main class="main">
 
-  <!-- OUTBOUND TAB -->
-  <div id="panel-out" class="tab-panel active">
-    <div class="out-layout">
+  <!-- DASHBOARD TAB -->
+  <div id="panel-dash" class="tab-panel active">
 
-      <!-- MAIN DELIVERY COLUMN -->
-      <div class="out-main">
-        <div class="summary-row" id="sum-out"></div>
-        <div class="toolbar">
-          <div class="tl-left">
-            <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
-            <select class="fsel" onchange="renderOut()" id="filt-out">
-              <option value="">All Statuses</option>
-              <option>Order In</option><option>Loading</option>
-              <option>Out for Delivery</option><option>Completed</option>
-            </select>
-          </div>
-          <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
-        </div>
-        <div class="card-list" id="cards-out"></div>
-        <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
+    <!-- NOTICE BOARD on dashboard -->
+    <div class="notice-board empty" id="nb" style="margin-bottom:18px">
+      <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notices</span></div>
+      <div class="msg-list" id="msg-list"></div>
+      <div class="msg-row">
+        <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice for the team…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
+        <button class="msg-post" onclick="postMsg()">Post</button>
       </div>
-
-      <!-- NOTICE BOARD SIDEBAR -->
-      <div class="out-sidebar">
-        <div class="notice-board empty" id="nb">
-          <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notices</span></div>
-          <div class="msg-list" id="msg-list"></div>
-          <div class="msg-row">
-            <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
-            <button class="msg-post" onclick="postMsg()">Post</button>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- DELIVERIES OUT — dominant section -->
+    <div class="dash-section-hdr">
+      <div class="dash-section-title">🚚 Deliveries Out</div>
+      <div class="summary-row" id="sum-dash-out" style="margin-bottom:12px"></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderDashOut()" id="srch-dash-out" style="flex:1;width:auto">
+        <input class="search-box" type="text" placeholder="Filter status…" oninput="renderDashOut()" id="filt-dash-status" style="width:160px" list="dash-status-list">
+        <datalist id="dash-status-list"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></datalist>
+        <button class="btn-new" onclick="openOutForm()">+ New</button>
+      </div>
+      <div class="card-list" id="cards-dash-out"></div>
+      <div id="empty-dash-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No active deliveries.</div>
+    </div>
+
+    <!-- WORKFLOW TASKS — secondary section -->
+    <div class="dash-section-hdr" style="margin-top:28px">
+      <div class="dash-section-title">✅ Workflow Tasks</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <input class="search-box" type="text" placeholder="Search tasks or person…" oninput="renderDashWF()" id="srch-dash-wf" style="flex:1;width:auto">
+        <button class="btn-new" style="background:var(--blue)" onclick="openWFForm()">+ New Task</button>
+      </div>
+      <div class="card-list" id="cards-dash-wf"></div>
+      <div id="empty-dash-wf" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No open tasks.</div>
+    </div>
+
+  </div>
+
+  <!-- OUTBOUND TAB -->
+  <div id="panel-out" class="tab-panel">
+    <div class="summary-row" id="sum-out"></div>
+    <div class="toolbar">
+      <div class="tl-left">
+        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
+        <input class="search-box" type="text" placeholder="Filter status…" oninput="renderOut()" id="filt-out-txt" style="width:160px" list="out-status-list">
+        <datalist id="out-status-list"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></datalist>
+      </div>
+      <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
+    </div>
+    <div class="card-list" id="cards-out"></div>
+    <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
   </div>
 
   <!-- INBOUND TAB -->
@@ -552,21 +576,11 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
       <button class="btn-new" onclick="openWFForm()">+ New Task</button>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <select class="fsel" onchange="renderWF()" id="filt-wf-status">
-        <option value="">All Statuses</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Done">Done</option>
-      </select>
-      <select class="fsel" onchange="renderWF()" id="filt-wf-person">
-        <option value="">All People</option>
-      </select>
-      <select class="fsel" onchange="renderWF()" id="filt-wf-priority">
-        <option value="">All Priorities</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
+      <input class="search-box" type="text" placeholder="Search task or person…" oninput="renderWF()" id="srch-wf" style="flex:1;min-width:180px">
+      <input class="search-box" type="text" placeholder="Filter status…" oninput="renderWF()" id="filt-wf-status-txt" style="width:150px" list="wf-status-list">
+      <datalist id="wf-status-list"><option>Open</option><option>In Progress</option><option>Done</option></datalist>
+      <input class="search-box" type="text" placeholder="Filter priority…" oninput="renderWF()" id="filt-wf-priority-txt" style="width:150px" list="wf-priority-list">
+      <datalist id="wf-priority-list"><option>High</option><option>Medium</option><option>Low</option></datalist>
     </div>
     <div class="card-list" id="cards-wf"></div>
     <div id="empty-wf" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No tasks yet. Add one to get started.</div>
@@ -814,9 +828,10 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
       <div class="fg">
         <div class="fgrp"><label>Task Name / Description *</label><textarea id="wf-task" placeholder="e.g. Restock aisle 3 fasteners, sweep loading dock, check oil on forklift…" style="min-height:80px"></textarea></div>
         <div class="fr">
-          <div class="fgrp">
+          <div class="fgrp" style="position:relative">
             <label>Assigned To</label>
-            <select id="wf-person"><option value="">— Unassigned —</option></select>
+            <input type="text" id="wf-person" placeholder="Type a name…" autocomplete="off" oninput="wfPersonSearch(this.value)" onblur="setTimeout(()=>hideWFDrop(),200)">
+            <div id="wf-person-drop" style="display:none;position:absolute;top:100%;background:var(--white);border:1px solid var(--bd);border-top:none;z-index:200;max-height:160px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1);left:0;right:0"></div>
           </div>
           <div class="fgrp">
             <label>Priority</label>
@@ -937,7 +952,7 @@ function switchTab(t,btn){
 }
 
 // listeners
-outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));outRecs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderOut();});
+outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));outRecs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderOut();renderDashOut();});
 inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();});
 msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
@@ -948,7 +963,7 @@ attachRef.on('value',s=>{attachRecs=[];s.forEach(c=>attachRecs.push({_k:c.key,..
 });
 wfRef.on('value',s=>{wfRecs=[];s.forEach(c=>wfRecs.push({_k:c.key,...c.val()}));
   wfRecs.sort((a,b)=>{const p={High:0,Medium:1,Low:2};const pd=(p[a.priority]??1)-(p[b.priority]??1);if(pd)return pd;return(a.due||'9')<(b.due||'9')?-1:1;});
-  renderWF();
+  renderWF();renderDashWF();
 });
 peopleRef.on('value',s=>{peopleList=[];s.forEach(c=>peopleList.push({_k:c.key,name:c.val()}));
   peopleList.sort((a,b)=>a.name.localeCompare(b.name));
@@ -1148,11 +1163,11 @@ function saveOut(){
 
 // ── RENDER OUTBOUND CARDS
 function renderOut(){
-  const search=document.getElementById('srch-out').value.toLowerCase();
-  const filt=document.getElementById('filt-out').value;
+  const search=(document.getElementById('srch-out').value||'').toLowerCase();
+  const fStatus=(document.getElementById('filt-out-txt')?.value||'').toLowerCase();
   let rows=outRecs.filter(r=>{
-    if(filt&&r.status!==filt)return false;
-    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver}`.toLowerCase().includes(search))return false;
+    if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
+    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
     return true;
   });
   const wrap=document.getElementById('cards-out');
@@ -1768,20 +1783,7 @@ function renderPeopleList(){
     </div>`).join('');
 }
 function renderWFPersonDropdowns(){
-  // populate workflow form dropdown
-  const sel=document.getElementById('wf-person');
-  const cur=sel?sel.value:'';
-  if(sel){
-    sel.innerHTML='<option value="">— Unassigned —</option>'+
-      peopleList.map(p=>`<option value="${esc(p.name)}"${p.name===cur?' selected':''}>${esc(p.name)}</option>`).join('');
-  }
-  // populate workflow filter dropdown
-  const fsel=document.getElementById('filt-wf-person');
-  const fcur=fsel?fsel.value:'';
-  if(fsel){
-    fsel.innerHTML='<option value="">All People</option>'+
-      peopleList.map(p=>`<option value="${esc(p.name)}"${p.name===fcur?' selected':''}>${esc(p.name)}</option>`).join('');
-  }
+  // no-op now — person field is a text search input, not a dropdown
 }
 
 // ── WORKFLOW TASKS
@@ -1794,7 +1796,6 @@ const WF_PRI_COL={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
 
 function openWFForm(key){
   editWFKey=key||null;
-  renderWFPersonDropdowns();
   const r=key?wfRecs.find(x=>x._k===key):null;
   document.getElementById('fwf-title').textContent=key?'Edit Task':'New Task';
   document.getElementById('wf-task').value    =r?.task    ||'';
@@ -1807,11 +1808,29 @@ function openWFForm(key){
 }
 function closeWFForm(){document.getElementById('form-wf').classList.remove('open');editWFKey=null;}
 
+// person search dropdown in workflow form
+function wfPersonSearch(val){
+  const drop=document.getElementById('wf-person-drop');
+  if(!val||!val.trim()){drop.style.display='none';return;}
+  const matches=peopleList.filter(p=>(p.name||'').toLowerCase().includes(val.toLowerCase())).slice(0,6);
+  if(!matches.length){drop.style.display='none';return;}
+  drop.innerHTML=matches.map(p=>`
+    <div class="cust-drop-item" onmousedown="fillWFPerson('${esc(p.name)}')">
+      <div class="cdi-name">${esc(p.name)}</div>
+    </div>`).join('');
+  drop.style.display='block';
+}
+function fillWFPerson(name){
+  document.getElementById('wf-person').value=name;
+  hideWFDrop();
+}
+function hideWFDrop(){const d=document.getElementById('wf-person-drop');if(d)d.style.display='none';}
+
 function saveWF(){
   const task=document.getElementById('wf-task').value.trim();
   if(!task){alert('Task description is required.');return;}
   const rec={task,
-    person:  document.getElementById('wf-person').value,
+    person:  document.getElementById('wf-person').value.trim(),
     priority:document.getElementById('wf-priority').value,
     due:     document.getElementById('wf-due').value,
     status:  document.getElementById('wf-status').value,
@@ -1860,51 +1879,104 @@ function openDetWF(key){
 }
 function closeDetWF(){document.getElementById('det-wf').classList.remove('open');}
 
-function renderWF(){
-  renderWFPersonDropdowns();
-  const fStatus  =document.getElementById('filt-wf-status').value;
-  const fPerson  =document.getElementById('filt-wf-person').value;
-  const fPriority=document.getElementById('filt-wf-priority').value;
+function wfCardHtml(r){
   const today=new Date().toISOString().slice(0,10);
+  const overdue=r.due&&r.due<today&&r.status!=='Done';
+  const isDone=r.status==='Done';
+  const meta=[r.person?'👤 '+r.person:'',r.due?(overdue?'⚠️ Overdue: ':'Due: ')+fmtDate(r.due):''].filter(Boolean).join(' · ');
+  return`<div class="wf-card p-${r.priority||'Medium'} s-${(r.status||'').replace(' ','-')}" onclick="openDetWF('${r._k}')">
+    <div class="wf-row">
+      <div class="wf-row-left">
+        <div class="wf-task-name${isDone?' done-strike':''}">${esc(r.task)}</div>
+        <div class="wf-meta" style="${overdue?'color:var(--red)':''}">${meta||'No assignment'}</div>
+      </div>
+      <div class="wf-row-right">
+        <span class="badge ${WF_STATUS_BADGE[r.status]||''}">${r.status}</span>
+        <span style="font-size:.8rem;color:${WF_PRI_COL[r.priority]||'var(--g500)'};font-weight:600">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'')}</span>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+  </div>`;
+}
 
-  let rows=wfRecs.filter(r=>{
-    if(fStatus   && r.status  !==fStatus)   return false;
-    if(fPerson   && r.person  !==fPerson)   return false;
-    if(fPriority && r.priority!==fPriority) return false;
+function renderWF(){
+  const search=(document.getElementById('srch-wf')?.value||'').toLowerCase();
+  const fStatus=(document.getElementById('filt-wf-status-txt')?.value||'').toLowerCase();
+  const fPriority=(document.getElementById('filt-wf-priority-txt')?.value||'').toLowerCase();
+  const rows=wfRecs.filter(r=>{
+    if(fStatus   &&!(r.status  ||'').toLowerCase().includes(fStatus))   return false;
+    if(fPriority &&!(r.priority||'').toLowerCase().includes(fPriority)) return false;
+    if(search    &&!`${r.task} ${r.person}`.toLowerCase().includes(search)) return false;
     return true;
   });
-
-  const wrap =document.getElementById('cards-wf');
+  const wrap=document.getElementById('cards-wf');
   const empty=document.getElementById('empty-wf');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{empty.style.display='none';wrap.innerHTML=rows.map(wfCardHtml).join('');}
+  const active=wfRecs.filter(r=>r.status!=='Done').length;
+  document.getElementById('cwf').textContent=active;
+}
+
+// ── DASHBOARD RENDERS
+function renderDashOut(){
+  const search=(document.getElementById('srch-dash-out')?.value||'').toLowerCase();
+  const fStatus=(document.getElementById('filt-dash-status')?.value||'').toLowerCase();
+  // show non-completed first, then show last 5 completed
+  let active=outRecs.filter(r=>{
+    if(r.status==='Completed')return false;
+    if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
+    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
+    return true;
+  });
+  let recent=!fStatus&&!search?outRecs.filter(r=>r.status==='Completed').slice(0,3):[];
+  const rows=[...active,...recent];
+  const wrap=document.getElementById('cards-dash-out');
+  const empty=document.getElementById('empty-dash-out');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
     wrap.innerHTML=rows.map(r=>{
-      const overdue=r.due&&r.due<today&&r.status!=='Done';
-      const isDone=r.status==='Done';
-      const meta=[
-        r.person?'👤 '+r.person:'',
-        r.due?(overdue?'⚠️ Overdue: ':'Due: ')+fmtDate(r.due):''
-      ].filter(Boolean).join(' · ');
-      return`<div class="wf-card p-${r.priority||'Medium'} s-${r.status.replace(' ','-')}" onclick="openDetWF('${r._k}')">
-        <div class="wf-row">
-          <div class="wf-row-left">
-            <div class="wf-task-name${isDone?' done-strike':''}">${esc(r.task)}</div>
-            <div class="wf-meta" style="${overdue?'color:var(--red)':''}">${meta||'No assignment'}</div>
+      const dots=(OUT_DOT[r.status]||['','','','']).map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
+      return`<div class="del-card ${S_CARD[r.status]||''}" onclick="openDetOut('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${r.ticketNum?`<span style="font-size:.85rem;color:var(--g500);font-weight:400;margin-right:6px">#${esc(r.ticketNum)}</span>`:''}${esc(r.customer||'—')}</div>
+            <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
           </div>
-          <div class="wf-row-right">
-            <span class="badge ${WF_STATUS_BADGE[r.status]||''}">${r.status}</span>
-            <span style="font-size:.8rem;color:${WF_PRI_COL[r.priority]||'var(--g500)'};font-weight:600">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'')}</span>
+          <div class="card-row-right">
+            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
+            <div class="prog">${dots}</div>
           </div>
           <div class="card-chevron">›</div>
         </div>
       </div>`;
     }).join('');
   }
+  // summary
+  const total=outRecs.length,orderIn=outRecs.filter(r=>r.status==='Order In').length,
+    loading=outRecs.filter(r=>r.status==='Loading').length,
+    enRoute=outRecs.filter(r=>r.status==='Out for Delivery').length,
+    completed=outRecs.filter(r=>r.status==='Completed').length;
+  document.getElementById('sum-dash-out').innerHTML=`
+    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
+    <div class="sc purple"><div class="sc-lbl">Order In</div><div class="sc-val">${orderIn}</div></div>
+    <div class="sc amber"><div class="sc-lbl">Loading</div><div class="sc-val">${loading}</div></div>
+    <div class="sc blue"><div class="sc-lbl">En Route</div><div class="sc-val">${enRoute}</div></div>
+    <div class="sc green"><div class="sc-lbl">Done</div><div class="sc-val">${completed}</div></div>`;
+}
 
-  // update pill — only open/in-progress
-  const active=wfRecs.filter(r=>r.status!=='Done').length;
-  document.getElementById('cwf').textContent=active;
+function renderDashWF(){
+  const search=(document.getElementById('srch-dash-wf')?.value||'').toLowerCase();
+  // on dashboard show only open/in-progress tasks
+  const rows=wfRecs.filter(r=>{
+    if(r.status==='Done')return false;
+    if(search&&!`${r.task} ${r.person}`.toLowerCase().includes(search))return false;
+    return true;
+  });
+  const wrap=document.getElementById('cards-dash-wf');
+  const empty=document.getElementById('empty-dash-wf');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{empty.style.display='none';wrap.innerHTML=rows.map(wfCardHtml).join('');}
 }
 
 // ── PASSWORD-PROTECTED DELETE
