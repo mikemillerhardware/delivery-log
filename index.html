@@ -48,22 +48,31 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
+/* OUTBOUND LAYOUT — sidebar */
+.out-layout{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:start}
+.out-main{min-width:0}
+.out-sidebar{position:sticky;top:16px}
+@media(max-width:700px){
+  .out-layout{grid-template-columns:1fr}
+  .out-sidebar{position:static}
+}
+
 /* NOTICE BOARD */
-.notice-board{background:var(--green-bg);border:2px solid var(--green-bd);border-radius:6px;padding:13px 15px;margin-bottom:16px}
+.notice-board{background:var(--green-bg);border:2px solid var(--green-bd);border-radius:6px;padding:12px 13px}
 .notice-board.empty{background:var(--g50);border-color:var(--bd)}
 .nb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.nb-label{font-family:'Oswald',sans-serif;font-size:0.95rem;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.nb-label{font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
 .notice-board.empty .nb-label{color:var(--g500)}
-.msg-list{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
-.msg-item{background:var(--white);border-left:4px solid var(--green);padding:9px 13px;border-radius:0 4px 4px 0}
-.msg-text{font-size:1rem;font-weight:600;color:var(--ink);line-height:1.4}
-.msg-meta{font-size:0.78rem;color:var(--g500);margin-top:2px}
-.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:1rem;padding:0 0 0 8px}
+.msg-list{display:flex;flex-direction:column;gap:6px;margin-bottom:9px}
+.msg-item{background:var(--white);border-left:3px solid var(--green);padding:7px 10px;border-radius:0 4px 4px 0}
+.msg-text{font-size:0.92rem;font-weight:600;color:var(--ink);line-height:1.4}
+.msg-meta{font-size:0.72rem;color:var(--g500);margin-top:2px}
+.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.95rem;padding:0 0 0 6px}
 .msg-del:hover{color:var(--red)}
-.msg-row{display:flex;gap:8px}
-.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.97rem;padding:9px 11px;border:1px solid var(--bd);border-radius:4px;outline:none}
+.msg-row{display:flex;gap:6px}
+.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.9rem;padding:7px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0}
 .msg-inp:focus{border-color:var(--green)}
-.msg-post{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:9px 16px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
+.msg-post{font-family:'Oswald',sans-serif;font-size:0.8rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:7px 11px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
 .msg-post:hover{background:#155230}
 
 /* HOURS BANNER */
@@ -323,32 +332,39 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 
   <!-- OUTBOUND TAB -->
   <div id="panel-out" class="tab-panel active">
-    <div class="notice-board empty" id="nb">
-      <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notice Board</span></div>
-      <div class="msg-list" id="msg-list"></div>
-      <div class="msg-row">
-        <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice for the team…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
-        <button class="msg-post" onclick="postMsg()">Post</button>
+    <div class="out-layout">
+
+      <!-- MAIN DELIVERY COLUMN -->
+      <div class="out-main">
+        <div class="summary-row" id="sum-out"></div>
+        <div class="toolbar">
+          <div class="tl-left">
+            <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
+            <select class="fsel" onchange="renderOut()" id="filt-out">
+              <option value="">All Statuses</option>
+              <option>Order In</option><option>Loading</option>
+              <option>Out for Delivery</option><option>Completed</option>
+            </select>
+          </div>
+          <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
+        </div>
+        <div class="card-list" id="cards-out"></div>
+        <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
       </div>
-    </div>
-    <div class="hrs-banner" id="hrs-banner">
-      <span class="hrs-text" id="hrs-text"></span>
-      <button class="hrs-edit" onclick="switchTab('settings',document.querySelectorAll('.tab-btn')[2])">Edit Hours</button>
-    </div>
-    <div class="summary-row" id="sum-out"></div>
-    <div class="toolbar">
-      <div class="tl-left">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
-        <select class="fsel" onchange="renderOut()" id="filt-out">
-          <option value="">All Statuses</option>
-          <option>Order In</option><option>Loading</option>
-          <option>Out for Delivery</option><option>Completed</option>
-        </select>
+
+      <!-- NOTICE BOARD SIDEBAR -->
+      <div class="out-sidebar">
+        <div class="notice-board empty" id="nb">
+          <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notices</span></div>
+          <div class="msg-list" id="msg-list"></div>
+          <div class="msg-row">
+            <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
+            <button class="msg-post" onclick="postMsg()">Post</button>
+          </div>
+        </div>
       </div>
-      <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
+
     </div>
-    <div class="card-list" id="cards-out"></div>
-    <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
   </div>
 
   <!-- INBOUND TAB -->
@@ -707,6 +723,24 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   </div>
 </div>
 
+<!-- PASSWORD OVERLAY -->
+<div class="overlay" id="pw-overlay" style="z-index:1500">
+  <div class="modal" style="max-width:360px">
+    <div class="mhdr"><span class="mtitle">Enter Password to Delete</span><button class="mclose" onclick="closePW()">×</button></div>
+    <div class="mbody">
+      <div class="fgrp">
+        <label>Password</label>
+        <input type="password" id="pw-input" placeholder="••••••••••" onkeydown="if(event.key==='Enter')submitPW()" style="font-size:1.1rem;letter-spacing:3px">
+        <div id="pw-error" style="display:none;color:var(--red);font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:1px;margin-top:6px">Incorrect password.</div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn-cancel" onclick="closePW()">Cancel</button>
+      <button class="btn-save" style="background:var(--red)" onclick="submitPW()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">×</button>
@@ -925,7 +959,7 @@ function openDetOut(key){
     </div>`;
   renderAttachSection(key);
   document.getElementById('det-out-edit').onclick=()=>{closeDetOut();openOutForm(key);};
-  document.getElementById('det-out-del').onclick=()=>{if(confirm('Delete this delivery?')){outRef.child(key).remove();closeDetOut();}};
+  document.getElementById('det-out-del').onclick=()=>pwDelete(()=>{outRef.child(key).remove();closeDetOut();});
   document.getElementById('det-out-print').onclick=()=>printTicket(key);
   document.getElementById('det-out').classList.add('open');
 }
@@ -1064,7 +1098,7 @@ function openDetIn(key){
     </div>`;
 
   document.getElementById('det-in-edit').onclick=()=>{closeDetIn();openInForm(key);};
-  document.getElementById('det-in-del').onclick=()=>{if(confirm('Delete this record?')){inRef.child(key).remove();closeDetIn();}};
+  document.getElementById('det-in-del').onclick=()=>pwDelete(()=>{inRef.child(key).remove();closeDetIn();});
   document.getElementById('det-in').classList.add('open');
 }
 function closeDetIn(){document.getElementById('det-in').classList.remove('open');}
@@ -1343,7 +1377,7 @@ function openDetCust(key){
       <div style="background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:12px 14px;font-size:1rem;font-weight:600;line-height:1.5;white-space:pre-wrap">${esc(r.notes||'No notes yet.')}</div>
     </div>`;
   document.getElementById('det-cust-edit').onclick=()=>{closeDetCust();openCustForm(key);};
-  document.getElementById('det-cust-del').onclick=()=>{if(confirm('Delete this customer record?')){custRef.child(key).remove();closeDetCust();}};
+  document.getElementById('det-cust-del').onclick=()=>pwDelete(()=>{custRef.child(key).remove();closeDetCust();});
   document.getElementById('det-cust').classList.add('open');
 }
 function closeDetCust(){document.getElementById('det-cust').classList.remove('open');}
@@ -1578,6 +1612,29 @@ function exportJSON(){
   };
   downloadFile(JSON.stringify(backup,null,2),`miller-delivery-backup-${todayStr()}.json`,'application/json');
 }
+
+// ── PASSWORD-PROTECTED DELETE
+let _pwCallback=null;
+const PW='8704494255';
+function pwDelete(cb){
+  _pwCallback=cb;
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-error').style.display='none';
+  document.getElementById('pw-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pw-input').focus(),100);
+}
+function submitPW(){
+  if(document.getElementById('pw-input').value===PW){
+    closePW();
+    if(_pwCallback)_pwCallback();
+    _pwCallback=null;
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+function closePW(){document.getElementById('pw-overlay').classList.remove('open');_pwCallback=null;}
 
 // ── HELPERS
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
