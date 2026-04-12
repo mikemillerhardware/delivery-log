@@ -281,6 +281,31 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .cust-drop-item .cdi-name{font-weight:600;font-family:'Oswald',sans-serif;font-size:1rem}
 .cust-drop-item .cdi-sub{font-size:.8rem;color:var(--g500);margin-top:1px}
 
+/* WORKFLOW CARDS */
+.wf-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.wf-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.wf-card.p-High  {border-left-color:var(--red)}
+.wf-card.p-Medium{border-left-color:var(--amber)}
+.wf-card.p-Low   {border-left-color:var(--green)}
+.wf-card.s-Done  {opacity:.55}
+.wf-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.wf-row-left{flex:1;min-width:0}
+.wf-task-name{font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:var(--ink);line-height:1.3}
+.wf-task-name.done-strike{text-decoration:line-through;color:var(--g500)}
+.wf-meta{font-size:0.83rem;color:var(--g500);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wf-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+
+/* STATUS BADGES */
+.badge-wf-open    {background:#F0E8FA;color:var(--purple)}
+.badge-wf-progress{background:var(--blue-bg);color:var(--blue)}
+.badge-wf-done    {background:var(--green-bg);color:var(--green)}
+
+/* PEOPLE LIST in settings */
+.person-row{display:flex;align-items:center;justify-content:space-between;background:var(--g50);border:1px solid var(--bd);border-radius:4px;padding:9px 13px}
+.person-name{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.5px;color:var(--ink)}
+.person-del{background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.9rem;padding:2px 6px;font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase}
+.person-del:hover{color:var(--red)}
+
 /* EXPORT ROWS */
 .export-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--g100)}
 .export-row:last-child{border-bottom:none}
@@ -322,6 +347,7 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
     <button class="tab-btn active" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
     <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
     <button class="tab-btn" onclick="switchTab('order-list',this)">Order List <span class="cpill" id="col">0</span></button>
+    <button class="tab-btn" onclick="switchTab('workflow',this)">Workflow <span class="cpill" id="cwf">0</span></button>
     <button class="tab-btn" onclick="switchTab('history',this)">History</button>
     <button class="tab-btn" onclick="switchTab('customers',this)">Customers</button>
     <button class="tab-btn" onclick="switchTab('settings',this)">Hours &amp; Settings</button>
@@ -503,6 +529,47 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
       </div>
       <div id="export-status" style="margin-top:14px;font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:1px;color:var(--green);display:none"></div>
     </div>
+
+    <!-- PEOPLE MANAGEMENT -->
+    <div class="settings-box" style="margin-top:20px">
+      <div class="settings-title">👥 People</div>
+      <p style="font-size:.95rem;color:var(--g500);margin-bottom:16px">Add staff names to assign workflow tasks and deliveries.</p>
+      <div id="people-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="person-inp" placeholder="Full name…" style="flex:1;font-family:'Open Sans',sans-serif;font-size:1rem;padding:9px 11px;border:1px solid var(--bd);border-radius:4px;outline:none" onkeydown="if(event.key==='Enter')addPerson()">
+        <button class="btn-save" onclick="addPerson()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW TAB -->
+  <div id="panel-workflow" class="tab-panel">
+    <div class="ol-header-row">
+      <div>
+        <div class="ol-title">✅ Workflow Tasks</div>
+        <div class="ol-sub">Store chores and tasks assigned to staff</div>
+      </div>
+      <button class="btn-new" onclick="openWFForm()">+ New Task</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <select class="fsel" onchange="renderWF()" id="filt-wf-status">
+        <option value="">All Statuses</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Done">Done</option>
+      </select>
+      <select class="fsel" onchange="renderWF()" id="filt-wf-person">
+        <option value="">All People</option>
+      </select>
+      <select class="fsel" onchange="renderWF()" id="filt-wf-priority">
+        <option value="">All Priorities</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+    <div class="card-list" id="cards-wf"></div>
+    <div id="empty-wf" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No tasks yet. Add one to get started.</div>
   </div>
 
 </main>
@@ -723,6 +790,61 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   </div>
 </div>
 
+<!-- ══ WORKFLOW DETAIL OVERLAY ══ -->
+<div class="overlay" id="det-wf">
+  <div class="modal">
+    <div class="mhdr">
+      <span class="mtitle" id="det-wf-title">Task Detail</span>
+      <button class="mclose" onclick="closeDetWF()">×</button>
+    </div>
+    <div class="mbody" id="det-wf-body"></div>
+    <div class="mfoot">
+      <button class="sbtn del-btn" id="det-wf-del">Delete</button>
+      <button class="sbtn outline" id="det-wf-edit">Edit</button>
+      <button class="sbtn close-btn" onclick="closeDetWF()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WORKFLOW FORM OVERLAY ══ -->
+<div class="overlay" id="form-wf">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="fwf-title">New Task</span><button class="mclose" onclick="closeWFForm()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Task Name / Description *</label><textarea id="wf-task" placeholder="e.g. Restock aisle 3 fasteners, sweep loading dock, check oil on forklift…" style="min-height:80px"></textarea></div>
+        <div class="fr">
+          <div class="fgrp">
+            <label>Assigned To</label>
+            <select id="wf-person"><option value="">— Unassigned —</option></select>
+          </div>
+          <div class="fgrp">
+            <label>Priority</label>
+            <select id="wf-priority">
+              <option value="High">🔴 High</option>
+              <option value="Medium" selected>🟡 Medium</option>
+              <option value="Low">🟢 Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fgrp"><label>Due Date</label><input type="date" id="wf-due"></div>
+          <div class="fgrp">
+            <label>Status</label>
+            <select id="wf-status">
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
+        </div>
+        <div class="fgrp"><label>Notes</label><textarea id="wf-notes" placeholder="Extra details…"></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeWFForm()">Cancel</button><button class="btn-save" onclick="saveWF()">Save Task</button></div>
+  </div>
+</div>
+
 <!-- PASSWORD OVERLAY -->
 <div class="overlay" id="pw-overlay" style="z-index:1500">
   <div class="modal" style="max-width:360px">
@@ -771,6 +893,8 @@ const hrsRef=db.ref('delivery_hours');
 const olRef =db.ref('order_list');
 const custRef=db.ref('delivery_customers');
 const attachRef=db.ref('delivery_attachments');
+const wfRef    =db.ref('workflow_tasks');
+const peopleRef=db.ref('store_people');
 
 // sync
 db.ref('.info/connected').on('value',s=>{
@@ -782,7 +906,7 @@ db.ref('.info/connected').on('value',s=>{
 });
 
 // state
-let outRecs=[],inRecs=[],msgs=[],olRecs=[],custRecs=[],attachRecs=[];
+let outRecs=[],inRecs=[],msgs=[],olRecs=[],custRecs=[],attachRecs=[],wfRecs=[],peopleList=[];
 let currentDetKey=null; // which delivery is open in detail overlay
 let tmpAttachData=null,tmpAttachType=null;
 let editOutKey=null,editInKey=null;
@@ -820,8 +944,15 @@ hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
 custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
 attachRef.on('value',s=>{attachRecs=[];s.forEach(c=>attachRecs.push({_k:c.key,...c.val()}));
-  // refresh open detail if visible
   if(currentDetKey&&document.getElementById('det-out').classList.contains('open'))renderAttachSection(currentDetKey);
+});
+wfRef.on('value',s=>{wfRecs=[];s.forEach(c=>wfRecs.push({_k:c.key,...c.val()}));
+  wfRecs.sort((a,b)=>{const p={High:0,Medium:1,Low:2};const pd=(p[a.priority]??1)-(p[b.priority]??1);if(pd)return pd;return(a.due||'9')<(b.due||'9')?-1:1;});
+  renderWF();
+});
+peopleRef.on('value',s=>{peopleList=[];s.forEach(c=>peopleList.push({_k:c.key,name:c.val()}));
+  peopleList.sort((a,b)=>a.name.localeCompare(b.name));
+  renderPeopleList();renderWFPersonDropdowns();
 });
 
 // ── MESSAGES
@@ -1611,6 +1742,169 @@ function exportJSON(){
     messages:       msgs.map(({_k,...r})=>({firebaseKey:_k,...r}))
   };
   downloadFile(JSON.stringify(backup,null,2),`miller-delivery-backup-${todayStr()}.json`,'application/json');
+}
+
+// ── PEOPLE MANAGEMENT
+function addPerson(){
+  const name=document.getElementById('person-inp').value.trim();
+  if(!name)return;
+  // check duplicate
+  if(peopleList.find(p=>p.name.toLowerCase()===name.toLowerCase())){alert('That name is already in the list.');return;}
+  peopleRef.push(name);
+  document.getElementById('person-inp').value='';
+}
+function deletePerson(key){
+  if(!confirm('Remove this person?'))return;
+  peopleRef.child(key).remove();
+}
+function renderPeopleList(){
+  const wrap=document.getElementById('people-list');
+  if(!wrap)return;
+  if(!peopleList.length){wrap.innerHTML='<div style="font-size:.9rem;color:var(--g500);font-style:italic">No people added yet.</div>';return;}
+  wrap.innerHTML=peopleList.map(p=>`
+    <div class="person-row">
+      <span class="person-name">${esc(p.name)}</span>
+      <button class="person-del" onclick="deletePerson('${p._k}')">✕ Remove</button>
+    </div>`).join('');
+}
+function renderWFPersonDropdowns(){
+  // populate workflow form dropdown
+  const sel=document.getElementById('wf-person');
+  const cur=sel?sel.value:'';
+  if(sel){
+    sel.innerHTML='<option value="">— Unassigned —</option>'+
+      peopleList.map(p=>`<option value="${esc(p.name)}"${p.name===cur?' selected':''}>${esc(p.name)}</option>`).join('');
+  }
+  // populate workflow filter dropdown
+  const fsel=document.getElementById('filt-wf-person');
+  const fcur=fsel?fsel.value:'';
+  if(fsel){
+    fsel.innerHTML='<option value="">All People</option>'+
+      peopleList.map(p=>`<option value="${esc(p.name)}"${p.name===fcur?' selected':''}>${esc(p.name)}</option>`).join('');
+  }
+}
+
+// ── WORKFLOW TASKS
+let editWFKey=null;
+const WF_STATUSES=['Open','In Progress','Done'];
+const WF_STATUS_COL={'Open':'purple','In Progress':'blue','Done':'green'};
+const WF_STATUS_BADGE={'Open':'badge-wf-open','In Progress':'badge-wf-progress','Done':'badge-wf-done'};
+const WF_PRI_ICON={High:'🔴',Medium:'🟡',Low:'🟢'};
+const WF_PRI_COL={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
+
+function openWFForm(key){
+  editWFKey=key||null;
+  renderWFPersonDropdowns();
+  const r=key?wfRecs.find(x=>x._k===key):null;
+  document.getElementById('fwf-title').textContent=key?'Edit Task':'New Task';
+  document.getElementById('wf-task').value    =r?.task    ||'';
+  document.getElementById('wf-person').value  =r?.person  ||'';
+  document.getElementById('wf-priority').value=r?.priority||'Medium';
+  document.getElementById('wf-due').value     =r?.due     ||'';
+  document.getElementById('wf-status').value  =r?.status  ||'Open';
+  document.getElementById('wf-notes').value   =r?.notes   ||'';
+  document.getElementById('form-wf').classList.add('open');
+}
+function closeWFForm(){document.getElementById('form-wf').classList.remove('open');editWFKey=null;}
+
+function saveWF(){
+  const task=document.getElementById('wf-task').value.trim();
+  if(!task){alert('Task description is required.');return;}
+  const rec={task,
+    person:  document.getElementById('wf-person').value,
+    priority:document.getElementById('wf-priority').value,
+    due:     document.getElementById('wf-due').value,
+    status:  document.getElementById('wf-status').value,
+    notes:   document.getElementById('wf-notes').value.trim(),
+    updated: new Date().toISOString()
+  };
+  if(editWFKey){wfRef.child(editWFKey).update(rec);}
+  else{rec.created=new Date().toISOString();wfRef.push(rec);}
+  closeWFForm();
+}
+
+function setWFStatus(key,status){
+  wfRef.child(key).update({status,updated:new Date().toISOString()});
+  const ov=document.getElementById('det-wf');
+  if(ov.classList.contains('open'))openDetWF(key);
+}
+
+function openDetWF(key){
+  const r=wfRecs.find(x=>x._k===key);if(!r)return;
+  document.getElementById('det-wf-title').textContent=r.task.length>40?r.task.slice(0,40)+'…':r.task;
+  const statusBtns=WF_STATUSES.map(s=>`
+    <button class="sbtn ${WF_STATUS_COL[s]}${s===r.status?' active-status':''}"
+      onclick="setWFStatus('${key}','${s}')" ${s===r.status?'disabled':''}>
+      ${s===r.status?'✓ ':''}${esc(s)}
+    </button>`).join('');
+  const overdue=r.due&&r.due<new Date().toISOString().slice(0,10)&&r.status!=='Done';
+  document.getElementById('det-wf-body').innerHTML=`
+    <div class="detail-section">
+      <div class="ds-title">Status</div>
+      <div class="status-btns">${statusBtns}</div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Task</div>
+      <div style="font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;margin-bottom:12px">${esc(r.task)}</div>
+      <div class="detail-grid">
+        <div><div class="di-lbl">Assigned To</div><div class="di-val">${esc(r.person||'Unassigned')}</div></div>
+        <div><div class="di-lbl">Priority</div><div class="di-val">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'—')}</div></div>
+        <div><div class="di-lbl">Due Date</div><div class="di-val" style="${overdue?'color:var(--red);font-weight:700':''}">${fmtDate(r.due)}${overdue?' ⚠️':''}</div></div>
+        <div><div class="di-lbl">Created</div><div class="di-val">${fmtDate(r.created?.slice(0,10))}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>`;
+  document.getElementById('det-wf-edit').onclick=()=>{closeDetWF();openWFForm(key);};
+  document.getElementById('det-wf-del').onclick=()=>{if(confirm('Delete this task?')){wfRef.child(key).remove();closeDetWF();}};
+  document.getElementById('det-wf').classList.add('open');
+}
+function closeDetWF(){document.getElementById('det-wf').classList.remove('open');}
+
+function renderWF(){
+  renderWFPersonDropdowns();
+  const fStatus  =document.getElementById('filt-wf-status').value;
+  const fPerson  =document.getElementById('filt-wf-person').value;
+  const fPriority=document.getElementById('filt-wf-priority').value;
+  const today=new Date().toISOString().slice(0,10);
+
+  let rows=wfRecs.filter(r=>{
+    if(fStatus   && r.status  !==fStatus)   return false;
+    if(fPerson   && r.person  !==fPerson)   return false;
+    if(fPriority && r.priority!==fPriority) return false;
+    return true;
+  });
+
+  const wrap =document.getElementById('cards-wf');
+  const empty=document.getElementById('empty-wf');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    wrap.innerHTML=rows.map(r=>{
+      const overdue=r.due&&r.due<today&&r.status!=='Done';
+      const isDone=r.status==='Done';
+      const meta=[
+        r.person?'👤 '+r.person:'',
+        r.due?(overdue?'⚠️ Overdue: ':'Due: ')+fmtDate(r.due):''
+      ].filter(Boolean).join(' · ');
+      return`<div class="wf-card p-${r.priority||'Medium'} s-${r.status.replace(' ','-')}" onclick="openDetWF('${r._k}')">
+        <div class="wf-row">
+          <div class="wf-row-left">
+            <div class="wf-task-name${isDone?' done-strike':''}">${esc(r.task)}</div>
+            <div class="wf-meta" style="${overdue?'color:var(--red)':''}">${meta||'No assignment'}</div>
+          </div>
+          <div class="wf-row-right">
+            <span class="badge ${WF_STATUS_BADGE[r.status]||''}">${r.status}</span>
+            <span style="font-size:.8rem;color:${WF_PRI_COL[r.priority]||'var(--g500)'};font-weight:600">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'')}</span>
+          </div>
+          <div class="card-chevron">›</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // update pill — only open/in-progress
+  const active=wfRecs.filter(r=>r.status!=='Done').length;
+  document.getElementById('cwf').textContent=active;
 }
 
 // ── PASSWORD-PROTECTED DELETE
