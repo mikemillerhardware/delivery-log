@@ -3,684 +3,541 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Miller Hardware — Delivery Log</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Miller Hardware — Delivery</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --red:#C0392B;--red-dk:#96281B;
-  --ink:#1A1A1A;--g900:#222;--g700:#444;--g500:#777;--g300:#C0C0C0;--g100:#F0F0EE;--g50:#F7F7F5;--white:#FFF;
-  --green:#1E6B45;--green-bg:#EAF5EE;--green-bd:#A8D5B5;
-  --amber:#B8680A;--amber-bg:#FEF3E2;
-  --blue:#1B4F8A;--blue-bg:#E8F0FA;
-  --purple:#5C2D8A;--purple-bg:#F0E8FA;
+  --red:#C0392B; --red-dk:#96281B;
+  --ink:#1A1A1A; --g8:#222; --g7:#444; --g5:#777; --g3:#C0C0C0; --g1:#F0F0EE; --g0:#F7F7F5;
+  --white:#FFF;
+  --green:#1E6B45; --green-bg:#EAF5EE;
+  --amber:#B8680A; --amber-bg:#FEF3E2;
+  --blue:#1B4F8A; --blue-bg:#E8F0FA;
   --bd:#DCDCDA;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Open Sans',sans-serif;background:var(--g100);color:var(--ink);min-height:100vh;font-size:16px}
+body{font-family:'Barlow',sans-serif;background:var(--g1);color:var(--ink);min-height:100vh;font-size:16px}
 
-/* HEADER */
-header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(--red)}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.logo{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:1px;color:var(--white);line-height:1}
-.logo em{color:var(--red);font-style:normal}
-.logo-tag{font-size:0.8rem;color:var(--g300);font-weight:400;letter-spacing:3px;margin-left:8px}
-.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.sync-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);padding:5px 11px;border-radius:20px}
-.sdot{width:9px;height:9px;border-radius:50%;background:var(--g500)}
+/* ── HEADER ── */
+header{background:var(--ink);border-bottom:4px solid var(--red);padding:10px 16px}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:1px;color:var(--white);line-height:1}
+.logo span{color:var(--red)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.sync{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);padding:4px 11px;border-radius:20px}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--g5);flex-shrink:0}
 .sdot.live{background:#2ECC71;box-shadow:0 0 6px #2ECC71}
 .sdot.err{background:var(--red)}
 .sdot.conn{background:var(--amber);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-#sync-text{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--g300);letter-spacing:1px}
-.loc-pill{background:var(--red);color:var(--white);font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:2px;padding:4px 11px;border-radius:3px}
-#clock{font-family:'Oswald',sans-serif;font-size:0.82rem;color:var(--g300);letter-spacing:1px;margin-top:6px}
+#sync-txt{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--g3);letter-spacing:1px}
+.loc{background:var(--red);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:2px;padding:4px 10px;border-radius:3px;font-weight:700}
+#clock{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;color:var(--g3);letter-spacing:1px;margin-top:4px}
 
-/* TAB NAV */
-.tab-nav{background:var(--g900);border-bottom:1px solid #111;overflow-x:auto}
-.tab-nav-inner{display:flex;padding:0 16px;min-width:max-content}
-.tab-btn{font-family:'Oswald',sans-serif;font-size:0.98rem;letter-spacing:2px;text-transform:uppercase;padding:13px 20px;border:none;background:transparent;color:var(--g500);cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap}
-.tab-btn:hover{color:var(--g300)}
-.tab-btn.active{color:var(--white);border-bottom-color:var(--red)}
-.cpill{display:inline-block;background:var(--red);color:var(--white);font-size:0.72rem;padding:2px 7px;border-radius:12px;margin-left:5px;vertical-align:middle;font-weight:700;font-family:'Open Sans',sans-serif}
+/* ── NAV ── */
+nav{background:var(--g8);overflow-x:auto;white-space:nowrap}
+.nav-inner{display:flex;padding:0 16px}
+.tab{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px 20px;border:none;background:transparent;color:var(--g5);cursor:pointer;border-bottom:3px solid transparent;transition:all .15s}
+.tab:hover{color:var(--g3)}
+.tab.active{color:var(--white);border-bottom-color:var(--red)}
+.pill{display:inline-block;background:var(--red);color:var(--white);font-size:.65rem;padding:2px 7px;border-radius:10px;margin-left:5px;vertical-align:middle;font-weight:700;font-family:'Barlow',sans-serif}
 
-/* MAIN */
-.main{max-width:700px;margin:0 auto;padding:16px}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
+/* ── MAIN ── */
+.main{max-width:720px;margin:0 auto;padding:16px}
+.panel{display:none}.panel.active{display:block}
 
-/* OUTBOUND LAYOUT — sidebar */
-.out-layout{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:start}
-.out-main{min-width:0}
-.out-sidebar{position:sticky;top:16px}
-@media(max-width:700px){
-  .out-layout{grid-template-columns:1fr}
-  .out-sidebar{position:static}
-}
+/* ── STAT CARDS ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:12px 14px;border-left:5px solid var(--g3)}
+.stat.red{border-left-color:var(--red)}.stat.green{border-left-color:var(--green)}
+.stat.amber{border-left-color:var(--amber)}.stat.blue{border-left-color:var(--blue)}
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--g5);margin-bottom:3px}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:800;line-height:1;color:var(--ink)}
 
-/* FLOATING NOTICE BOARD */
-/* SUMMARY */
-.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:16px}
-.sc{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:12px 14px;border-left:5px solid var(--g300)}
-.sc.red{border-left-color:var(--red)}.sc.green{border-left-color:var(--green)}
-.sc.amber{border-left-color:var(--amber)}.sc.blue{border-left-color:var(--blue)}.sc.purple{border-left-color:var(--purple)}
-.sc-lbl{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);margin-bottom:3px}
-.sc-val{font-family:'Oswald',sans-serif;font-size:2.2rem;font-weight:700;line-height:1;color:var(--ink)}
-
-/* TOOLBAR */
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.tl-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.search-box{font-family:'Open Sans',sans-serif;font-size:0.97rem;padding:9px 12px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);width:200px;outline:none}
-.search-box:focus{border-color:var(--red)}
-.fsel{font-family:'Open Sans',sans-serif;font-size:0.92rem;padding:9px 9px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none;cursor:pointer}
-.btn-new{font-family:'Oswald',sans-serif;font-size:0.97rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:10px 20px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+/* ── TOOLBAR ── */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.bar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1}
+.srch{font-family:'Barlow',sans-serif;font-size:.97rem;padding:9px 12px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none;flex:1;min-width:160px}
+.srch:focus{border-color:var(--red)}
+.btn-new{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:10px 20px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
 .btn-new:hover{background:var(--red-dk)}
+.btn-new.blue{background:var(--blue)}.btn-new.green{background:var(--green)}
 
-/* DELIVERY CARD (collapsed list item only) */
+/* ── DELIVERY CARDS ── */
 .card-list{display:flex;flex-direction:column;gap:10px}
-.del-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.del-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
-.del-card.s-order-in  {border-left-color:var(--purple)}
-.del-card.s-loading   {border-left-color:var(--amber)}
-.del-card.s-out       {border-left-color:var(--blue)}
-.del-card.s-completed {border-left-color:var(--green)}
-.del-card.s-expected  {border-left-color:var(--blue)}
-.del-card.s-received  {border-left-color:var(--green)}
-.del-card.s-partial   {border-left-color:var(--amber)}
-.del-card.s-overdue   {border-left-color:var(--red)}
+.dcard{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g3);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.dcard:hover{box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.dcard.s-order-in{border-left-color:#7B2FBE}
+.dcard.s-loading{border-left-color:var(--amber)}
+.dcard.s-out{border-left-color:var(--blue)}
+.dcard.s-expected{border-left-color:var(--blue)}
+.dcard.s-partial{border-left-color:var(--amber)}
+.dcard.s-overdue{border-left-color:var(--red)}
+.dcard.s-received{border-left-color:var(--green)}
 
-.card-row{display:flex;align-items:center;padding:14px 15px;gap:12px}
-.card-row-left{flex:1;min-width:0}
-.card-name{font-family:'Oswald',sans-serif;font-size:1.18rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-line2{font-size:0.85rem;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-.card-chevron{font-size:1.1rem;color:var(--g300);flex-shrink:0;margin-left:4px}
+.crow{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.crow-left{flex:1;min-width:0}
+.cname{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmeta{font-size:.83rem;color:var(--g5);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crow-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.chev{color:var(--g3);font-size:1.1rem;flex-shrink:0;margin-left:4px}
 
-/* PROGRESS DOTS */
-.prog{display:flex;gap:4px;align-items:center}
-.pdot{width:9px;height:9px;border-radius:50%;background:var(--g300);flex-shrink:0}
-.pdot.po{background:var(--purple)}.pdot.pl{background:var(--amber)}
-.pdot.pd{background:var(--blue)}.pdot.pc{background:var(--green)}
+/* ── BADGES ── */
+.badge{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:700;display:inline-block;white-space:nowrap;border-radius:3px}
+.b-order-in{background:#F0E8FA;color:#7B2FBE}
+.b-loading{background:var(--amber-bg);color:var(--amber)}
+.b-out{background:var(--blue-bg);color:var(--blue)}
+.b-expected{background:var(--blue-bg);color:var(--blue)}
+.b-partial{background:var(--amber-bg);color:var(--amber)}
+.b-overdue{background:#FDECEC;color:var(--red)}
+.b-received{background:var(--green-bg);color:var(--green)}
+.b-completed{background:var(--green-bg);color:var(--green)}
+.b-open{background:#F0E8FA;color:#7B2FBE}
+.b-progress{background:var(--blue-bg);color:var(--blue)}
+.b-done{background:var(--green-bg);color:var(--green)}
 
-/* BADGES */
-.badge{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;display:inline-block;white-space:nowrap;border-radius:3px}
-.b-order-in {background:var(--purple-bg);color:var(--purple)}
-.b-loading  {background:var(--amber-bg); color:var(--amber)}
-.b-out      {background:var(--blue-bg);  color:var(--blue)}
-.b-completed{background:var(--green-bg); color:var(--green)}
-.b-expected {background:var(--blue-bg);  color:var(--blue)}
-.b-received {background:var(--green-bg); color:var(--green)}
-.b-partial  {background:var(--amber-bg); color:var(--amber)}
-.b-overdue  {background:#FDECEC;         color:var(--red)}
+/* progress dots */
+.dots{display:flex;gap:4px;align-items:center}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--g3);flex-shrink:0}
+.dot.d0{background:#7B2FBE}.dot.d1{background:var(--amber)}.dot.d2{background:var(--blue)}.dot.d3{background:var(--green)}
 
-.empty-state{padding:50px 20px;text-align:center;color:var(--g500);font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:1px}
-.empty-icon{font-size:2.4rem;display:block;margin-bottom:10px;opacity:.3}
+.empty{padding:50px 20px;text-align:center;color:var(--g5);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;letter-spacing:1px}
+.empty-ico{font-size:2.4rem;display:block;margin-bottom:10px;opacity:.3}
 
-/* ══ OVERLAYS (form + detail) ══ */
+/* ── OVERLAY ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
 .overlay.open{display:flex}
 .modal{background:var(--white);width:100%;max-width:580px;border-top:5px solid var(--red);border-radius:0 0 6px 6px;animation:su .2s ease;margin:auto}
 @keyframes su{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
-.mhdr{padding:16px 18px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.mtitle{font-family:'Oswald',sans-serif;font-size:1.35rem;letter-spacing:1px;font-weight:600;flex:1;min-width:0}
-.mclose{font-size:1.6rem;background:none;border:none;cursor:pointer;color:var(--g500);padding:0 4px;line-height:1;flex-shrink:0}
+.mhdr{padding:15px 18px 11px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mtitle{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:1px}
+.mclose{font-size:1.5rem;background:none;border:none;cursor:pointer;color:var(--g5);padding:0 4px;line-height:1}
 .mclose:hover{color:var(--ink)}
 .mbody{padding:18px}
-.mfoot{padding:14px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.mfoot{padding:12px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 
-/* DETAIL OVERLAY specific */
-.detail-section{margin-bottom:16px}
-.ds-title{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding-bottom:5px;border-bottom:1px solid var(--bd);margin-bottom:9px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
-.di-lbl{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);margin-bottom:1px}
-.di-val{font-size:1rem;color:var(--ink);font-weight:600}
-
-/* STATUS BUTTONS inside detail overlay */
-.status-btns{display:flex;gap:8px;flex-wrap:wrap}
-.sbtn{font-family:'Oswald',sans-serif;font-size:0.95rem;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:none;padding:11px 16px;border-radius:4px;cursor:pointer;flex:1;min-width:110px;text-align:center}
+/* detail overlay status buttons */
+.status-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.sbtn{font-family:'Barlow Condensed',sans-serif;font-size:.97rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:none;padding:10px 16px;border-radius:4px;cursor:pointer;flex:1;min-width:100px;text-align:center}
 .sbtn:hover{opacity:.88}
-.sbtn.purple{background:var(--purple)}.sbtn.amber{background:var(--amber)}
-.sbtn.blue{background:var(--blue)}.sbtn.green{background:var(--green)}
-.sbtn.active-status{opacity:.4;cursor:default}
-.sbtn.outline{background:transparent;border:1px solid var(--bd);color:var(--g500);font-size:0.85rem;padding:9px 14px;flex:none}
-.sbtn.outline:hover{background:var(--g100);color:var(--ink)}
-.sbtn.del-btn{background:transparent;border:1px solid #ECC;color:var(--red);font-size:0.85rem;padding:9px 14px;flex:none}
-.sbtn.del-btn:hover{background:#FEE}
-.sbtn.close-btn{background:var(--ink);color:var(--white);font-size:1rem;padding:13px;flex:1;letter-spacing:2px}
-.sbtn.close-btn:hover{background:var(--g700)}
+.sbtn.dim{opacity:.4;cursor:default}
+.sbtn.ghost{background:transparent;border:1px solid var(--bd);color:var(--g5);font-size:.85rem;padding:8px 14px;flex:none}
+.sbtn.ghost:hover{background:var(--g1);color:var(--ink)}
+.sbtn.danger{background:transparent;border:1px solid #ECC;color:var(--red);font-size:.85rem;padding:8px 14px;flex:none}
+.sbtn.danger:hover{background:#FEE}
+.sbtn.done-btn{background:var(--ink);font-size:1rem;padding:12px;flex:1;letter-spacing:2px}
+.sbtn.done-btn:hover{background:var(--g7)}
 
-.photo-full{max-width:100%;border:1px solid var(--bd);border-radius:4px;margin-top:6px;display:block}
+/* detail sections */
+.dsec{margin-bottom:16px}
+.dsec-title{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--g5);padding-bottom:5px;border-bottom:1px solid var(--bd);margin-bottom:9px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.dlbl{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--g5);margin-bottom:1px}
+.dval{font-size:.97rem;color:var(--ink);font-weight:600}
 
-/* FORM ELEMENTS */
+/* ── FORMS ── */
 .fg{display:grid;gap:13px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.fgrp{display:flex;flex-direction:column;gap:4px}
-.fgrp label{font-family:'Oswald',sans-serif;font-size:0.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--g700);font-weight:600}
-.fgrp input,.fgrp select,.fgrp textarea{font-family:'Open Sans',sans-serif;font-size:1rem;padding:10px 11px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none}
+.fgrp{display:flex;flex-direction:column;gap:4px;position:relative}
+.fgrp label{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--g7);font-weight:700}
+.fgrp input,.fgrp select,.fgrp textarea{font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 11px;border:1px solid var(--bd);border-radius:4px;background:var(--white);color:var(--ink);outline:none}
 .fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{border-color:var(--red)}
-.fgrp textarea{resize:vertical;min-height:68px}
-.fdiv{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--g500);padding:6px 0 2px;border-top:1px solid var(--bd);margin-top:2px}
-.warn{font-size:0.87rem;color:var(--red);font-weight:600;margin-top:3px;display:none}
-.photo-area{border:2px dashed var(--bd);border-radius:4px;background:var(--g50);padding:20px 14px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
+.fgrp textarea{resize:vertical;min-height:70px}
+.fdiv{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--g5);padding:6px 0 2px;border-top:1px solid var(--bd);margin-top:2px}
+.fwarn{font-size:.87rem;color:var(--red);font-weight:600;display:none;margin-top:3px}
+
+/* customer search dropdown */
+.csearch-drop{display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--bd);border-top:none;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.csdrop-item{padding:10px 13px;cursor:pointer;border-bottom:1px solid var(--g1)}
+.csdrop-item:hover{background:var(--g0)}
+.csdrop-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700}
+.csdrop-sub{font-size:.8rem;color:var(--g5);margin-top:1px}
+
+/* label row with add-customer button */
+.label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.label-row label{margin-bottom:0}
+.mini-btn{font-family:'Barlow Condensed',sans-serif;font-size:.73rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);border:none;padding:3px 9px;border-radius:3px;cursor:pointer}
+.mini-btn:hover{opacity:.88}
+
+/* photo upload */
+.photo-area{border:2px dashed var(--bd);border-radius:4px;background:var(--g0);padding:20px 14px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
 .photo-area:hover{border-color:var(--red)}
 .photo-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-lbl{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;text-transform:uppercase;color:var(--g500);pointer-events:none}
-.uicon{font-size:1.9rem;display:block;margin-bottom:5px;opacity:.4}
+.upload-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;letter-spacing:1px;text-transform:uppercase;color:var(--g5);pointer-events:none}
+.upload-ico{font-size:1.8rem;display:block;margin-bottom:5px;opacity:.4}
 .prev-wrap{position:relative;display:inline-block;margin-top:9px}
-.prev-wrap img{max-width:100%;max-height:190px;display:block;border:1px solid var(--bd);border-radius:3px}
-.prev-clear{position:absolute;top:4px;right:4px;background:var(--red);color:var(--white);border:none;cursor:pointer;font-size:0.72rem;padding:3px 7px;border-radius:2px;font-family:'Oswald',sans-serif}
-.btn-cancel{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:transparent;color:var(--g500);border:1px solid var(--bd);padding:9px 18px;border-radius:4px;cursor:pointer;text-transform:uppercase}
-.btn-save{font-family:'Oswald',sans-serif;font-size:0.88rem;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:9px 22px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.prev-wrap img{max-width:100%;max-height:180px;display:block;border:1px solid var(--bd);border-radius:3px}
+.prev-clear{position:absolute;top:4px;right:4px;background:var(--red);color:var(--white);border:none;cursor:pointer;font-size:.7rem;padding:3px 7px;border-radius:2px;font-family:'Barlow Condensed',sans-serif;font-weight:700}
+
+/* photo grid in detail */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:8px}
+.pthumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;border:1px solid var(--bd);cursor:pointer}
+.pthumb-wrap{position:relative}
+.pthumb-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.no-photos{font-size:.87rem;color:var(--g5);font-style:italic;margin-top:4px}
+
+/* customer note banner */
+.cust-note{background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:10px 13px;margin-bottom:14px}
+.cust-note-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:3px;font-weight:700}
+.cust-note-txt{font-size:.97rem;font-weight:600;color:var(--ink);line-height:1.4}
+
+/* settings */
+.sbox{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:20px;max-width:500px;margin-bottom:20px}
+.sbox-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;margin-bottom:14px;border-bottom:1px solid var(--bd);padding-bottom:9px}
+.person-row{display:flex;align-items:center;justify-content:space-between;background:var(--g0);border:1px solid var(--bd);border-radius:4px;padding:9px 13px;margin-bottom:7px}
+.person-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.5px}
+.person-del{background:none;border:none;color:var(--g3);cursor:pointer;font-size:.85rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.person-del:hover{color:var(--red)}
+.hrs-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.hrs-day{font-family:'Barlow Condensed',sans-serif;font-size:.97rem;font-weight:700;letter-spacing:1px;width:46px}
+.hrs-row input[type="time"]{font-family:'Barlow',sans-serif;font-size:.92rem;padding:6px 8px;border:1px solid var(--bd);border-radius:4px;outline:none}
+.hrs-row input[type="time"]:focus{border-color:var(--red)}
+.hrs-closed-lbl{display:flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;color:var(--g5);cursor:pointer}
+
+/* export */
+.exp-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--g1)}
+.exp-row:last-child{border-bottom:none}
+.exp-label{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.5px;color:var(--ink);margin-bottom:2px}
+.exp-desc{font-size:.82rem;color:var(--g5)}
+.exp-btn{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);border:none;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.exp-btn:hover{opacity:.88}
+
+/* workflow */
+.wf-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g3);cursor:pointer;transition:box-shadow .15s}
+.wf-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.wf-card.p-High{border-left-color:var(--red)}
+.wf-card.p-Medium{border-left-color:var(--amber)}
+.wf-card.p-Low{border-left-color:var(--green)}
+.wf-card.s-Done{opacity:.5}
+.wf-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
+.wf-task{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:var(--ink);line-height:1.3}
+.wf-task.struck{text-decoration:line-through;color:var(--g5)}
+.wf-meta{font-size:.82rem;color:var(--g5);margin-top:3px}
+
+/* lightbox */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;align-items:center;justify-content:center;padding:16px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:4px}
+.lb-close{position:absolute;top:16px;right:20px;color:#fff;font-size:2rem;background:none;border:none;cursor:pointer}
+
+/* btn styles */
+.btn-cancel{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1px;background:transparent;color:var(--g5);border:1px solid var(--bd);padding:9px 18px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.btn-save{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1px;background:var(--red);color:var(--white);border:none;padding:9px 22px;border-radius:4px;cursor:pointer;text-transform:uppercase}
 .btn-save:hover{background:var(--red-dk)}
 
-/* SETTINGS */
-.settings-box{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:20px;max-width:480px}
-.settings-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:600;letter-spacing:1px;margin-bottom:16px;border-bottom:1px solid var(--bd);padding-bottom:9px}
-.hrs-grid{display:grid;gap:9px}
-.hrs-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.hrs-day{font-family:'Oswald',sans-serif;font-size:0.97rem;letter-spacing:1px;width:46px;color:var(--ink);font-weight:600}
-.hrs-row input[type="time"]{font-family:'Open Sans',sans-serif;font-size:0.92rem;padding:6px 9px;border:1px solid var(--bd);border-radius:4px;outline:none}
-.hrs-row input[type="time"]:focus{border-color:var(--red)}
-.hrs-closed{display:flex;align-items:center;gap:5px;font-family:'Oswald',sans-serif;font-size:0.88rem;color:var(--g500);cursor:pointer}
-.hrs-closed input{cursor:pointer}
+/* history card */
+.hist-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--green);cursor:pointer;transition:box-shadow .15s}
+.hist-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.1)}
 
-/* ORDER LIST */
-.ol-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-.ol-title{font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:1px;color:var(--ink)}
-.ol-sub{font-size:0.85rem;color:var(--g500);margin-top:3px}
-.ol-filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-
-.ol-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
-.ol-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
-.ol-card.urg-High  {border-left-color:var(--red)}
-.ol-card.urg-Medium{border-left-color:var(--amber)}
-.ol-card.urg-Low   {border-left-color:var(--green)}
-.ol-card.is-ordered{border-left-color:var(--g300);opacity:.65}
-
-.ol-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
-.ol-row-left{flex:1;min-width:0}
-.ol-item-name{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ol-item-name.ordered{text-decoration:line-through;color:var(--g500)}
-.ol-meta{font-size:0.85rem;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ol-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-
-.urg-badge{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;display:inline-block;white-space:nowrap;border-radius:3px}
-.urg-High  {background:#FDECEC;color:var(--red)}
-.urg-Medium{background:var(--amber-bg);color:var(--amber)}
-.urg-Low   {background:var(--green-bg);color:var(--green)}
-.ordered-badge{background:var(--g100);color:var(--g500);font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;font-weight:600;border-radius:3px}
-
-/* CUSTOMER NOTE BANNER (shown in delivery detail) */
-.cust-note-banner{background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:10px 13px;margin-bottom:14px}
-.cust-note-banner-lbl{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:4px;font-weight:600}
-.cust-note-banner-text{font-size:0.97rem;color:var(--ink);font-weight:600;line-height:1.4}
-
-/* HISTORY card (same as del-card but lighter) */
-.hist-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--green);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
-.hist-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
-
-/* PRINT */
+/* print ticket */
 @media print{
-  header,nav,.tab-nav,#print-area~*,.overlay{display:none!important}
+  header,nav,#print-area~*,.overlay,.lightbox{display:none!important}
   #print-area{display:block!important;position:fixed;inset:0;background:#fff;padding:0;z-index:9999}
   body{background:#fff}
 }
-.print-ticket{font-family:'Open Sans',sans-serif;max-width:680px;margin:0 auto;padding:32px 36px;color:#111;font-size:14px}
-.pt-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #C0392B;padding-bottom:14px;margin-bottom:18px}
-.pt-logo{font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:1px;line-height:1.1}
+.pt{font-family:'Barlow',sans-serif;max-width:680px;margin:0 auto;padding:30px 36px;color:#111;font-size:14px}
+.pt-hdr{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #C0392B;padding-bottom:12px;margin-bottom:16px}
+.pt-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:1px;line-height:1.1}
 .pt-logo span{color:#C0392B}
-.pt-logo small{display:block;font-size:0.65rem;letter-spacing:3px;color:#777;font-weight:400;margin-top:2px}
-.pt-meta{text-align:right;font-size:0.82rem;color:#777;line-height:1.6}
-.pt-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin-bottom:14px}
-.pt-section{margin-bottom:16px}
-.pt-section-title{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:#999;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:8px}
-.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
-.pt-field label{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:1px}
-.pt-field span{font-size:0.95rem;font-weight:600;color:#111}
-.pt-items{background:#f8f8f6;border:1px solid #ddd;padding:10px 14px;font-size:0.95rem;line-height:1.6;white-space:pre-wrap;font-weight:600}
-.pt-sig-area{border:1px solid #ddd;height:80px;margin-top:8px;display:flex;align-items:flex-end;padding:6px 10px}
-.pt-sig-line{border-top:1px solid #aaa;width:100%;margin-top:auto;padding-top:4px;font-size:0.75rem;color:#999;font-family:'Oswald',sans-serif;letter-spacing:1px}
-.pt-footer{margin-top:24px;padding-top:12px;border-top:1px solid #ddd;text-align:center;font-size:0.78rem;color:#aaa;font-family:'Oswald',sans-serif;letter-spacing:1px}
-.pt-photo{max-width:200px;max-height:150px;border:1px solid #ddd;margin-top:6px}
+.pt-logo small{display:block;font-size:.65rem;letter-spacing:3px;color:#777;font-weight:400;margin-top:2px}
+.pt-meta{text-align:right;font-size:.8rem;color:#777;line-height:1.7}
+.pt-sec-title{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#999;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:8px;margin-top:14px}
+.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;margin-bottom:8px}
+.pt-field label{font-family:'Barlow Condensed',sans-serif;font-size:.63rem;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:1px}
+.pt-field span{font-size:.95rem;font-weight:600}
+.pt-items{background:#f8f8f6;border:1px solid #ddd;padding:9px 13px;font-size:.93rem;line-height:1.6;white-space:pre-wrap;font-weight:600}
+.pt-sig{border:1px solid #ddd;height:70px;margin-top:8px;display:flex;align-items:flex-end;padding:5px 8px}
+.pt-sig-line{border-top:1px solid #aaa;width:100%;padding-top:3px;font-size:.72rem;color:#999;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
+.pt-foot{margin-top:20px;padding-top:10px;border-top:1px solid #ddd;text-align:center;font-size:.75rem;color:#aaa;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
 
-/* ATTACHMENT GRID */
-.attach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:10px}
-.attach-item{position:relative;border:1px solid var(--bd);border-radius:4px;overflow:hidden;background:var(--g50)}
-.attach-item img{width:100%;height:80px;object-fit:cover;display:block;cursor:pointer}
-.attach-item .attach-pdf{height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.8rem;color:var(--red);cursor:pointer}
-.attach-item .attach-cap{font-size:0.72rem;color:var(--g700);padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Oswald',sans-serif;letter-spacing:.5px}
-.attach-item .attach-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
-.attach-add-btn{border:2px dashed var(--bd);border-radius:4px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--g500);font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;gap:4px;background:var(--g50);transition:border-color .15s}
-.attach-add-btn:hover{border-color:var(--red);color:var(--red)}
-
-/* CUSTOMER DROPDOWN */
-.cust-drop-item{padding:10px 14px;cursor:pointer;font-size:.97rem;border-bottom:1px solid var(--g100)}
-.cust-drop-item:hover{background:var(--g50)}
-.cust-drop-item .cdi-name{font-weight:600;font-family:'Oswald',sans-serif;font-size:1rem}
-.cust-drop-item .cdi-sub{font-size:.8rem;color:var(--g500);margin-top:1px}
-
-/* WORKFLOW CARDS */
-.wf-card{background:var(--white);border:1px solid var(--bd);border-radius:6px;border-left:5px solid var(--g300);cursor:pointer;transition:box-shadow .15s;-webkit-tap-highlight-color:transparent}
-.wf-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
-.wf-card.p-High  {border-left-color:var(--red)}
-.wf-card.p-Medium{border-left-color:var(--amber)}
-.wf-card.p-Low   {border-left-color:var(--green)}
-.wf-card.s-Done  {opacity:.55}
-.wf-row{display:flex;align-items:center;padding:13px 15px;gap:12px}
-.wf-row-left{flex:1;min-width:0}
-.wf-task-name{font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:var(--ink);line-height:1.3}
-.wf-task-name.done-strike{text-decoration:line-through;color:var(--g500)}
-.wf-meta{font-size:0.83rem;color:var(--g500);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wf-row-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-
-/* STATUS BADGES */
-.badge-wf-open    {background:#F0E8FA;color:var(--purple)}
-.badge-wf-progress{background:var(--blue-bg);color:var(--blue)}
-.badge-wf-done    {background:var(--green-bg);color:var(--green)}
-
-/* PEOPLE LIST in settings */
-.person-row{display:flex;align-items:center;justify-content:space-between;background:var(--g50);border:1px solid var(--bd);border-radius:4px;padding:9px 13px}
-.person-name{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.5px;color:var(--ink)}
-.person-del{background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.9rem;padding:2px 6px;font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase}
-.person-del:hover{color:var(--red)}
-
-/* DASHBOARD SECTIONS */
-.dash-section-hdr{margin-bottom:6px}
-.dash-section-title{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.dash-section-title::after{content:'';flex:1;height:2px;background:var(--bd);border-radius:1px}
-
-/* EXPORT ROWS */
-.export-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--g100)}
-.export-row:last-child{border-bottom:none}
-.export-info{flex:1;min-width:0}
-.export-label{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.5px;color:var(--ink);margin-bottom:2px}
-.export-desc{font-size:.82rem;color:var(--g500);line-height:1.4}
-.export-btn{font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);border:none;padding:9px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.export-btn:hover{opacity:.88}
-
-/* LIGHTBOX */
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:2000;align-items:center;justify-content:center;padding:20px}
-.lightbox.open{display:flex}
-.lightbox img{max-width:100%;max-height:90vh;border-radius:4px}
-.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:2rem;background:none;border:none;cursor:pointer;line-height:1}
-
-@media(max-width:480px){
-  .fr{grid-template-columns:1fr}
-  .detail-grid{grid-template-columns:1fr}
-  .summary-row{grid-template-columns:1fr 1fr}
-  .status-btns .sbtn{min-width:0}
-}
+@media(max-width:480px){.fr{grid-template-columns:1fr}.dgrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hdr-top">
-    <div class="logo">MILLER <em>HARDWARE</em><span class="logo-tag">DELIVERY</span></div>
+  <div class="hdr">
+    <div class="logo">MILLER <span>HARDWARE</span></div>
     <div class="hdr-right">
-      <div class="sync-pill"><div class="sdot conn" id="sdot"></div><span id="sync-text">Connecting…</span></div>
-      <span class="loc-pill">Yellville</span>
+      <div class="sync"><div class="sdot conn" id="sdot"></div><span id="sync-txt">Connecting…</span></div>
+      <span class="loc">Yellville</span>
     </div>
   </div>
   <div id="clock"></div>
 </header>
 
-<nav class="tab-nav">
-  <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('dash',this)">Dashboard</button>
-    <button class="tab-btn" onclick="switchTab('out',this)">Deliveries Out <span class="cpill" id="co">0</span></button>
-    <button class="tab-btn" onclick="switchTab('in',this)">Due In <span class="cpill" id="ci">0</span></button>
-    <button class="tab-btn" onclick="switchTab('order-list',this)">Order List <span class="cpill" id="col">0</span></button>
-    <button class="tab-btn" onclick="switchTab('workflow',this)">Workflow <span class="cpill" id="cwf">0</span></button>
-    <button class="tab-btn" onclick="switchTab('history',this)">History</button>
-    <button class="tab-btn" onclick="switchTab('customers',this)">Customers</button>
-    <button class="tab-btn" onclick="switchTab('settings',this)">Hours &amp; Settings</button>
+<nav>
+  <div class="nav-inner">
+    <button class="tab active" onclick="switchTab('dash',this)">Dashboard</button>
+    <button class="tab" onclick="switchTab('out',this)">Deliveries Out <span class="pill" id="p-out">0</span></button>
+    <button class="tab" onclick="switchTab('in',this)">Due In <span class="pill" id="p-in">0</span></button>
+    <button class="tab" onclick="switchTab('wf',this)">Workflow <span class="pill" id="p-wf">0</span></button>
+    <button class="tab" onclick="switchTab('orders',this)">Order List <span class="pill" id="p-ol">0</span></button>
+    <button class="tab" onclick="switchTab('custs',this)">Customers</button>
+    <button class="tab" onclick="switchTab('history',this)">History</button>
+    <button class="tab" onclick="switchTab('settings',this)">Settings</button>
   </div>
 </nav>
 
 <main class="main">
 
-  <!-- DASHBOARD TAB -->
-  <div id="panel-dash" class="tab-panel active">
-
-    <!-- DELIVERIES OUT — dominant section -->
-    <div class="dash-section-hdr">
-      <div class="dash-section-title">🚚 Deliveries Out</div>
-      <div class="summary-row" id="sum-dash-out" style="margin-bottom:12px"></div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderDashOut()" id="srch-dash-out" style="flex:1;width:auto">
-        <input class="search-box" type="text" placeholder="Filter status…" oninput="renderDashOut()" id="filt-dash-status" style="width:160px" list="dash-status-list">
-        <datalist id="dash-status-list"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></datalist>
-        <button class="btn-new" onclick="openOutForm()">+ New</button>
-      </div>
-      <div class="card-list" id="cards-dash-out"></div>
-      <div id="empty-dash-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No active deliveries.</div>
-    </div>
-
-    <!-- DELIVERIES DUE IN — middle section -->
-    <div class="dash-section-hdr" style="margin-top:28px">
-      <div class="dash-section-title">📦 Deliveries Due In</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-        <input class="search-box" type="text" placeholder="Search vendor, PO…" oninput="renderDashIn()" id="srch-dash-in" style="flex:1;width:auto">
-        <button class="btn-new" style="background:var(--blue)" onclick="openInForm()">+ New Inbound</button>
-      </div>
-      <div class="card-list" id="cards-dash-in"></div>
-      <div id="empty-dash-in" class="empty-state" style="display:none"><span class="empty-icon">📦</span>No pending inbound deliveries.</div>
-    </div>
-
-    <!-- WORKFLOW TASKS — secondary section -->
-    <div class="dash-section-hdr" style="margin-top:28px">
-      <div class="dash-section-title">✅ Workflow Tasks</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-        <input class="search-box" type="text" placeholder="Search tasks or person…" oninput="renderDashWF()" id="srch-dash-wf" style="flex:1;width:auto">
-        <button class="btn-new" style="background:var(--blue)" onclick="openWFForm()">+ New Task</button>
-      </div>
-      <div class="card-list" id="cards-dash-wf"></div>
-      <div id="empty-dash-wf" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No open tasks.</div>
-    </div>
-
+<!-- DASHBOARD -->
+<div id="panel-dash" class="panel active">
+  <div id="dash-stats" class="stats"></div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+    🚚 ACTIVE DELIVERIES
+    <span style="flex:1;height:2px;background:var(--bd);border-radius:1px;display:block"></span>
+    <button class="btn-new" onclick="openOutForm()" style="font-size:.85rem;padding:7px 14px">+ New</button>
   </div>
+  <div class="card-list" id="dash-out-list"></div>
+  <div id="dash-out-empty" class="empty" style="display:none"><span class="empty-ico">🚚</span>No active deliveries.</div>
 
-  <!-- OUTBOUND TAB -->
-  <div id="panel-out" class="tab-panel">
-    <div class="summary-row" id="sum-out"></div>
-    <div class="toolbar">
-      <div class="tl-left">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderOut()" id="srch-out">
-        <input class="search-box" type="text" placeholder="Filter status…" oninput="renderOut()" id="filt-out-txt" style="width:160px" list="out-status-list">
-        <datalist id="out-status-list"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></datalist>
-      </div>
-      <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
-    </div>
-    <div class="card-list" id="cards-out"></div>
-    <div id="empty-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No outbound deliveries yet.</div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin:24px 0 10px;display:flex;align-items:center;gap:8px">
+    📦 DUE IN
+    <span style="flex:1;height:2px;background:var(--bd);border-radius:1px;display:block"></span>
+    <button class="btn-new blue" onclick="openInForm()" style="font-size:.85rem;padding:7px 14px">+ New</button>
   </div>
+  <div class="card-list" id="dash-in-list"></div>
+  <div id="dash-in-empty" class="empty" style="display:none"><span class="empty-ico">📦</span>No pending inbound.</div>
 
-  <!-- INBOUND TAB -->
-  <div id="panel-in" class="tab-panel">
-    <div class="summary-row" id="sum-in"></div>
-    <div class="toolbar">
-      <div class="tl-left">
-        <input class="search-box" type="text" placeholder="Search…" oninput="renderIn()" id="srch-in">
-        <select class="fsel" onchange="renderIn()" id="filt-in-s">
-          <option value="">All Statuses</option>
-          <option>Expected</option><option>Partial</option><option>Received</option><option>Overdue</option>
-        </select>
-        <select class="fsel" onchange="renderIn()" id="filt-in-v"><option value="">All Vendors</option></select>
-      </div>
-      <button class="btn-new" onclick="openInForm()">+ New Inbound</button>
-    </div>
-    <div class="card-list" id="cards-in"></div>
-    <div id="empty-in" class="empty-state" style="display:none"><span class="empty-icon">📦</span>No inbound deliveries yet.</div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin:24px 0 10px;display:flex;align-items:center;gap:8px">
+    ✅ OPEN TASKS
+    <span style="flex:1;height:2px;background:var(--bd);border-radius:1px;display:block"></span>
+    <button class="btn-new green" onclick="openWFForm()" style="font-size:.85rem;padding:7px 14px">+ New</button>
   </div>
+  <div class="card-list" id="dash-wf-list"></div>
+  <div id="dash-wf-empty" class="empty" style="display:none"><span class="empty-ico">✅</span>No open tasks.</div>
+</div>
 
-  <!-- ORDER LIST TAB -->
-  <div id="panel-order-list" class="tab-panel">
-    <div class="ol-header-row">
-      <div>
-        <div class="ol-title">📋 Items to Order</div>
-        <div class="ol-sub">Added by drivers &amp; staff when stock is running low</div>
-      </div>
-      <button class="btn-new" onclick="openOLForm()">+ Add Item</button>
+<!-- DELIVERIES OUT -->
+<div id="panel-out" class="panel">
+  <div class="stats" id="out-stats"></div>
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search customer, address…" oninput="renderOut()" id="srch-out">
     </div>
-    <div class="ol-filter-row">
-      <select class="fsel" onchange="renderOL()" id="filt-ol">
-        <option value="">All Items</option>
-        <option value="pending">Needs Ordering</option>
-        <option value="ordered">Ordered</option>
-      </select>
-      <select class="fsel" onchange="renderOL()" id="filt-ol-urg">
-        <option value="">All Urgency</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-    </div>
-    <div class="card-list" id="cards-ol"></div>
-    <div id="empty-ol" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No items on the order list.</div>
+    <button class="btn-new" onclick="openOutForm()">+ New Delivery</button>
   </div>
+  <div class="card-list" id="out-list"></div>
+  <div id="out-empty" class="empty" style="display:none"><span class="empty-ico">🚚</span>No active deliveries.</div>
+</div>
 
-  <!-- HISTORY TAB -->
-  <div id="panel-history" class="tab-panel">
-    <div class="ol-header-row">
-      <div>
-        <div class="ol-title">📦 Delivery History</div>
-        <div class="ol-sub">All completed outbound deliveries</div>
-      </div>
+<!-- DELIVERIES IN -->
+<div id="panel-in" class="panel">
+  <div class="stats" id="in-stats"></div>
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search vendor, PO…" oninput="renderIn()" id="srch-in">
     </div>
-    <div class="toolbar">
-      <div class="tl-left">
-        <input class="search-box" type="text" placeholder="Search customer…" oninput="renderHistory()" id="srch-hist" style="width:180px">
-        <input class="fsel" type="month" id="filt-hist-month" onchange="renderHistory()" style="padding:9px 9px">
-      </div>
-    </div>
-    <div class="card-list" id="cards-hist"></div>
-    <div id="empty-hist" class="empty-state" style="display:none"><span class="empty-icon">📋</span>No completed deliveries yet.</div>
+    <button class="btn-new blue" onclick="openInForm()">+ New Inbound</button>
   </div>
+  <div class="card-list" id="in-list"></div>
+  <div id="in-empty" class="empty" style="display:none"><span class="empty-ico">📦</span>No inbound orders.</div>
+</div>
 
-  <!-- CUSTOMERS TAB -->
-  <div id="panel-customers" class="tab-panel">
-    <div class="ol-header-row">
-      <div>
-        <div class="ol-title">👤 Customer Notes</div>
-        <div class="ol-sub">Persistent notes shown on every delivery for that customer</div>
-      </div>
-      <button class="btn-new" onclick="openCustForm()">+ Add Customer</button>
+<!-- WORKFLOW -->
+<div id="panel-wf" class="panel">
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search tasks or person…" oninput="renderWF()" id="srch-wf">
     </div>
-    <input class="search-box" type="text" placeholder="Search customers…" oninput="renderCusts()" id="srch-cust" style="margin-bottom:14px;width:100%">
-    <div class="card-list" id="cards-cust"></div>
-    <div id="empty-cust" class="empty-state" style="display:none"><span class="empty-icon">👤</span>No customer notes yet.</div>
+    <button class="btn-new green" onclick="openWFForm()">+ New Task</button>
   </div>
+  <div class="card-list" id="wf-list"></div>
+  <div id="wf-empty" class="empty" style="display:none"><span class="empty-ico">✅</span>No tasks yet.</div>
+</div>
 
-  <!-- SETTINGS TAB -->
-  <div id="panel-settings" class="tab-panel">
-    <div class="settings-box" style="margin-bottom:20px">
-      <div class="settings-title">Delivery Hours</div>
-      <p style="font-size:.95rem;color:var(--g500);margin-bottom:16px">Set hours deliveries can be scheduled. A warning shows if a delivery is booked on a closed day.</p>
-      <div class="hrs-grid" id="hrs-grid"></div>
-      <div style="margin-top:18px"><button class="btn-save" onclick="saveHours()">Save Hours</button></div>
+<!-- ORDER LIST -->
+<div id="panel-orders" class="panel">
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search items…" oninput="renderOL()" id="srch-ol">
     </div>
+    <button class="btn-new" onclick="openOLForm()">+ Add Item</button>
+  </div>
+  <div class="card-list" id="ol-list"></div>
+  <div id="ol-empty" class="empty" style="display:none"><span class="empty-ico">📋</span>No items on the list.</div>
+</div>
 
-    <div class="settings-box">
-      <div class="settings-title">📥 Export &amp; Backup</div>
-      <p style="font-size:.95rem;color:var(--g500);margin-bottom:18px">Download your data as CSV spreadsheets or a full JSON backup. Use these to keep records, open in Excel, or restore data if needed.</p>
-
-      <div style="display:flex;flex-direction:column;gap:12px">
-
-        <div class="export-row">
-          <div class="export-info">
-            <div class="export-label">Deliveries Out</div>
-            <div class="export-desc">All outbound delivery records — customer, address, items, driver, status, ticket #, dates</div>
-          </div>
-          <button class="export-btn" onclick="exportCSV('out')">⬇ CSV</button>
-        </div>
-
-        <div class="export-row">
-          <div class="export-info">
-            <div class="export-label">Deliveries Due In</div>
-            <div class="export-desc">All inbound orders — vendor, PO number, items, expected date, received status</div>
-          </div>
-          <button class="export-btn" onclick="exportCSV('in')">⬇ CSV</button>
-        </div>
-
-        <div class="export-row">
-          <div class="export-info">
-            <div class="export-label">Customer Records</div>
-            <div class="export-desc">All saved customers — name, phone, address, notes</div>
-          </div>
-          <button class="export-btn" onclick="exportCSV('customers')">⬇ CSV</button>
-        </div>
-
-        <div class="export-row">
-          <div class="export-info">
-            <div class="export-label">Order List</div>
-            <div class="export-desc">Items flagged for reorder — item name, urgency, qty on hand, who added it</div>
-          </div>
-          <button class="export-btn" onclick="exportCSV('orderlist')">⬇ CSV</button>
-        </div>
-
-        <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:2px">
-          <div class="export-row">
-            <div class="export-info">
-              <div class="export-label" style="color:var(--ink)">Full JSON Backup</div>
-              <div class="export-desc">Everything in one file — use this to restore or migrate all data</div>
-            </div>
-            <button class="export-btn" style="background:var(--ink)" onclick="exportJSON()">⬇ JSON</button>
-          </div>
-        </div>
-
-      </div>
-      <div id="export-status" style="margin-top:14px;font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:1px;color:var(--green);display:none"></div>
+<!-- CUSTOMERS -->
+<div id="panel-custs" class="panel">
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search customers…" oninput="renderCusts()" id="srch-custs">
     </div>
+    <button class="btn-new green" onclick="openCustForm()">+ Add Customer</button>
+  </div>
+  <div class="card-list" id="custs-list"></div>
+  <div id="custs-empty" class="empty" style="display:none"><span class="empty-ico">👤</span>No customers yet.</div>
+</div>
 
-    <!-- PEOPLE MANAGEMENT -->
-    <div class="settings-box" style="margin-top:20px">
-      <div class="settings-title">👥 People</div>
-      <p style="font-size:.95rem;color:var(--g500);margin-bottom:16px">Add staff names to assign workflow tasks and deliveries.</p>
-      <div id="people-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
-      <div style="display:flex;gap:8px">
-        <input type="text" id="person-inp" placeholder="Full name…" style="flex:1;font-family:'Open Sans',sans-serif;font-size:1rem;padding:9px 11px;border:1px solid var(--bd);border-radius:4px;outline:none" onkeydown="if(event.key==='Enter')addPerson()">
-        <button class="btn-save" onclick="addPerson()">Add</button>
-      </div>
+<!-- HISTORY -->
+<div id="panel-history" class="panel">
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search…" oninput="renderHistory()" id="srch-hist">
+      <input type="month" id="filt-hist-month" onchange="renderHistory()" style="font-family:'Barlow',sans-serif;font-size:.92rem;padding:9px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;background:var(--white)">
     </div>
   </div>
+  <div class="card-list" id="hist-list"></div>
+  <div id="hist-empty" class="empty" style="display:none"><span class="empty-ico">📋</span>No completed deliveries yet.</div>
+</div>
 
-  <!-- WORKFLOW TAB -->
-  <div id="panel-workflow" class="tab-panel">
-    <div class="ol-header-row">
-      <div>
-        <div class="ol-title">✅ Workflow Tasks</div>
-        <div class="ol-sub">Store chores and tasks assigned to staff</div>
-      </div>
-      <button class="btn-new" onclick="openWFForm()">+ New Task</button>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <input class="search-box" type="text" placeholder="Search task or person…" oninput="renderWF()" id="srch-wf" style="flex:1;min-width:180px">
-      <input class="search-box" type="text" placeholder="Filter status…" oninput="renderWF()" id="filt-wf-status-txt" style="width:150px" list="wf-status-list">
-      <datalist id="wf-status-list"><option>Open</option><option>In Progress</option><option>Done</option></datalist>
-      <input class="search-box" type="text" placeholder="Filter priority…" oninput="renderWF()" id="filt-wf-priority-txt" style="width:150px" list="wf-priority-list">
-      <datalist id="wf-priority-list"><option>High</option><option>Medium</option><option>Low</option></datalist>
-    </div>
-    <div class="card-list" id="cards-wf"></div>
-    <div id="empty-wf" class="empty-state" style="display:none"><span class="empty-icon">✅</span>No tasks yet. Add one to get started.</div>
+<!-- SETTINGS -->
+<div id="panel-settings" class="panel">
+  <!-- Delivery Hours -->
+  <div class="sbox">
+    <div class="sbox-title">🕐 Delivery Hours</div>
+    <p style="font-size:.93rem;color:var(--g5);margin-bottom:16px">Set hours deliveries can run. A warning shows when scheduling outside these hours.</p>
+    <div id="hrs-grid"></div>
+    <div style="margin-top:16px"><button class="btn-save" onclick="saveHours()">Save Hours</button></div>
   </div>
+  <!-- People -->
+  <div class="sbox">
+    <div class="sbox-title">👥 People</div>
+    <p style="font-size:.93rem;color:var(--g5);margin-bottom:14px">Names used to assign workflow tasks.</p>
+    <div id="people-list"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <input type="text" id="person-inp" placeholder="Full name…" style="flex:1;font-family:'Barlow',sans-serif;font-size:1rem;padding:9px 11px;border:1px solid var(--bd);border-radius:4px;outline:none" onkeydown="if(event.key==='Enter')addPerson()">
+      <button class="btn-save" onclick="addPerson()">Add</button>
+    </div>
+  </div>
+  <!-- Export -->
+  <div class="sbox">
+    <div class="sbox-title">📥 Export &amp; Backup</div>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <div class="exp-row"><div><div class="exp-label">Deliveries Out</div><div class="exp-desc">All outbound records as spreadsheet</div></div><button class="exp-btn" onclick="exportCSV('out')">⬇ CSV</button></div>
+      <div class="exp-row"><div><div class="exp-label">Deliveries Due In</div><div class="exp-desc">All inbound orders as spreadsheet</div></div><button class="exp-btn" onclick="exportCSV('in')">⬇ CSV</button></div>
+      <div class="exp-row"><div><div class="exp-label">Customers</div><div class="exp-desc">Customer list with notes</div></div><button class="exp-btn" onclick="exportCSV('custs')">⬇ CSV</button></div>
+      <div class="exp-row"><div><div class="exp-label">Order List</div><div class="exp-desc">Items flagged for reorder</div></div><button class="exp-btn" onclick="exportCSV('ol')">⬇ CSV</button></div>
+      <div class="exp-row" style="border-top:1px solid var(--bd);padding-top:14px;margin-top:8px"><div><div class="exp-label">Full JSON Backup</div><div class="exp-desc">Everything in one file</div></div><button class="exp-btn" style="background:var(--ink)" onclick="exportJSON()">⬇ JSON</button></div>
+    </div>
+    <div id="exp-status" style="display:none;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:1px;color:var(--green)"></div>
+  </div>
+</div>
 
 </main>
 
-<!-- ══ DETAIL OVERLAY — OUTBOUND ══ -->
+<!-- ══ DETAIL: DELIVERY OUT ══ -->
 <div class="overlay" id="det-out">
   <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle" id="det-out-title">Delivery Detail</span>
-      <button class="mclose" onclick="closeDetOut()">×</button>
-    </div>
+    <div class="mhdr"><span class="mtitle" id="det-out-title">Delivery</span><button class="mclose" onclick="closeDet('det-out')">×</button></div>
     <div class="mbody" id="det-out-body"></div>
     <div class="mfoot">
-      <button class="sbtn del-btn" id="det-out-del">Delete</button>
-      <button class="sbtn outline" id="det-out-edit">Edit</button>
-      <button class="sbtn outline" id="det-out-print">🖨 Print</button>
-      <button class="sbtn close-btn" onclick="closeDetOut()">Done</button>
+      <button class="sbtn danger" id="det-out-del-btn">Delete</button>
+      <button class="sbtn ghost" id="det-out-edit-btn">Edit</button>
+      <button class="sbtn ghost" id="det-out-print-btn">🖨 Print</button>
+      <button class="sbtn done-btn" onclick="closeDet('det-out')">Done</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ATTACH PHOTO OVERLAY ══ -->
-<div class="overlay" id="overlay-attach">
-  <div class="modal" style="max-width:460px">
-    <div class="mhdr"><span class="mtitle">Add Photo / Document</span><button class="mclose" onclick="closeAttach()">×</button></div>
-    <div class="mbody">
-      <div class="fg">
-        <div class="fgrp">
-          <label>Caption (optional)</label>
-          <input type="text" id="attach-caption" placeholder="e.g. Loaded on truck, Dropped at gate…">
-        </div>
-        <div class="fgrp">
-          <label>Photo or Document</label>
-          <div class="photo-area">
-            <input type="file" accept="image/*,application/pdf" id="attach-file" onchange="handleAttachFile(event)">
-            <span class="upload-lbl"><span class="uicon">📷</span>Tap to take photo, choose from library, or upload PDF</span>
-          </div>
-          <div id="attach-prev"></div>
-        </div>
-      </div>
-    </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeAttach()">Cancel</button><button class="btn-save" onclick="saveAttach()">Save</button></div>
-  </div>
-</div>
-
-<!-- ══ DETAIL OVERLAY — INBOUND ══ -->
+<!-- ══ DETAIL: INBOUND ══ -->
 <div class="overlay" id="det-in">
   <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle" id="det-in-title">Inbound Detail</span>
-      <button class="mclose" onclick="closeDetIn()">×</button>
-    </div>
+    <div class="mhdr"><span class="mtitle" id="det-in-title">Inbound Order</span><button class="mclose" onclick="closeDet('det-in')">×</button></div>
     <div class="mbody" id="det-in-body"></div>
     <div class="mfoot">
-      <button class="sbtn del-btn" id="det-in-del">Delete</button>
-      <button class="sbtn outline" id="det-in-edit">Edit</button>
-      <button class="sbtn close-btn" onclick="closeDetIn()">Done</button>
+      <button class="sbtn danger" id="det-in-del-btn">Delete</button>
+      <button class="sbtn ghost" id="det-in-edit-btn">Edit</button>
+      <button class="sbtn done-btn" onclick="closeDet('det-in')">Done</button>
     </div>
   </div>
 </div>
 
-<!-- ══ FORM OVERLAY — OUTBOUND ══ -->
+<!-- ══ DETAIL: WORKFLOW ══ -->
+<div class="overlay" id="det-wf">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="det-wf-title">Task</span><button class="mclose" onclick="closeDet('det-wf')">×</button></div>
+    <div class="mbody" id="det-wf-body"></div>
+    <div class="mfoot">
+      <button class="sbtn danger" id="det-wf-del-btn">Delete</button>
+      <button class="sbtn ghost" id="det-wf-edit-btn">Edit</button>
+      <button class="sbtn done-btn" onclick="closeDet('det-wf')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DETAIL: ORDER LIST ══ -->
+<div class="overlay" id="det-ol">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="det-ol-title">Order Item</span><button class="mclose" onclick="closeDet('det-ol')">×</button></div>
+    <div class="mbody" id="det-ol-body"></div>
+    <div class="mfoot">
+      <button class="sbtn danger" id="det-ol-del-btn">Delete</button>
+      <button class="sbtn ghost" id="det-ol-edit-btn">Edit</button>
+      <button class="sbtn done-btn" onclick="closeDet('det-ol')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DETAIL: CUSTOMER ══ -->
+<div class="overlay" id="det-cust">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="det-cust-title">Customer</span><button class="mclose" onclick="closeDet('det-cust')">×</button></div>
+    <div class="mbody" id="det-cust-body"></div>
+    <div class="mfoot">
+      <button class="sbtn danger" id="det-cust-del-btn">Delete</button>
+      <button class="sbtn ghost" id="det-cust-edit-btn">Edit</button>
+      <button class="sbtn done-btn" onclick="closeDet('det-cust')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORM: DELIVERY OUT ══ -->
 <div class="overlay" id="form-out">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="fot-title">New Delivery Out</span><button class="mclose" onclick="closeOutForm()">×</button></div>
+    <div class="mhdr"><span class="mtitle" id="form-out-title">New Delivery Out</span><button class="mclose" onclick="closeForm('form-out')">×</button></div>
     <div class="mbody">
       <div class="fg">
-        <div class="fdiv">Ticket</div>
-        <div class="fgrp"><label>Ticket Number</label><input type="text" id="o-ticket" placeholder="e.g. T-1042"></div>
-        <div class="fdiv">Customer Info</div>
-        <div class="fgrp" style="position:relative">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-            <label style="margin-bottom:0">Customer Name</label>
-            <button type="button" onclick="openCustForm()" style="font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);border:none;padding:4px 10px;border-radius:3px;cursor:pointer">+ New Customer</button>
+        <div class="fdiv">Ticket &amp; Customer</div>
+        <div class="fr">
+          <div class="fgrp"><label>Ticket #</label><input type="text" id="o-ticket" placeholder="e.g. T-1042"></div>
+          <div class="fgrp">
+            <div class="label-row"><label>Customer</label><button class="mini-btn" onclick="quickAddCust()">+ New Customer</button></div>
+            <input type="text" id="o-cust" placeholder="Type to search…" autocomplete="off" oninput="custSearch(this.value,'o-cust-drop')" onblur="setTimeout(()=>hideDrop('o-cust-drop'),200)">
+            <div class="csearch-drop" id="o-cust-drop"></div>
           </div>
-          <input type="text" id="o-cust" placeholder="Start typing to search…" autocomplete="off" oninput="custSearch(this.value)" onblur="setTimeout(()=>hideCustDrop(),200)">
-          <div id="cust-drop" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--bd);border-top:none;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1)"></div>
         </div>
         <div class="fr">
           <div class="fgrp"><label>Phone</label><input type="tel" id="o-phone" placeholder="(870) 555-0000"></div>
-          <div class="fgrp"><label>Delivery Address</label><input type="text" id="o-addr" placeholder="Street, City, ZIP"></div>
+          <div class="fgrp"><label>Address</label><input type="text" id="o-addr" placeholder="Street, City, ZIP"></div>
         </div>
         <div class="fdiv">Order Details</div>
         <div class="fgrp"><label>Items / Description</label><textarea id="o-items" placeholder="e.g. 20 – 2×6×16 SYP, 5 bags concrete mix…"></textarea></div>
         <div class="fr">
-          <div class="fgrp"><label>Driver</label><input type="text" id="o-driver" placeholder="Driver name"></div>
+          <div class="fgrp">
+            <label>Driver</label>
+            <input type="text" id="o-driver" placeholder="Type to search…" autocomplete="off" oninput="personSearch(this.value,'o-driver-drop')" onblur="setTimeout(()=>hideDrop('o-driver-drop'),200)">
+            <div class="csearch-drop" id="o-driver-drop"></div>
+          </div>
           <div class="fgrp"><label>Status</label>
-            <select id="o-status"><option>Order In</option><option>Loading</option><option>Out for Delivery</option><option>Completed</option></select>
+            <select id="o-status"><option>Order In</option><option>Loading</option><option>Out for Delivery</option></select>
           </div>
         </div>
         <div class="fr">
-          <div class="fgrp"><label>Delivery Date</label><input type="date" id="o-date" onchange="chkWarn()"></div>
-          <div class="fgrp"><label>Time Window</label><input type="text" id="o-win" placeholder="e.g. 8am – 11am"></div>
+          <div class="fgrp"><label>Delivery Date</label><input type="date" id="o-date" onchange="checkHrsWarn()"></div>
+          <div class="fgrp"><label>Time Window</label><input type="text" id="o-window" placeholder="e.g. 8am – 11am"></div>
         </div>
-        <div class="warn" id="o-warn"></div>
+        <div id="o-hrs-warn" class="fwarn"></div>
         <div class="fgrp"><label>Notes</label><textarea id="o-notes" placeholder="Gate code, access notes…"></textarea></div>
-        <div class="fdiv">Proof of Delivery</div>
-        <div class="fgrp">
-          <label>Photo</label>
-          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="o-photo" onchange="handlePhoto(event,'o')">
-          <span class="upload-lbl"><span class="uicon">📷</span>Tap to take photo or choose from library</span></div>
-          <div id="o-prev"></div>
-        </div>
-        <div class="fgrp"><label>Received By</label><input type="text" id="o-rcvby" placeholder="Name of person who accepted delivery"></div>
+        <div class="fdiv">Received By</div>
+        <div class="fgrp"><label>Name of person who accepted delivery</label><input type="text" id="o-rcvby" placeholder="Print name"></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeOutForm()">Cancel</button><button class="btn-save" onclick="saveOut()">Save Delivery</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-out')">Cancel</button><button class="btn-save" onclick="saveOut()">Save Delivery</button></div>
   </div>
 </div>
 
-<!-- ══ FORM OVERLAY — INBOUND ══ -->
+<!-- ══ FORM: INBOUND ══ -->
 <div class="overlay" id="form-in">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="fin-title">New Inbound Order</span><button class="mclose" onclick="closeInForm()">×</button></div>
+    <div class="mhdr"><span class="mtitle" id="form-in-title">New Inbound Order</span><button class="mclose" onclick="closeForm('form-in')">×</button></div>
     <div class="mbody">
       <div class="fg">
         <div class="fdiv">Vendor Info</div>
         <div class="fr">
-          <div class="fgrp"><label>Vendor / Supplier *</label><input type="text" id="i-vendor" placeholder="e.g. Orgill, Prinsco"></div>
+          <div class="fgrp"><label>Vendor / Supplier</label><input type="text" id="i-vendor" placeholder="e.g. Orgill, Prinsco"></div>
           <div class="fgrp"><label>PO Number</label><input type="text" id="i-po" placeholder="PO-XXXXX"></div>
         </div>
         <div class="fdiv">Order Details</div>
@@ -699,167 +556,120 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
         <div class="fgrp"><label>Notes / Discrepancies</label><textarea id="i-notes" placeholder="Short shipped, damaged cartons…"></textarea></div>
         <div class="fdiv">Receiving Photo (optional)</div>
         <div class="fgrp">
-          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="i-photo" onchange="handlePhoto(event,'i')">
-          <span class="upload-lbl"><span class="uicon">📷</span>Tap to take photo or choose from library</span></div>
+          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="i-photo" onchange="handlePhoto(event,'i')"><span class="upload-lbl"><span class="upload-ico">📷</span>Tap to take photo or choose from library</span></div>
           <div id="i-prev"></div>
         </div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeInForm()">Cancel</button><button class="btn-save" onclick="saveIn()">Save Order</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-in')">Cancel</button><button class="btn-save" onclick="saveIn()">Save Order</button></div>
   </div>
 </div>
 
-<!-- ══ ORDER LIST DETAIL OVERLAY ══ -->
-<div class="overlay" id="det-ol">
-  <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle" id="det-ol-title">Item Detail</span>
-      <button class="mclose" onclick="closeDetOL()">×</button>
-    </div>
-    <div class="mbody" id="det-ol-body"></div>
-    <div class="mfoot">
-      <button class="sbtn del-btn" id="det-ol-del">Delete</button>
-      <button class="sbtn outline" id="det-ol-edit">Edit</button>
-      <button class="sbtn close-btn" onclick="closeDetOL()">Done</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ ORDER LIST FORM OVERLAY ══ -->
-<div class="overlay" id="form-ol">
-  <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="fol-title">Add Item to Order</span><button class="mclose" onclick="closeOLForm()">×</button></div>
-    <div class="mbody">
-      <div class="fg">
-        <div class="fgrp"><label>Item / Product Name *</label><input type="text" id="ol-item" placeholder="e.g. 3/4 PVC Coupling, Box 16d Nails…"></div>
-        <div class="fr">
-          <div class="fgrp"><label>Qty on Hand</label><input type="text" id="ol-qty" placeholder="e.g. 3 left, almost out"></div>
-          <div class="fgrp"><label>Urgency</label>
-            <select id="ol-urg">
-              <option value="High">🔴 High — Order ASAP</option>
-              <option value="Medium" selected>🟡 Medium — Order Soon</option>
-              <option value="Low">🟢 Low — Next Order</option>
-            </select>
-          </div>
-        </div>
-        <div class="fgrp"><label>Added By</label><input type="text" id="ol-who" placeholder="Your name"></div>
-        <div class="fgrp"><label>Notes</label><textarea id="ol-notes" placeholder="Any extra details — aisle location, common vendor, etc."></textarea></div>
-      </div>
-    </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeOLForm()">Cancel</button><button class="btn-save" onclick="saveOL()">Add to List</button></div>
-  </div>
-</div>
-
-<!-- ══ CUSTOMER DETAIL OVERLAY ══ -->
-<div class="overlay" id="det-cust">
-  <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle" id="det-cust-title">Customer</span>
-      <button class="mclose" onclick="closeDetCust()">×</button>
-    </div>
-    <div class="mbody" id="det-cust-body"></div>
-    <div class="mfoot">
-      <button class="sbtn del-btn" id="det-cust-del">Delete</button>
-      <button class="sbtn outline" id="det-cust-edit">Edit</button>
-      <button class="sbtn close-btn" onclick="closeDetCust()">Done</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ CUSTOMER FORM OVERLAY ══ -->
-<div class="overlay" id="form-cust">
-  <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="fcust-title">Add Customer Notes</span><button class="mclose" onclick="closeCustForm()">×</button></div>
-    <div class="mbody">
-      <div class="fg">
-        <div class="fgrp"><label>Customer Name *</label><input type="text" id="c-name" placeholder="Full name — must match delivery records exactly"></div>
-        <div class="fgrp"><label>Phone</label><input type="tel" id="c-phone" placeholder="(870) 555-0000"></div>
-        <div class="fgrp"><label>Address</label><input type="text" id="c-addr" placeholder="Delivery address"></div>
-        <div class="fgrp"><label>Notes (shown on every delivery)</label><textarea id="c-notes" placeholder="e.g. Gate code 1234, call ahead, dogs in yard, deliver to back of house…" style="min-height:100px"></textarea></div>
-      </div>
-    </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeCustForm()">Cancel</button><button class="btn-save" onclick="saveCust()">Save</button></div>
-  </div>
-</div>
-
-<!-- ══ WORKFLOW DETAIL OVERLAY ══ -->
-<div class="overlay" id="det-wf">
-  <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle" id="det-wf-title">Task Detail</span>
-      <button class="mclose" onclick="closeDetWF()">×</button>
-    </div>
-    <div class="mbody" id="det-wf-body"></div>
-    <div class="mfoot">
-      <button class="sbtn del-btn" id="det-wf-del">Delete</button>
-      <button class="sbtn outline" id="det-wf-edit">Edit</button>
-      <button class="sbtn close-btn" onclick="closeDetWF()">Done</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ WORKFLOW FORM OVERLAY ══ -->
+<!-- ══ FORM: WORKFLOW ══ -->
 <div class="overlay" id="form-wf">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle" id="fwf-title">New Task</span><button class="mclose" onclick="closeWFForm()">×</button></div>
+    <div class="mhdr"><span class="mtitle" id="form-wf-title">New Task</span><button class="mclose" onclick="closeForm('form-wf')">×</button></div>
     <div class="mbody">
       <div class="fg">
-        <div class="fgrp"><label>Task Name / Description *</label><textarea id="wf-task" placeholder="e.g. Restock aisle 3 fasteners, sweep loading dock, check oil on forklift…" style="min-height:80px"></textarea></div>
+        <div class="fgrp"><label>Task Description</label><textarea id="wf-task" placeholder="Describe the task…" style="min-height:80px"></textarea></div>
         <div class="fr">
-          <div class="fgrp" style="position:relative">
-            <label>Assigned To</label>
-            <input type="text" id="wf-person" placeholder="Type a name…" autocomplete="off" oninput="wfPersonSearch(this.value)" onblur="setTimeout(()=>hideWFDrop(),200)">
-            <div id="wf-person-drop" style="display:none;position:absolute;top:100%;background:var(--white);border:1px solid var(--bd);border-top:none;z-index:200;max-height:160px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1);left:0;right:0"></div>
-          </div>
           <div class="fgrp">
-            <label>Priority</label>
-            <select id="wf-priority">
-              <option value="High">🔴 High</option>
-              <option value="Medium" selected>🟡 Medium</option>
-              <option value="Low">🟢 Low</option>
-            </select>
+            <label>Assigned To</label>
+            <input type="text" id="wf-person" placeholder="Type to search…" autocomplete="off" oninput="personSearch(this.value,'wf-person-drop')" onblur="setTimeout(()=>hideDrop('wf-person-drop'),200)">
+            <div class="csearch-drop" id="wf-person-drop"></div>
+          </div>
+          <div class="fgrp"><label>Priority</label>
+            <select id="wf-priority"><option value="High">🔴 High</option><option value="Medium" selected>🟡 Medium</option><option value="Low">🟢 Low</option></select>
           </div>
         </div>
         <div class="fr">
           <div class="fgrp"><label>Due Date</label><input type="date" id="wf-due"></div>
-          <div class="fgrp">
-            <label>Status</label>
-            <select id="wf-status">
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Done">Done</option>
-            </select>
+          <div class="fgrp"><label>Status</label>
+            <select id="wf-status"><option>Open</option><option>In Progress</option><option>Done</option></select>
           </div>
         </div>
         <div class="fgrp"><label>Notes</label><textarea id="wf-notes" placeholder="Extra details…"></textarea></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeWFForm()">Cancel</button><button class="btn-save" onclick="saveWF()">Save Task</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-wf')">Cancel</button><button class="btn-save" onclick="saveWF()">Save Task</button></div>
   </div>
 </div>
 
-<!-- PASSWORD OVERLAY -->
-<div class="overlay" id="pw-overlay" style="z-index:1500">
-  <div class="modal" style="max-width:360px">
-    <div class="mhdr"><span class="mtitle">Enter Password to Delete</span><button class="mclose" onclick="closePW()">×</button></div>
+<!-- ══ FORM: ORDER LIST ══ -->
+<div class="overlay" id="form-ol">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="form-ol-title">Add to Order List</span><button class="mclose" onclick="closeForm('form-ol')">×</button></div>
     <div class="mbody">
-      <div class="fgrp">
-        <label>Password</label>
-        <input type="password" id="pw-input" placeholder="••••••••••" onkeydown="if(event.key==='Enter')submitPW()" style="font-size:1.1rem;letter-spacing:3px">
-        <div id="pw-error" style="display:none;color:var(--red);font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:1px;margin-top:6px">Incorrect password.</div>
+      <div class="fg">
+        <div class="fgrp"><label>Item / Product Name</label><input type="text" id="ol-item" placeholder="e.g. 3/4 PVC Coupling, Box 16d Nails…"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Qty on Hand</label><input type="text" id="ol-qty" placeholder="e.g. 3 left, almost out"></div>
+          <div class="fgrp"><label>Urgency</label>
+            <select id="ol-urg"><option value="High">🔴 High — Order ASAP</option><option value="Medium" selected>🟡 Medium — Order Soon</option><option value="Low">🟢 Low — Next Order</option></select>
+          </div>
+        </div>
+        <div class="fgrp"><label>Added By</label><input type="text" id="ol-who" placeholder="Your name"></div>
+        <div class="fgrp"><label>Notes</label><textarea id="ol-notes" placeholder="Vendor, aisle location, etc."></textarea></div>
       </div>
     </div>
-    <div class="mfoot">
-      <button class="btn-cancel" onclick="closePW()">Cancel</button>
-      <button class="btn-save" style="background:var(--red)" onclick="submitPW()">Delete</button>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-ol')">Cancel</button><button class="btn-save" onclick="saveOL()">Add to List</button></div>
+  </div>
+</div>
+
+<!-- ══ FORM: CUSTOMER ══ -->
+<div class="overlay" id="form-cust">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="form-cust-title">Add Customer</span><button class="mclose" onclick="closeForm('form-cust')">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Name</label><input type="text" id="c-name" placeholder="Full name"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Phone</label><input type="tel" id="c-phone" placeholder="(870) 555-0000"></div>
+          <div class="fgrp"><label>Address</label><input type="text" id="c-addr" placeholder="Street, City, ZIP"></div>
+        </div>
+        <div class="fgrp"><label>Notes (shown on every delivery)</label><textarea id="c-notes" placeholder="Gate code, call ahead, dogs in yard…" style="min-height:90px"></textarea></div>
+      </div>
     </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-cust')">Cancel</button><button class="btn-save" onclick="saveCust()">Save Customer</button></div>
+  </div>
+</div>
+
+<!-- ══ ATTACH PHOTO ══ -->
+<div class="overlay" id="form-attach">
+  <div class="modal" style="max-width:460px">
+    <div class="mhdr"><span class="mtitle">Add Photo</span><button class="mclose" onclick="closeForm('form-attach')">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Caption (optional)</label><input type="text" id="att-cap" placeholder="e.g. Loaded on truck, Dropped at gate…"></div>
+        <div class="fgrp">
+          <div class="photo-area"><input type="file" accept="image/*" capture="environment" id="att-file" onchange="handleAttach(event)"><span class="upload-lbl"><span class="upload-ico">📷</span>Tap to take photo or choose from library</span></div>
+          <div id="att-prev"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeForm('form-attach')">Cancel</button><button class="btn-save" onclick="saveAttach()">Save Photo</button></div>
+  </div>
+</div>
+
+<!-- PASSWORD PROMPT -->
+<div class="overlay" id="pw-overlay" style="z-index:1500">
+  <div class="modal" style="max-width:360px">
+    <div class="mhdr"><span class="mtitle">Enter Password</span><button class="mclose" onclick="closePW()">×</button></div>
+    <div class="mbody">
+      <div class="fgrp">
+        <label>Password required to delete</label>
+        <input type="password" id="pw-inp" placeholder="••••••••••" onkeydown="if(event.key==='Enter')submitPW()" style="font-size:1.1rem;letter-spacing:3px">
+        <div id="pw-err" style="display:none;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:700;margin-top:6px;letter-spacing:1px">Incorrect password.</div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closePW()">Cancel</button><button class="btn-save" style="background:var(--red)" onclick="submitPW()">Delete</button></div>
   </div>
 </div>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  <img id="lightbox-img" src="" alt="">
+<div class="lightbox" id="lightbox" onclick="document.getElementById('lightbox').classList.remove('open')">
+  <button class="lb-close">×</button>
+  <img id="lb-img" src="" alt="">
 </div>
 
 <!-- PRINT AREA -->
@@ -869,6 +679,7 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
+// ── FIREBASE ─────────────────────────────────────────────────────────────────
 firebase.initializeApp({
   apiKey:"AIzaSyDNEl1mXtNLGN0nsvr1lZi7SJzsiypJFLM",
   authDomain:"millersawshop-f716a.firebaseapp.com",
@@ -878,908 +689,558 @@ firebase.initializeApp({
   messagingSenderId:"187757043776",
   appId:"1:187757043776:web:a0cce22b59172da8db7fa5"
 });
-const db=firebase.database();
-const outRef=db.ref('deliveries_out');
-const inRef =db.ref('deliveries_in');
-const hrsRef=db.ref('delivery_hours');
-const olRef =db.ref('order_list');
-const custRef=db.ref('delivery_customers');
-const attachRef=db.ref('delivery_attachments');
-const wfRef    =db.ref('workflow_tasks');
-const peopleRef=db.ref('store_people');
-
-// sync
-db.ref('.info/connected').on('value',s=>{
-  const on=s.val();
-  document.getElementById('sdot').className='sdot '+(on?'live':'err');
-  const t=document.getElementById('sync-text');
-  t.textContent=on?'Live Sync On':'Offline';
-  t.style.color=on?'#2ECC71':'var(--red)';
-});
-
-// state
-let outRecs=[],inRecs=[],olRecs=[],custRecs=[],attachRecs=[],wfRecs=[],peopleList=[];
-let currentDetKey=null; // which delivery is open in detail overlay
-let tmpAttachData=null,tmpAttachType=null;
-let editOutKey=null,editInKey=null;
-let tmpOPhoto=null,tmpIPhoto=null;
-let hoursConfig={
-  Mon:{open:'07:00',close:'17:00',closed:false},Tue:{open:'07:00',close:'17:00',closed:false},
-  Wed:{open:'07:00',close:'17:00',closed:false},Thu:{open:'07:00',close:'17:00',closed:false},
-  Fri:{open:'07:00',close:'17:00',closed:false},Sat:{open:'08:00',close:'12:00',closed:false},
-  Sun:{open:'08:00',close:'12:00',closed:true}
+const db = firebase.database();
+const refs = {
+  out:    db.ref('del_out'),
+  in:     db.ref('del_in'),
+  wf:     db.ref('del_wf'),
+  ol:     db.ref('del_ol'),
+  custs:  db.ref('del_custs'),
+  attach: db.ref('del_attach'),
+  people: db.ref('del_people'),
+  hours:  db.ref('del_hours')
 };
 
-// clock
+// sync indicator
+db.ref('.info/connected').on('value', s => {
+  const on = s.val();
+  document.getElementById('sdot').className = 'sdot ' + (on ? 'live' : 'err');
+  const t = document.getElementById('sync-txt');
+  t.textContent = on ? 'Live Sync On' : 'Offline';
+  t.style.color = on ? '#2ECC71' : 'var(--red)';
+});
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let outRecs=[], inRecs=[], wfRecs=[], olRecs=[], custRecs=[], attachRecs=[], peopleList=[];
+let hoursConfig = {Mon:{o:'07:00',c:'17:00',x:false},Tue:{o:'07:00',c:'17:00',x:false},Wed:{o:'07:00',c:'17:00',x:false},Thu:{o:'07:00',c:'17:00',x:false},Fri:{o:'07:00',c:'17:00',x:false},Sat:{o:'08:00',c:'12:00',x:false},Sun:{o:'08:00',c:'12:00',x:true}};
+let editKeys = {out:null, in:null, wf:null, ol:null, cust:null};
+let tmpPhotos = {o:null, i:null};
+let attachDelivKey = null, tmpAttachData = null;
+
+// ── LISTENERS ────────────────────────────────────────────────────────────────
+refs.out.on('value', s => {
+  outRecs = [];
+  s.forEach(c => outRecs.push({_k:c.key, ...c.val()}));
+  outRecs.sort((a,b) => { const ad=a.date||'9999', bd=b.date||'9999'; return ad<bd?-1:ad>bd?1:0; });
+  renderOut(); renderDash();
+});
+refs.in.on('value', s => {
+  inRecs = [];
+  s.forEach(c => inRecs.push({_k:c.key, ...c.val()}));
+  inRecs.sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
+  renderIn(); renderDash();
+});
+refs.wf.on('value', s => {
+  wfRecs = [];
+  s.forEach(c => wfRecs.push({_k:c.key, ...c.val()}));
+  const po = {High:0,Medium:1,Low:2};
+  wfRecs.sort((a,b) => ((po[a.priority]??1)-(po[b.priority]??1)) || ((a.due||'9')<(b.due||'9')?-1:1));
+  renderWF(); renderDash();
+});
+refs.ol.on('value', s => {
+  olRecs = [];
+  s.forEach(c => olRecs.push({_k:c.key, ...c.val()}));
+  const uo = {High:0,Medium:1,Low:2};
+  olRecs.sort((a,b) => (uo[a.urgency]??1)-(uo[b.urgency]??1));
+  renderOL();
+});
+refs.custs.on('value', s => {
+  custRecs = [];
+  s.forEach(c => custRecs.push({_k:c.key, ...c.val()}));
+  custRecs.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+  renderCusts();
+});
+refs.attach.on('value', s => {
+  attachRecs = [];
+  s.forEach(c => attachRecs.push({_k:c.key, ...c.val()}));
+  // refresh open detail if visible
+  if(attachDelivKey && document.getElementById('det-out').classList.contains('open')) {
+    refreshAttachGrid(attachDelivKey);
+  }
+});
+refs.people.on('value', s => {
+  peopleList = [];
+  s.forEach(c => peopleList.push({_k:c.key, name:c.val()}));
+  peopleList.sort((a,b) => a.name.localeCompare(b.name));
+  renderPeople();
+});
+refs.hours.on('value', s => {
+  if(s.val()) hoursConfig = s.val();
+});
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
 function tick(){
   const n=new Date();
-  document.getElementById('clock').textContent=
-    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+
+  document.getElementById('clock').textContent =
+    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' +
     n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
-setInterval(tick,1000);tick();
+setInterval(tick,1000); tick();
 
-// tabs
-function switchTab(t,btn){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(id, btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('panel-'+t).classList.add('active');
-  if(t==='settings')renderHrsGrid();
+  document.getElementById('panel-'+id).classList.add('active');
+  if(id==='settings') renderHrsGrid();
 }
 
-// listeners
-outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));
-  outRecs.sort((a,b)=>{
-    const ad=a.date||'9999', bd=b.date||'9999';
-    if(ad!==bd)return ad<bd?-1:1;
-    return(a.created||'')<(b.created||'')?-1:1;
-  });
-  renderOut();renderDashOut();
-});
-inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();renderDashIn();});
-hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();});
-olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
-custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
-attachRef.on('value',s=>{attachRecs=[];s.forEach(c=>attachRecs.push({_k:c.key,...c.val()}));
-  if(currentDetKey&&document.getElementById('det-out').classList.contains('open'))renderAttachSection(currentDetKey);
-});
-wfRef.on('value',s=>{wfRecs=[];s.forEach(c=>wfRecs.push({_k:c.key,...c.val()}));
-  wfRecs.sort((a,b)=>{const p={High:0,Medium:1,Low:2};const pd=(p[a.priority]??1)-(p[b.priority]??1);if(pd)return pd;return(a.due||'9')<(b.due||'9')?-1:1;});
-  renderWF();renderDashWF();
-});
-peopleRef.on('value',s=>{peopleList=[];s.forEach(c=>peopleList.push({_k:c.key,name:c.val()}));
-  peopleList.sort((a,b)=>a.name.localeCompare(b.name));
-  renderPeopleList();renderWFPersonDropdowns();
-});
+// ── OVERLAY HELPERS ───────────────────────────────────────────────────────────
+function openOverlay(id){ document.getElementById(id).classList.add('open'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
+function closeDet(id){ closeOverlay(id); attachDelivKey=null; }
+function closeForm(id){ closeOverlay(id); }
 
-// ── HOURS
+// ── CUSTOMER SEARCH ───────────────────────────────────────────────────────────
+function custSearch(val, dropId){
+  const drop = document.getElementById(dropId);
+  if(!val||val.length<1){drop.style.display='none';return;}
+  const hits = custRecs.filter(c=>(c.name||'').toLowerCase().includes(val.toLowerCase())).slice(0,6);
+  if(!hits.length){drop.style.display='none';return;}
+  drop.innerHTML = hits.map(c=>`
+    <div class="csdrop-item" onmousedown="fillCust('${c._k}')">
+      <div class="csdrop-name">${esc(c.name)}</div>
+      <div class="csdrop-sub">${[c.phone,c.addr].filter(Boolean).map(esc).join(' · ')}</div>
+    </div>`).join('');
+  drop.style.display='block';
+}
+function fillCust(key){
+  const c = custRecs.find(x=>x._k===key); if(!c)return;
+  document.getElementById('o-cust').value = c.name||'';
+  document.getElementById('o-phone').value = c.phone||'';
+  document.getElementById('o-addr').value = c.addr||'';
+  hideDrop('o-cust-drop');
+}
+function hideDrop(id){ const d=document.getElementById(id); if(d)d.style.display='none'; }
+
+// person search for driver / wf assign
+function personSearch(val, dropId){
+  const drop = document.getElementById(dropId);
+  if(!val||val.length<1){drop.style.display='none';return;}
+  const hits = peopleList.filter(p=>(p.name||'').toLowerCase().includes(val.toLowerCase())).slice(0,6);
+  if(!hits.length){drop.style.display='none';return;}
+  const inputId = drop.id.replace('-drop','');
+  drop.innerHTML = hits.map(p=>`
+    <div class="csdrop-item" onmousedown="fillPerson('${inputId}','${esc(p.name)}','${dropId}')">
+      <div class="csdrop-name">${esc(p.name)}</div>
+    </div>`).join('');
+  drop.style.display='block';
+}
+function fillPerson(inputId, name, dropId){
+  const el=document.getElementById(inputId); if(el)el.value=name;
+  hideDrop(dropId);
+}
+
+// quick add customer from delivery form
+function quickAddCust(){
+  document.getElementById('form-cust-title').textContent='Add Customer';
+  ['c-name','c-phone','c-addr','c-notes'].forEach(id=>document.getElementById(id).value='');
+  editKeys.cust=null;
+  openOverlay('form-cust');
+}
+
+// ── HOURS ─────────────────────────────────────────────────────────────────────
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 function renderHrsGrid(){
-  document.getElementById('hrs-grid').innerHTML=DAYS.map(d=>{
-    const h=hoursConfig[d]||{open:'07:00',close:'17:00',closed:false};
+  document.getElementById('hrs-grid').innerHTML = DAYS.map(d=>{
+    const h=hoursConfig[d]||{o:'07:00',c:'17:00',x:false};
     return`<div class="hrs-row">
       <span class="hrs-day">${d}</span>
-      <input type="time" id="ho-${d}" value="${h.open||'07:00'}" ${h.closed?'disabled':''}>
-      <span style="font-family:'Oswald',sans-serif;color:var(--g500);font-size:.9rem">to</span>
-      <input type="time" id="hc-${d}" value="${h.close||'17:00'}" ${h.closed?'disabled':''}>
-      <label class="hrs-closed"><input type="checkbox" id="hx-${d}" ${h.closed?'checked':''} onchange="toggleClosed('${d}')"> Closed</label>
+      <input type="time" id="ho-${d}" value="${h.o||'07:00'}" ${h.x?'disabled':''}>
+      <span style="font-family:'Barlow Condensed',sans-serif;color:var(--g5)">to</span>
+      <input type="time" id="hc-${d}" value="${h.c||'17:00'}" ${h.x?'disabled':''}>
+      <label class="hrs-closed-lbl"><input type="checkbox" id="hx-${d}" ${h.x?'checked':''} onchange="toggleDay('${d}')"> Closed</label>
     </div>`;
   }).join('');
 }
-function toggleClosed(d){
+function toggleDay(d){
   const x=document.getElementById('hx-'+d).checked;
   document.getElementById('ho-'+d).disabled=x;
   document.getElementById('hc-'+d).disabled=x;
 }
 function saveHours(){
   const cfg={};
-  DAYS.forEach(d=>{cfg[d]={open:document.getElementById('ho-'+d).value,close:document.getElementById('hc-'+d).value,closed:document.getElementById('hx-'+d).checked};});
-  hrsRef.set(cfg);alert('Hours saved!');
+  DAYS.forEach(d=>{ cfg[d]={o:document.getElementById('ho-'+d).value,c:document.getElementById('hc-'+d).value,x:document.getElementById('hx-'+d).checked}; });
+  refs.hours.set(cfg);
+  alert('Hours saved!');
 }
-function fmt12(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;const ap=hr>=12?'pm':'am';return(hr%12||12)+(m!=='00'?':'+m:'')+ap;}
-function chkWarn(){
-  const w=document.getElementById('o-warn');
+function checkHrsWarn(){
+  const w=document.getElementById('o-hrs-warn'); if(!w)return;
   const dv=document.getElementById('o-date').value;
   if(!dv){w.style.display='none';return;}
   const day=new Date(dv+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
   const h=hoursConfig[day];
-  if(h&&h.closed){w.textContent=`⚠️ ${day} is marked as no deliveries.`;w.style.display='block';}
+  if(h&&h.x){w.textContent=`⚠️ ${day} is marked as no deliveries.`;w.style.display='block';}
   else w.style.display='none';
 }
 
-// ── PHOTO
-function handlePhoto(e,which){
-  const file=e.target.files[0];if(!file)return;
-  const img=new Image(),reader=new FileReader();
+// ── PHOTO HELPERS ─────────────────────────────────────────────────────────────
+function handlePhoto(e, which){
+  const file=e.target.files[0]; if(!file)return;
+  compress(file, data=>{ tmpPhotos[which]=data; renderPrev(which+'-prev',data); });
+}
+function renderPrev(id, data){
+  const el=document.getElementById(id); if(!el)return;
+  if(!data){el.innerHTML='';return;}
+  el.innerHTML=`<div class="prev-wrap"><img src="${data}" alt="photo"><button class="prev-clear" onclick="clearPrev('${id}','${id[0]}')">✕</button></div>`;
+}
+function clearPrev(prevId, which){
+  tmpPhotos[which]=null;
+  document.getElementById(prevId).innerHTML='';
+}
+function compress(file, cb){
+  const img=new Image(), reader=new FileReader();
   reader.onload=ev=>{
     img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      const MAX=800;let w=img.width,h=img.height;
-      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-      canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const data=canvas.toDataURL('image/jpeg',.7);
-      if(which==='o')tmpOPhoto=data;else tmpIPhoto=data;
-      renderPrev(which,data);
+      const MAX=900; let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;} if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+      const canvas=document.createElement('canvas'); canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      cb(canvas.toDataURL('image/jpeg',.75));
     };img.src=ev.target.result;
   };reader.readAsDataURL(file);
 }
-function renderPrev(w,data){
-  const el=document.getElementById(w+'-prev');if(!data){el.innerHTML='';return;}
-  el.innerHTML=`<div class="prev-wrap"><img src="${data}" alt="photo"><button class="prev-clear" onclick="clearPrev('${w}')">✕ Remove</button></div>`;
-}
-function clearPrev(w){
-  if(w==='o'){tmpOPhoto=null;document.getElementById('o-photo').value='';}
-  else{tmpIPhoto=null;document.getElementById('i-photo').value='';}
-  renderPrev(w,null);
-}
 
-// ── OUTBOUND CONSTANTS
-const OUT_S=['Order In','Loading','Out for Delivery','Completed'];
-const OUT_COL={'Order In':'purple','Loading':'amber','Out for Delivery':'blue','Completed':'green'};
-const S_CARD={'Order In':'s-order-in','Loading':'s-loading','Out for Delivery':'s-out','Completed':'s-completed'};
-const BDGE={'Order In':'b-order-in','Loading':'b-loading','Out for Delivery':'b-out','Completed':'b-completed',
-  'Expected':'b-expected','Received':'b-received','Partial':'b-partial','Overdue':'b-overdue'};
-const OUT_DOT={'Order In':['po','','',''],'Loading':['po','pl','',''],'Out for Delivery':['po','pl','pd',''],'Completed':['po','pl','pd','pc']};
-
-// ── OUTBOUND DETAIL OVERLAY
-function openDetOut(key){
-  currentDetKey=key;
-  const r=outRecs.find(x=>x._k===key);
-  if(!r)return;
-  document.getElementById('det-out-title').textContent=(r.ticketNum?'#'+r.ticketNum+' — ':'')+r.customer;
-  const custMatch=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
-  const custBanner=custMatch?.notes?`<div class="cust-note-banner"><div class="cust-note-banner-lbl">📌 Customer Note</div><div class="cust-note-banner-text">${esc(custMatch.notes)}</div></div>`:'';
-  const statusBtns=OUT_S.map(s=>`<button class="sbtn ${OUT_COL[s]}${s===r.status?' active-status':''}" onclick="setOutStatus('${key}','${s.replace(/'/g,"\\'")}');event.stopPropagation()" ${s===r.status?'disabled':''}>${s===r.status?'✓ ':''}${esc(s)}</button>`).join('');
-  document.getElementById('det-out-body').innerHTML=custBanner+`
-    <div class="detail-section"><div class="ds-title">Status</div><div class="status-btns">${statusBtns}</div></div>
-    <div class="detail-section"><div class="ds-title">Customer</div>
-      <div class="detail-grid">
-        ${r.ticketNum?`<div><div class="di-lbl">Ticket #</div><div class="di-val">#${esc(r.ticketNum)}</div></div>`:''}
-        <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.customer)}</div></div>
-        <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
-        <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.address||'—')}</div></div>
-      </div>
-    </div>
-    <div class="detail-section"><div class="ds-title">Order</div>
-      <div class="detail-grid">
-        <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'')}</div></div>
-        <div><div class="di-lbl">Driver</div><div class="di-val">${esc(r.driver||'—')}</div></div>
-        <div><div class="di-lbl">Date</div><div class="di-val">${fmtDate(r.date)}</div></div>
-        <div><div class="di-lbl">Window</div><div class="di-val">${esc(r.window||'—')}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
-      </div>
-    </div>
-    ${r.receivedBy?`<div class="detail-section"><div class="ds-title">Proof of Delivery</div><div class="di-lbl">Received By</div><div class="di-val">${esc(r.receivedBy)}</div></div>`:''}
-    <div class="detail-section">
-      <div class="ds-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <span>Photos &amp; Documents</span>
-        <button class="attach-add-btn" style="height:auto;border:none;background:var(--red);color:#fff;font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:3px;cursor:pointer" onclick="openAttach('${key}')">+ Add Photo</button>
-      </div>
-      <div id="attach-grid-${key}" class="attach-grid"></div>
-    </div>`;
-  renderAttachSection(key);
-  document.getElementById('det-out-edit').onclick=()=>{closeDetOut();openOutForm(key);};
-  document.getElementById('det-out-del').onclick=()=>pwDelete(()=>{outRef.child(key).remove();closeDetOut();});
-  document.getElementById('det-out-print').onclick=()=>printTicket(key);
-  document.getElementById('det-out').classList.add('open');
+// ── ATTACH PHOTOS ─────────────────────────────────────────────────────────────
+function openAttach(delivKey){
+  attachDelivKey=delivKey; tmpAttachData=null;
+  document.getElementById('att-cap').value='';
+  document.getElementById('att-file').value='';
+  document.getElementById('att-prev').innerHTML='';
+  openOverlay('form-attach');
 }
-function closeDetOut(){currentDetKey=null;document.getElementById('det-out').classList.remove('open');}
-
-function setOutStatus(key,status){
-  outRef.child(key).update({status});
-  // refresh the detail overlay if still open
-  const overlay=document.getElementById('det-out');
-  if(overlay.classList.contains('open')) openDetOut(key);
+function handleAttach(e){
+  const file=e.target.files[0]; if(!file)return;
+  compress(file, data=>{
+    tmpAttachData=data;
+    document.getElementById('att-prev').innerHTML=`<div class="prev-wrap" style="margin-top:9px"><img src="${data}" style="max-height:180px;border:1px solid var(--bd);border-radius:3px;display:block"></div>`;
+  });
+}
+function saveAttach(){
+  if(!tmpAttachData){alert('Please select a photo first.');return;}
+  refs.attach.push({delivKey:attachDelivKey,data:tmpAttachData,caption:document.getElementById('att-cap').value.trim(),created:new Date().toISOString()});
+  closeForm('form-attach');
+}
+function deleteAttach(key){ refs.attach.child(key).remove(); }
+function refreshAttachGrid(delivKey){
+  const el=document.getElementById('attach-grid'); if(!el)return;
+  const items=attachRecs.filter(a=>a.delivKey===delivKey);
+  if(!items.length){el.innerHTML='<div class="no-photos">No photos attached.</div>';return;}
+  el.innerHTML=`<div class="photo-grid">${items.map(a=>`
+    <div class="pthumb-wrap">
+      <img class="pthumb" src="${a.data}" alt="${esc(a.caption||'')}" onclick="openLB('${a._k}')">
+      <button class="pthumb-del" onclick="deleteAttach('${a._k}')">✕</button>
+    </div>`).join('')}</div>`;
+}
+function openLB(key){
+  const a=attachRecs.find(x=>x._k===key); if(!a)return;
+  document.getElementById('lb-img').src=a.data;
+  document.getElementById('lightbox').classList.add('open');
 }
 
-// ── OUTBOUND FORM
+// ── PASSWORD ──────────────────────────────────────────────────────────────────
+let _pwCb=null;
+const PW='8704494255';
+function pwDelete(cb){
+  _pwCb=cb;
+  document.getElementById('pw-inp').value='';
+  const e=document.getElementById('pw-err'); if(e)e.style.display='none';
+  openOverlay('pw-overlay');
+  setTimeout(()=>document.getElementById('pw-inp').focus(),100);
+}
+function submitPW(){
+  if(document.getElementById('pw-inp').value===PW){
+    closePW(); if(_pwCb)_pwCb(); _pwCb=null;
+  } else {
+    const e=document.getElementById('pw-err'); if(e)e.style.display='block';
+    document.getElementById('pw-inp').value='';
+    document.getElementById('pw-inp').focus();
+  }
+}
+function closePW(){ closeOverlay('pw-overlay'); _pwCb=null; }
+
+// ── OUTBOUND ──────────────────────────────────────────────────────────────────
+const OUT_S = ['Order In','Loading','Out for Delivery'];
+const OUT_COL = {'Order In':'#7B2FBE','Loading':'var(--amber)','Out for Delivery':'var(--blue)'};
+const OUT_DOT_I = {'Order In':0,'Loading':1,'Out for Delivery':2};
+const BDGE_CLS = {
+  'Order In':'b-order-in','Loading':'b-loading','Out for Delivery':'b-out',
+  'Completed':'b-completed','Expected':'b-expected','Partial':'b-partial',
+  'Overdue':'b-overdue','Received':'b-received',
+  'Open':'b-open','In Progress':'b-progress','Done':'b-done'
+};
+const S_CARD_CLS = {
+  'Order In':'s-order-in','Loading':'s-loading','Out for Delivery':'s-out',
+  'Expected':'s-expected','Partial':'s-partial','Overdue':'s-overdue','Received':'s-received'
+};
+
 function openOutForm(key){
-  editOutKey=key||null;tmpOPhoto=null;
-  document.getElementById('o-prev').innerHTML='';document.getElementById('o-photo').value='';
-  const ow=document.getElementById('o-warn');if(ow)ow.style.display='none';
+  editKeys.out=key||null; tmpPhotos.o=null;
+  renderPrev('o-prev',null);
+  const el=document.getElementById('o-photo'); if(el)el.value='';
   const r=key?outRecs.find(x=>x._k===key):null;
-  document.getElementById('fot-title').textContent=key?'Edit Delivery':'New Delivery Out';
-  document.getElementById('o-ticket').value =r?.ticketNum ||'';
-  document.getElementById('o-cust').value  =r?.customer  ||'';
-  document.getElementById('o-phone').value =r?.phone     ||'';
-  document.getElementById('o-addr').value  =r?.address   ||'';
-  document.getElementById('o-items').value =r?.items     ||'';
-  document.getElementById('o-driver').value=r?.driver    ||'';
-  document.getElementById('o-status').value=r?.status    ||'Order In';
-  document.getElementById('o-date').value  =r?.date      ||new Date().toISOString().slice(0,10);
-  document.getElementById('o-win').value   =r?.window    ||'';
-  document.getElementById('o-notes').value =r?.notes     ||'';
-  document.getElementById('o-rcvby').value =r?.receivedBy||'';
-  if(r?.photo){tmpOPhoto=r.photo;renderPrev('o',r.photo);}
-  document.getElementById('form-out').classList.add('open');
-  chkWarn();
+  document.getElementById('form-out-title').textContent=key?'Edit Delivery':'New Delivery Out';
+  document.getElementById('o-ticket').value  =r?.ticket  ||'';
+  document.getElementById('o-cust').value    =r?.customer||'';
+  document.getElementById('o-phone').value   =r?.phone   ||'';
+  document.getElementById('o-addr').value    =r?.address ||'';
+  document.getElementById('o-items').value   =r?.items   ||'';
+  document.getElementById('o-driver').value  =r?.driver  ||'';
+  document.getElementById('o-status').value  =r?.status  ||'Order In';
+  document.getElementById('o-date').value    =r?.date    ||new Date().toISOString().slice(0,10);
+  document.getElementById('o-window').value  =r?.window  ||'';
+  document.getElementById('o-notes').value   =r?.notes   ||'';
+  document.getElementById('o-rcvby').value   =r?.rcvby   ||'';
+  const w=document.getElementById('o-hrs-warn'); if(w)w.style.display='none';
+  openOverlay('form-out');
+  checkHrsWarn();
 }
-function closeOutForm(){document.getElementById('form-out').classList.remove('open');editOutKey=null;}
 
 function saveOut(){
-  const customer=document.getElementById('o-cust').value.trim();
-  const items=document.getElementById('o-items').value.trim();
-  const rec={customer,items,
-    ticketNum:document.getElementById('o-ticket').value.trim(),
-    phone:document.getElementById('o-phone').value.trim(),
-    address:document.getElementById('o-addr').value.trim(),
-    driver:document.getElementById('o-driver').value.trim(),
-    status:document.getElementById('o-status').value,
-    date:document.getElementById('o-date').value,
-    window:document.getElementById('o-win').value.trim(),
-    notes:document.getElementById('o-notes').value.trim(),
-    receivedBy:document.getElementById('o-rcvby').value.trim(),
-    photo:tmpOPhoto||'',updated:new Date().toISOString()};
-  if(editOutKey){outRef.child(editOutKey).update(rec);}
-  else{rec.created=new Date().toISOString();outRef.push(rec);}
-  closeOutForm();
+  const rec={
+    ticket:   document.getElementById('o-ticket').value.trim(),
+    customer: document.getElementById('o-cust').value.trim(),
+    phone:    document.getElementById('o-phone').value.trim(),
+    address:  document.getElementById('o-addr').value.trim(),
+    items:    document.getElementById('o-items').value.trim(),
+    driver:   document.getElementById('o-driver').value.trim(),
+    status:   document.getElementById('o-status').value,
+    date:     document.getElementById('o-date').value,
+    window:   document.getElementById('o-window').value.trim(),
+    notes:    document.getElementById('o-notes').value.trim(),
+    rcvby:    document.getElementById('o-rcvby').value.trim(),
+    updated:  new Date().toISOString()
+  };
+  if(editKeys.out){ refs.out.child(editKeys.out).update(rec); }
+  else{ rec.created=new Date().toISOString(); refs.out.push(rec); }
+  closeForm('form-out');
 }
 
-// ── RENDER OUTBOUND CARDS
+function setOutStatus(key,status){
+  refs.out.child(key).update({status,updated:new Date().toISOString()});
+  openDetOut(key); // refresh detail
+}
+
+function markCompleted(key){
+  refs.out.child(key).update({status:'Completed',updated:new Date().toISOString()});
+  closeDet('det-out');
+}
+
+function openDetOut(key){
+  attachDelivKey=key;
+  const r=outRecs.find(x=>x._k===key); if(!r)return;
+  const custNote=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
+  const noteBanner=custNote?.notes?`<div class="cust-note"><div class="cust-note-lbl">📌 Customer Note</div><div class="cust-note-txt">${esc(custNote.notes)}</div></div>`:'';
+  const dotHtml=[0,1,2].map(i=>`<div class="dot${i<=OUT_DOT_I[r.status]?' d'+i:''}"></div>`).join('');
+  const statusBtns=OUT_S.map(s=>`<button class="sbtn${s===r.status?' dim':''}" style="background:${OUT_COL[s]}" onclick="setOutStatus('${key}','${s}')" ${s===r.status?'disabled':''}>${s===r.status?'✓ ':''}${esc(s)}</button>`).join('');
+  document.getElementById('det-out-title').textContent=(r.ticket?'#'+r.ticket+' — ':'')+r.customer;
+  document.getElementById('det-out-body').innerHTML=noteBanner+`
+    <div class="dsec"><div class="dsec-title">Status</div>
+      <div class="status-btns">${statusBtns}</div>
+      <div class="dots" style="margin-top:8px">${dotHtml}</div>
+    </div>
+    <div class="dsec"><div class="dsec-title">Customer</div>
+      <div class="dgrid">
+        ${r.ticket?`<div><div class="dlbl">Ticket #</div><div class="dval">#${esc(r.ticket)}</div></div>`:''}
+        <div><div class="dlbl">Name</div><div class="dval">${esc(r.customer||'—')}</div></div>
+        <div><div class="dlbl">Phone</div><div class="dval">${esc(r.phone||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="dlbl">Address</div><div class="dval">${esc(r.address||'—')}</div></div>
+      </div>
+    </div>
+    <div class="dsec"><div class="dsec-title">Order</div>
+      <div class="dgrid">
+        <div style="grid-column:1/-1"><div class="dlbl">Items</div><div class="dval" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
+        <div><div class="dlbl">Driver</div><div class="dval">${esc(r.driver||'—')}</div></div>
+        <div><div class="dlbl">Date</div><div class="dval">${fmtDate(r.date)}</div></div>
+        <div><div class="dlbl">Window</div><div class="dval">${esc(r.window||'—')}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="dlbl">Notes</div><div class="dval" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>
+    ${r.rcvby?`<div class="dsec"><div class="dsec-title">Proof of Delivery</div><div class="dlbl">Received By</div><div class="dval">${esc(r.rcvby)}</div></div>`:''}
+    <div class="dsec">
+      <div class="dsec-title" style="display:flex;align-items:center;justify-content:space-between">
+        Photos <button class="mini-btn" onclick="openAttach('${key}')">+ Add Photo</button>
+      </div>
+      <div id="attach-grid"></div>
+    </div>
+    <div class="dsec" style="border-top:1px solid var(--bd);padding-top:12px">
+      <div class="status-btns">
+        <button class="sbtn" style="background:var(--green)" onclick="markCompleted('${key}')">✓ Mark Completed</button>
+      </div>
+    </div>`;
+  refreshAttachGrid(key);
+  document.getElementById('det-out-del-btn').onclick=()=>pwDelete(()=>{refs.out.child(key).remove();closeDet('det-out');});
+  document.getElementById('det-out-edit-btn').onclick=()=>{closeDet('det-out');openOutForm(key);};
+  document.getElementById('det-out-print-btn').onclick=()=>printTicket(key);
+  openOverlay('det-out');
+}
+
 function renderOut(){
-  const search=(document.getElementById('srch-out').value||'').toLowerCase();
-  const fStatus=(document.getElementById('filt-out-txt')?.value||'').toLowerCase();
-  let rows=outRecs.filter(r=>{
+  const srch=(document.getElementById('srch-out')?.value||'').toLowerCase();
+  const rows=outRecs.filter(r=>{
     if(r.status==='Completed')return false;
-    if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
-    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
+    if(srch&&!`${r.customer} ${r.address} ${r.driver} ${r.ticket||''}`.toLowerCase().includes(srch))return false;
     return true;
   });
-  const wrap=document.getElementById('cards-out');
-  const empty=document.getElementById('empty-out');
+  const wrap=document.getElementById('out-list');
+  const empty=document.getElementById('out-empty');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    wrap.innerHTML=rows.map(r=>{
-      const dots=(OUT_DOT[r.status]||['','','','']).map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
-      return`<div class="del-card ${S_CARD[r.status]||''}" onclick="openDetOut('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${r.ticketNum?`<span style="font-size:.85rem;color:var(--g500);font-weight:400;margin-right:6px">#${esc(r.ticketNum)}</span>`:''}${esc(r.customer)}</div>
-            <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
-          </div>
-          <div class="card-row-right">
-            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
-            <div class="prog">${dots}</div>
-          </div>
-          <div class="card-chevron">›</div>
-        </div>
-      </div>`;
-    }).join('');
+    wrap.innerHTML=rows.map(r=>outCardHtml(r)).join('');
   }
-  const total=outRecs.length,
-    orderIn=outRecs.filter(r=>r.status==='Order In').length,
-    loading=outRecs.filter(r=>r.status==='Loading').length,
-    enRoute=outRecs.filter(r=>r.status==='Out for Delivery').length,
-    completed=outRecs.filter(r=>r.status==='Completed').length;
-  document.getElementById('sum-out').innerHTML=`
-    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
-    <div class="sc purple"><div class="sc-lbl">Order In</div><div class="sc-val">${orderIn}</div></div>
-    <div class="sc amber"><div class="sc-lbl">Loading</div><div class="sc-val">${loading}</div></div>
-    <div class="sc blue"><div class="sc-lbl">En Route</div><div class="sc-val">${enRoute}</div></div>
-    <div class="sc green"><div class="sc-lbl">Completed</div><div class="sc-val">${completed}</div></div>`;
-  document.getElementById('co').textContent=outRecs.filter(r=>r.status!=='Completed').length;
+  const total=outRecs.length, oi=outRecs.filter(r=>r.status==='Order In').length,
+    ld=outRecs.filter(r=>r.status==='Loading').length,
+    or=outRecs.filter(r=>r.status==='Out for Delivery').length,
+    cp=outRecs.filter(r=>r.status==='Completed').length;
+  const s=document.getElementById('out-stats');
+  if(s)s.innerHTML=`<div class="stat red"><div class="stat-lbl">Total</div><div class="stat-val">${total}</div></div><div class="stat"><div class="stat-lbl">Order In</div><div class="stat-val">${oi}</div></div><div class="stat amber"><div class="stat-lbl">Loading</div><div class="stat-val">${ld}</div></div><div class="stat blue"><div class="stat-lbl">En Route</div><div class="stat-val">${or}</div></div><div class="stat green"><div class="stat-lbl">Completed</div><div class="stat-val">${cp}</div></div>`;
+  const p=document.getElementById('p-out'); if(p)p.textContent=outRecs.filter(r=>r.status!=='Completed').length;
 }
 
-// ── INBOUND DETAIL OVERLAY
-const IN_S=['Expected','Partial','Received'];
-const IN_COL={'Expected':'blue','Partial':'amber','Received':'green','Overdue':'blue'};
-const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
-
-function openDetIn(key){
-  const r=inRecs.find(x=>x._k===key);
-  if(!r)return;
-  document.getElementById('det-in-title').textContent=r.vendor;
-
-  const statusBtns=IN_S.map(s=>`
-    <button class="sbtn ${IN_COL[s]}${s===r.status?' active-status':''}"
-      onclick="setInStatus('${key}','${s}')"
-      ${s===r.status?'disabled':''}>
-      ${s===r.status?'✓ ':''} ${esc(s)}
-    </button>`).join('');
-
-  document.getElementById('det-in-body').innerHTML=`
-    <div class="detail-section">
-      <div class="ds-title">Status</div>
-      <div class="status-btns">${statusBtns}</div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-title">Order Info</div>
-      <div class="detail-grid">
-        <div><div class="di-lbl">Vendor</div><div class="di-val">${esc(r.vendor)}</div></div>
-        <div><div class="di-lbl">PO Number</div><div class="di-val">${esc(r.po||'—')}</div></div>
-        <div style="grid-column:1/-1"><div class="di-lbl">Items</div><div class="di-val" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
-        <div><div class="di-lbl">Quantity</div><div class="di-val">${esc(r.qty||'—')}</div></div>
-        <div><div class="di-lbl">Expected</div><div class="di-val" style="${r.status==='Overdue'?'color:var(--red)':''}">${fmtDate(r.expected)}</div></div>
-        ${r.receivedDate?`<div><div class="di-lbl">Received Date</div><div class="di-val">${fmtDate(r.receivedDate)}</div></div>`:''}
-        ${r.receivedBy?`<div><div class="di-lbl">Received By</div><div class="di-val">${esc(r.receivedBy)}</div></div>`:''}
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes / Discrepancies</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+function outCardHtml(r){
+  const dotHtml=[0,1,2].map(i=>`<div class="dot${i<=OUT_DOT_I[r.status]?' d'+i:''}"></div>`).join('');
+  return`<div class="dcard ${S_CARD_CLS[r.status]||''}" onclick="openDetOut('${r._k}')">
+    <div class="crow">
+      <div class="crow-left">
+        <div class="cname">${r.ticket?`<span style="font-size:.85rem;color:var(--g5);font-weight:500;margin-right:5px">#${esc(r.ticket)}</span>`:''}${esc(r.customer||'—')}</div>
+        <div class="cmeta">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
       </div>
-      ${r.photo?`<img class="photo-full" src="${r.photo}" alt="Receiving photo" style="margin-top:10px">`:''}
-    </div>`;
-
-  document.getElementById('det-in-edit').onclick=()=>{closeDetIn();openInForm(key);};
-  document.getElementById('det-in-del').onclick=()=>pwDelete(()=>{inRef.child(key).remove();closeDetIn();});
-  document.getElementById('det-in').classList.add('open');
-}
-function closeDetIn(){document.getElementById('det-in').classList.remove('open');}
-
-function setInStatus(key,status){
-  const upd={status};
-  if(status==='Received')upd.receivedDate=new Date().toISOString().slice(0,10);
-  inRef.child(key).update(upd);
-  const overlay=document.getElementById('det-in');
-  if(overlay.classList.contains('open')) openDetIn(key);
+      <div class="crow-right">
+        <span class="badge ${BDGE_CLS[r.status]||''}">${r.status}</span>
+        <div class="dots">${dotHtml}</div>
+      </div>
+      <div class="chev">›</div>
+    </div>
+  </div>`;
 }
 
-// ── INBOUND FORM
+// ── INBOUND ───────────────────────────────────────────────────────────────────
 function openInForm(key){
-  editInKey=key||null;tmpIPhoto=null;
-  document.getElementById('i-prev').innerHTML='';document.getElementById('i-photo').value='';
+  editKeys.in=key||null; tmpPhotos.i=null;
+  renderPrev('i-prev',null);
+  const el=document.getElementById('i-photo'); if(el)el.value='';
   const r=key?inRecs.find(x=>x._k===key):null;
-  document.getElementById('fin-title').textContent=key?'Edit Inbound':'New Inbound Order';
+  document.getElementById('form-in-title').textContent=key?'Edit Inbound':'New Inbound Order';
   document.getElementById('i-vendor').value  =r?.vendor      ||'';
   document.getElementById('i-po').value      =r?.po          ||'';
   document.getElementById('i-items').value   =r?.items       ||'';
   document.getElementById('i-qty').value     =r?.qty         ||'';
   document.getElementById('i-exp').value     =r?.expected    ||'';
   document.getElementById('i-status').value  =r?.status      ||'Expected';
-  document.getElementById('i-rcvdate').value =r?.receivedDate||'';
-  document.getElementById('i-rcvby').value   =r?.receivedBy  ||'';
+  document.getElementById('i-rcvdate').value =r?.rcvdate     ||'';
+  document.getElementById('i-rcvby').value   =r?.rcvby       ||'';
   document.getElementById('i-notes').value   =r?.notes       ||'';
-  if(r?.photo){tmpIPhoto=r.photo;renderPrev('i',r.photo);}
-  document.getElementById('form-in').classList.add('open');
+  if(r?.photo){tmpPhotos.i=r.photo;renderPrev('i-prev',r.photo);}
+  openOverlay('form-in');
 }
-function closeInForm(){document.getElementById('form-in').classList.remove('open');editInKey=null;}
 
 function saveIn(){
-  const vendor=document.getElementById('i-vendor').value.trim();
-  if(!vendor){alert('Vendor name is required.');return;}
   let status=document.getElementById('i-status').value;
   const exp=document.getElementById('i-exp').value;
   if(status==='Expected'&&exp&&exp<new Date().toISOString().slice(0,10))status='Overdue';
-  const rec={vendor,status,
-    po:document.getElementById('i-po').value.trim(),
-    items:document.getElementById('i-items').value.trim(),
-    qty:document.getElementById('i-qty').value.trim(),
-    expected:exp,
-    receivedDate:document.getElementById('i-rcvdate').value,
-    receivedBy:document.getElementById('i-rcvby').value.trim(),
-    notes:document.getElementById('i-notes').value.trim(),
-    photo:tmpIPhoto||'',updated:new Date().toISOString()};
-  if(editInKey){inRef.child(editInKey).update(rec);}
-  else{rec.created=new Date().toISOString();inRef.push(rec);}
-  closeInForm();
-}
-
-// ── RENDER INBOUND CARDS
-function renderIn(){
-  const today=new Date().toISOString().slice(0,10);
-  inRecs.forEach(r=>{if(r.status==='Expected'&&r.expected&&r.expected<today)inRef.child(r._k).update({status:'Overdue'});});
-  const search=document.getElementById('srch-in').value.toLowerCase();
-  const fS=document.getElementById('filt-in-s').value;
-  const fV=document.getElementById('filt-in-v').value;
-  const vendors=[...new Set(inRecs.map(r=>r.vendor).filter(Boolean))];
-  const vSel=document.getElementById('filt-in-v');const cv=vSel.value;
-  vSel.innerHTML='<option value="">All Vendors</option>'+vendors.map(v=>`<option value="${esc(v)}"${v===cv?' selected':''}>${esc(v)}</option>`).join('');
-  let rows=inRecs.filter(r=>{
-    if(fS&&r.status!==fS)return false;
-    if(fV&&r.vendor!==fV)return false;
-    if(search&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search))return false;
-    return true;
-  });
-  const wrap=document.getElementById('cards-in');
-  const empty=document.getElementById('empty-in');
-  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
-  else{
-    empty.style.display='none';
-    wrap.innerHTML=rows.map(r=>`
-      <div class="del-card ${IN_CARD[r.status]||''}" onclick="openDetIn('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${esc(r.vendor)}</div>
-            <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
-          </div>
-          <div class="card-row-right">
-            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
-            ${r.status==='Overdue'?`<span style="font-size:.8rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
-          </div>
-          <div class="card-chevron">›</div>
-        </div>
-      </div>`).join('');
-  }
-  const total=inRecs.length,exp=inRecs.filter(r=>r.status==='Expected').length,
-    over=inRecs.filter(r=>r.status==='Overdue').length,rcv=inRecs.filter(r=>r.status==='Received').length;
-  document.getElementById('sum-in').innerHTML=`
-    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
-    <div class="sc blue"><div class="sc-lbl">Expected</div><div class="sc-val">${exp}</div></div>
-    <div class="sc amber"><div class="sc-lbl">Overdue</div><div class="sc-val">${over}</div></div>
-    <div class="sc green"><div class="sc-lbl">Received</div><div class="sc-val">${rcv}</div></div>`;
-  document.getElementById('ci').textContent=inRecs.filter(r=>r.status!=='Received').length;
-}
-
-// ── ORDER LIST
-let editOLKey=null;
-
-function openOLForm(key){
-  editOLKey=key||null;
-  const r=key?olRecs.find(x=>x._k===key):null;
-  document.getElementById('fol-title').textContent=key?'Edit Item':'Add Item to Order';
-  document.getElementById('ol-item').value =r?.item    ||'';
-  document.getElementById('ol-qty').value  =r?.qty     ||'';
-  document.getElementById('ol-urg').value  =r?.urgency ||'Medium';
-  document.getElementById('ol-who').value  =r?.who     ||'';
-  document.getElementById('ol-notes').value=r?.notes   ||'';
-  document.getElementById('form-ol').classList.add('open');
-}
-function closeOLForm(){document.getElementById('form-ol').classList.remove('open');editOLKey=null;}
-
-function saveOL(){
-  const item=document.getElementById('ol-item').value.trim();
-  if(!item){alert('Item name is required.');return;}
   const rec={
-    item,
-    qty:     document.getElementById('ol-qty').value.trim(),
-    urgency: document.getElementById('ol-urg').value,
-    who:     document.getElementById('ol-who').value.trim(),
-    notes:   document.getElementById('ol-notes').value.trim(),
-    ordered: editOLKey ? (olRecs.find(x=>x._k===editOLKey)?.ordered||false) : false,
+    vendor:  document.getElementById('i-vendor').value.trim(),
+    po:      document.getElementById('i-po').value.trim(),
+    items:   document.getElementById('i-items').value.trim(),
+    qty:     document.getElementById('i-qty').value.trim(),
+    expected:exp, status,
+    rcvdate: document.getElementById('i-rcvdate').value,
+    rcvby:   document.getElementById('i-rcvby').value.trim(),
+    notes:   document.getElementById('i-notes').value.trim(),
+    photo:   tmpPhotos.i||'',
     updated: new Date().toISOString()
   };
-  if(editOLKey){olRef.child(editOLKey).update(rec);}
-  else{rec.created=new Date().toISOString();olRef.push(rec);}
-  closeOLForm();
+  if(editKeys.in){ refs.in.child(editKeys.in).update(rec); }
+  else{ rec.created=new Date().toISOString(); refs.in.push(rec); }
+  closeForm('form-in');
 }
 
-function toggleOrdered(key){
-  const r=olRecs.find(x=>x._k===key);
-  if(!r)return;
-  olRef.child(key).update({ordered:!r.ordered});
-  const ov=document.getElementById('det-ol');
-  if(ov.classList.contains('open'))openDetOL(key);
+function setInStatus(key,status){
+  const upd={status,updated:new Date().toISOString()};
+  if(status==='Received')upd.rcvdate=new Date().toISOString().slice(0,10);
+  refs.in.child(key).update(upd);
+  openDetIn(key);
 }
 
-function openDetOL(key){
-  const r=olRecs.find(x=>x._k===key);
-  if(!r)return;
-  document.getElementById('det-ol-title').textContent=r.item;
-  const urgIcon={High:'🔴',Medium:'🟡',Low:'🟢'};
-  document.getElementById('det-ol-body').innerHTML=`
-    <div class="detail-section">
-      <div class="ds-title">Status</div>
-      <div class="status-btns">
-        <button class="sbtn ${r.ordered?'green':'outline'}" onclick="toggleOrdered('${key}')">
-          ${r.ordered?'✓ Ordered — Mark Pending':'Mark as Ordered'}
-        </button>
+function openDetIn(key){
+  const r=inRecs.find(x=>x._k===key); if(!r)return;
+  const IN_S_BTN=['Expected','Partial','Received'];
+  const IN_COL={'Expected':'var(--blue)','Partial':'var(--amber)','Received':'var(--green)'};
+  const statusBtns=IN_S_BTN.map(s=>`<button class="sbtn${s===r.status?' dim':''}" style="background:${IN_COL[s]}" onclick="setInStatus('${key}','${s}')" ${s===r.status?'disabled':''}>${s===r.status?'✓ ':''}${esc(s)}</button>`).join('');
+  const overdue=r.status==='Overdue';
+  document.getElementById('det-in-title').textContent=r.vendor||'Inbound Order';
+  document.getElementById('det-in-body').innerHTML=`
+    <div class="dsec"><div class="dsec-title">Status</div><div class="status-btns">${statusBtns}</div></div>
+    <div class="dsec"><div class="dsec-title">Order Info</div>
+      <div class="dgrid">
+        <div><div class="dlbl">Vendor</div><div class="dval">${esc(r.vendor||'—')}</div></div>
+        <div><div class="dlbl">PO Number</div><div class="dval">${esc(r.po||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="dlbl">Items</div><div class="dval" style="white-space:pre-wrap">${esc(r.items||'—')}</div></div>
+        <div><div class="dlbl">Quantity</div><div class="dval">${esc(r.qty||'—')}</div></div>
+        <div><div class="dlbl">Expected</div><div class="dval" style="${overdue?'color:var(--red);font-weight:700':''}">${fmtDate(r.expected)}${overdue?' ⚠️':''}</div></div>
+        ${r.rcvdate?`<div><div class="dlbl">Received Date</div><div class="dval">${fmtDate(r.rcvdate)}</div></div>`:''}
+        ${r.rcvby?`<div><div class="dlbl">Received By</div><div class="dval">${esc(r.rcvby)}</div></div>`:''}
+        ${r.notes?`<div style="grid-column:1/-1"><div class="dlbl">Notes</div><div class="dval" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
       </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-title">Item Info</div>
-      <div class="detail-grid">
-        <div style="grid-column:1/-1"><div class="di-lbl">Item</div><div class="di-val">${esc(r.item)}</div></div>
-        <div><div class="di-lbl">Qty on Hand</div><div class="di-val">${esc(r.qty||'—')}</div></div>
-        <div><div class="di-lbl">Urgency</div><div class="di-val">${urgIcon[r.urgency]||''} ${esc(r.urgency||'—')}</div></div>
-        <div><div class="di-lbl">Added By</div><div class="di-val">${esc(r.who||'—')}</div></div>
-        <div><div class="di-lbl">Date Added</div><div class="di-val">${fmtDate(r.created?.slice(0,10))}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
-      </div>
+      ${r.photo?`<img src="${r.photo}" style="max-width:100%;margin-top:10px;border:1px solid var(--bd);border-radius:3px" alt="photo">`:''}
     </div>`;
-  document.getElementById('det-ol-edit').onclick=()=>{closeDetOL();openOLForm(key);};
-  document.getElementById('det-ol-del').onclick=()=>{if(confirm('Remove this item?')){olRef.child(key).remove();closeDetOL();}};
-  document.getElementById('det-ol').classList.add('open');
+  document.getElementById('det-in-del-btn').onclick=()=>pwDelete(()=>{refs.in.child(key).remove();closeDet('det-in');});
+  document.getElementById('det-in-edit-btn').onclick=()=>{closeDet('det-in');openInForm(key);};
+  openOverlay('det-in');
 }
-function closeDetOL(){document.getElementById('det-ol').classList.remove('open');}
 
-function renderOL(){
-  const filt=document.getElementById('filt-ol').value;
-  const furg=document.getElementById('filt-ol-urg').value;
-  let rows=olRecs.filter(r=>{
-    if(filt==='pending'&&r.ordered)return false;
-    if(filt==='ordered'&&!r.ordered)return false;
-    if(furg&&r.urgency!==furg)return false;
+function renderIn(){
+  const today=new Date().toISOString().slice(0,10);
+  inRecs.forEach(r=>{if(r.status==='Expected'&&r.expected&&r.expected<today)refs.in.child(r._k).update({status:'Overdue'});});
+  const srch=(document.getElementById('srch-in')?.value||'').toLowerCase();
+  const rows=inRecs.filter(r=>{
+    if(r.status==='Received')return false;
+    if(srch&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(srch))return false;
     return true;
   });
-  const wrap=document.getElementById('cards-ol');
-  const empty=document.getElementById('empty-ol');
-  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
-  else{
-    empty.style.display='none';
-    const urgIcon={High:'🔴',Medium:'🟡',Low:'🟢'};
-    wrap.innerHTML=rows.map(r=>`
-      <div class="ol-card urg-${r.urgency||'Medium'}${r.ordered?' is-ordered':''}" onclick="openDetOL('${r._k}')">
-        <div class="ol-row">
-          <div class="ol-row-left">
-            <div class="ol-item-name${r.ordered?' ordered':''}">${esc(r.item)}</div>
-            <div class="ol-meta">${[r.qty?'On hand: '+r.qty:'',r.who?'Added by '+r.who:''].filter(Boolean).join(' · ')}</div>
-          </div>
-          <div class="ol-row-right">
-            ${r.ordered
-              ?'<span class="ordered-badge">✓ Ordered</span>'
-              :`<span class="urg-badge urg-${r.urgency||'Medium'}">${urgIcon[r.urgency]||''} ${esc(r.urgency||'Medium')}</span>`}
-          </div>
-          <div class="card-chevron">›</div>
-        </div>
-      </div>`).join('');
-  }
-  const pending=olRecs.filter(r=>!r.ordered).length;
-  document.getElementById('col').textContent=pending;
-}
-
-// ── HISTORY
-function renderHistory(){
-  const search=(document.getElementById('srch-hist').value||'').toLowerCase();
-  const month=document.getElementById('filt-hist-month').value; // yyyy-mm
-  const completed=outRecs.filter(r=>{
-    if(r.status!=='Completed')return false;
-    if(search&&!`${r.customer} ${r.address} ${r.driver}`.toLowerCase().includes(search))return false;
-    if(month&&r.date&&!r.date.startsWith(month))return false;
-    return true;
-  }).sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
-  const wrap=document.getElementById('cards-hist');
-  const empty=document.getElementById('empty-hist');
-  if(!completed.length){wrap.innerHTML='';empty.style.display='block';}
-  else{
-    empty.style.display='none';
-    wrap.innerHTML=completed.map(r=>`
-      <div class="hist-card" onclick="openDetOut('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${esc(r.customer)}</div>
-            <div class="card-line2">${[r.address,fmtDate(r.date),r.driver?'Driver: '+r.driver:''].filter(Boolean).join(' · ')}</div>
-          </div>
-          <div class="card-row-right">
-            <span class="badge b-completed">Completed</span>
-            ${r.photo?'<span style="font-size:.85rem">📷</span>':''}
-          </div>
-          <div class="card-chevron">›</div>
-        </div>
-      </div>`).join('');
-  }
-}
-
-// ── CUSTOMERS
-let editCustKey=null;
-function openCustForm(key){
-  editCustKey=key||null;
-  const r=key?custRecs.find(x=>x._k===key):null;
-  document.getElementById('fcust-title').textContent=key?'Edit Customer':'Add Customer Notes';
-  document.getElementById('c-name').value =r?.name  ||'';
-  document.getElementById('c-phone').value=r?.phone ||'';
-  document.getElementById('c-addr').value =r?.addr  ||'';
-  document.getElementById('c-notes').value=r?.notes ||'';
-  document.getElementById('form-cust').classList.add('open');
-}
-function closeCustForm(){document.getElementById('form-cust').classList.remove('open');editCustKey=null;}
-function saveCust(){
-  const name=document.getElementById('c-name').value.trim();
-  if(!name){alert('Customer name is required.');return;}
-  const rec={name,phone:document.getElementById('c-phone').value.trim(),addr:document.getElementById('c-addr').value.trim(),notes:document.getElementById('c-notes').value.trim(),updated:new Date().toISOString()};
-  if(editCustKey){custRef.child(editCustKey).update(rec);}
-  else{rec.created=new Date().toISOString();custRef.push(rec);}
-  closeCustForm();
-}
-function openDetCust(key){
-  const r=custRecs.find(x=>x._k===key);if(!r)return;
-  document.getElementById('det-cust-title').textContent=r.name;
-  // delivery count for this customer
-  const delCount=outRecs.filter(d=>(d.customer||'').toLowerCase().trim()===(r.name||'').toLowerCase().trim()).length;
-  document.getElementById('det-cust-body').innerHTML=`
-    <div class="detail-section">
-      <div class="ds-title">Customer Info</div>
-      <div class="detail-grid">
-        <div><div class="di-lbl">Name</div><div class="di-val">${esc(r.name)}</div></div>
-        <div><div class="di-lbl">Phone</div><div class="di-val">${esc(r.phone||'—')}</div></div>
-        <div style="grid-column:1/-1"><div class="di-lbl">Address</div><div class="di-val">${esc(r.addr||'—')}</div></div>
-        <div><div class="di-lbl">Total Deliveries</div><div class="di-val">${delCount}</div></div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-title">📌 Notes (shown on every delivery)</div>
-      <div style="background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:12px 14px;font-size:1rem;font-weight:600;line-height:1.5;white-space:pre-wrap">${esc(r.notes||'No notes yet.')}</div>
-    </div>`;
-  document.getElementById('det-cust-edit').onclick=()=>{closeDetCust();openCustForm(key);};
-  document.getElementById('det-cust-del').onclick=()=>pwDelete(()=>{custRef.child(key).remove();closeDetCust();});
-  document.getElementById('det-cust').classList.add('open');
-}
-function closeDetCust(){document.getElementById('det-cust').classList.remove('open');}
-function renderCusts(){
-  const search=(document.getElementById('srch-cust').value||'').toLowerCase();
-  let rows=custRecs.filter(r=>!search||`${r.name} ${r.phone} ${r.addr}`.toLowerCase().includes(search));
-  const wrap=document.getElementById('cards-cust');
-  const empty=document.getElementById('empty-cust');
+  const wrap=document.getElementById('in-list');
+  const empty=document.getElementById('in-empty');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
     wrap.innerHTML=rows.map(r=>`
-      <div class="del-card" style="border-left-color:var(--amber)" onclick="openDetCust('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${esc(r.name)}</div>
-            <div class="card-line2">${[r.phone,r.addr].filter(Boolean).map(esc).join(' · ')}</div>
+      <div class="dcard ${S_CARD_CLS[r.status]||''}" onclick="openDetIn('${r._k}')">
+        <div class="crow">
+          <div class="crow-left">
+            <div class="cname">${esc(r.vendor||'—')}</div>
+            <div class="cmeta">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
           </div>
-          <div class="card-row-right" style="max-width:160px;text-align:right">
-            <div style="font-size:.82rem;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc((r.notes||'').slice(0,40)+(r.notes&&r.notes.length>40?'…':''))}</div>
+          <div class="crow-right">
+            <span class="badge ${BDGE_CLS[r.status]||''}">${r.status}</span>
+            ${r.status==='Overdue'?`<span style="font-size:.78rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
           </div>
-          <div class="card-chevron">›</div>
+          <div class="chev">›</div>
         </div>
       </div>`).join('');
   }
+  const exp=inRecs.filter(r=>r.status==='Expected').length,
+    ov=inRecs.filter(r=>r.status==='Overdue').length,
+    rcv=inRecs.filter(r=>r.status==='Received').length;
+  const s=document.getElementById('in-stats');
+  if(s)s.innerHTML=`<div class="stat red"><div class="stat-lbl">Total</div><div class="stat-val">${inRecs.length}</div></div><div class="stat blue"><div class="stat-lbl">Expected</div><div class="stat-val">${exp}</div></div><div class="stat amber"><div class="stat-lbl">Overdue</div><div class="stat-val">${ov}</div></div><div class="stat green"><div class="stat-lbl">Received</div><div class="stat-val">${rcv}</div></div>`;
+  const p=document.getElementById('p-in'); if(p)p.textContent=inRecs.filter(r=>r.status!=='Received').length;
 }
 
-// ── PRINT TICKET
-function printTicket(key){
-  const r=outRecs.find(x=>x._k===key);if(!r)return;
-  const now=new Date();
-  const custMatch=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
-  const pa=document.getElementById('print-area');
-  pa.style.display='block';
-  pa.innerHTML=`<div class="print-ticket">
-    <div class="pt-header">
-      <div class="pt-logo">MILLER <span>HARDWARE</span><small>EST. 1931 · YELLVILLE, AR</small></div>
-      <div class="pt-meta">
-        Delivery Ticket<br>
-        Printed: ${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}<br>
-        ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}
-      </div>
-    </div>
-    <div class="pt-title">Delivery Ticket</div>
-    <div class="pt-section">
-      <div class="pt-section-title">Customer</div>
-      <div class="pt-grid">
-        <div class="pt-field"><label>Name</label><span>${esc(r.customer)}</span></div>
-        <div class="pt-field"><label>Phone</label><span>${esc(r.phone||'—')}</span></div>
-        <div class="pt-field" style="grid-column:1/-1"><label>Delivery Address</label><span>${esc(r.address||'—')}</span></div>
-      </div>
-    </div>
-    <div class="pt-section">
-      <div class="pt-section-title">Order Details</div>
-      <div class="pt-items">${esc(r.items||'')}</div>
-    </div>
-    <div class="pt-section">
-      <div class="pt-section-title">Delivery Info</div>
-      <div class="pt-grid">
-        <div class="pt-field"><label>Date</label><span>${fmtDate(r.date)}</span></div>
-        <div class="pt-field"><label>Time Window</label><span>${esc(r.window||'—')}</span></div>
-        <div class="pt-field"><label>Driver</label><span>${esc(r.driver||'—')}</span></div>
-        <div class="pt-field"><label>Status</label><span>${esc(r.status)}</span></div>
-        ${r.notes?`<div class="pt-field" style="grid-column:1/-1"><label>Notes</label><span>${esc(r.notes)}</span></div>`:''}
-      </div>
-    </div>
-    ${custMatch?.notes?`<div class="pt-section"><div class="pt-section-title">📌 Customer Notes</div><div style="background:#FFF8E1;border:1px solid #F0C040;padding:8px 12px;font-size:.9rem;font-weight:600">${esc(custMatch.notes)}</div></div>`:''}
-    <div class="pt-section">
-      <div class="pt-section-title">Proof of Delivery</div>
-      <div class="pt-field"><label>Received By (print name)</label><span>${esc(r.receivedBy||'')}</span></div>
-      ${r.photo?`<img class="pt-photo" src="${r.photo}" alt="Delivery photo">`:
-      `<div class="pt-sig-area"><div class="pt-sig-line">Customer Signature</div></div>`}
-    </div>
-    <div class="pt-footer">MILLER HARDWARE CO. · YELLVILLE &amp; HARRISON, AR · EST. 1931</div>
-  </div>`;
-  setTimeout(()=>{window.print();pa.style.display='none';},100);
-}
-
-// ── CUSTOMER SEARCH DROPDOWN
-function custSearch(val){
-  const drop=document.getElementById('cust-drop');
-  if(!val||val.length<1){drop.style.display='none';return;}
-  const matches=custRecs.filter(c=>(c.name||'').toLowerCase().includes(val.toLowerCase())).slice(0,6);
-  if(!matches.length){drop.style.display='none';return;}
-  drop.innerHTML=matches.map(c=>`
-    <div class="cust-drop-item" onmousedown="fillCust('${c._k}')">
-      <div class="cdi-name">${esc(c.name)}</div>
-      <div class="cdi-sub">${[c.phone,c.addr].filter(Boolean).map(esc).join(' · ')}</div>
-    </div>`).join('');
-  drop.style.display='block';
-}
-function fillCust(key){
-  const c=custRecs.find(x=>x._k===key);if(!c)return;
-  document.getElementById('o-cust').value=c.name||'';
-  document.getElementById('o-phone').value=c.phone||'';
-  document.getElementById('o-addr').value=c.addr||'';
-  hideCustDrop();
-}
-function hideCustDrop(){const d=document.getElementById('cust-drop');if(d)d.style.display='none';}
-
-// ── ATTACHMENTS
-let attachDeliveryKey=null;
-function openAttach(deliveryKey){
-  attachDeliveryKey=deliveryKey;
-  tmpAttachData=null;tmpAttachType=null;
-  document.getElementById('attach-caption').value='';
-  document.getElementById('attach-file').value='';
-  document.getElementById('attach-prev').innerHTML='';
-  document.getElementById('overlay-attach').classList.add('open');
-}
-function closeAttach(){document.getElementById('overlay-attach').classList.remove('open');attachDeliveryKey=null;}
-
-function handleAttachFile(e){
-  const file=e.target.files[0];if(!file)return;
-  tmpAttachType=file.type.startsWith('image/')?'image':'pdf';
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    tmpAttachData=ev.target.result;
-    if(tmpAttachType==='image'){
-      // compress
-      const img=new Image();
-      img.onload=()=>{
-        const canvas=document.createElement('canvas');
-        const MAX=900;let w=img.width,h=img.height;
-        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-        canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
-        tmpAttachData=canvas.toDataURL('image/jpeg',.75);
-        document.getElementById('attach-prev').innerHTML=`<img src="${tmpAttachData}" style="max-height:120px;margin-top:8px;border:1px solid var(--bd);border-radius:3px">`;
-      };img.src=ev.target.result;
-    } else {
-      document.getElementById('attach-prev').innerHTML=`<div style="margin-top:8px;padding:10px;background:var(--g50);border:1px solid var(--bd);border-radius:3px;font-family:'Oswald',sans-serif;font-size:.9rem;color:var(--red)">📄 PDF selected</div>`;
-    }
-  };
-  reader.readAsDataURL(file);
-}
-function saveAttach(){
-  if(!tmpAttachData){alert('Please select a file first.');return;}
-  if(!attachDeliveryKey){closeAttach();return;}
-  const caption=document.getElementById('attach-caption').value.trim();
-  attachRef.push({
-    deliveryKey:attachDeliveryKey,
-    data:tmpAttachData,
-    type:tmpAttachType||'image',
-    caption,
-    created:new Date().toISOString()
-  });
-  closeAttach();
-}
-function deleteAttach(key){
-  if(!confirm('Remove this attachment?'))return;
-  attachRef.child(key).remove();
-}
-function renderAttachSection(deliveryKey){
-  const grid=document.getElementById('attach-grid-'+deliveryKey);
-  if(!grid)return;
-  const items=attachRecs.filter(a=>a.deliveryKey===deliveryKey);
-  if(!items.length){grid.innerHTML=`<div style="grid-column:1/-1;font-size:.88rem;color:var(--g500);font-style:italic;padding:6px 0">No photos or documents yet.</div>`;return;}
-  grid.innerHTML=items.map(a=>`
-    <div class="attach-item">
-      ${a.type==='image'
-        ?`<img src="${a.data}" alt="${esc(a.caption||'photo')}" onclick="openLightbox('${a._k}')">`
-        :`<div class="attach-pdf" onclick="openPDF('${a._k}')">📄<span style="font-size:.65rem;margin-top:3px">PDF</span></div>`}
-      <div class="attach-cap">${esc(a.caption||fmtDT(a.created))}</div>
-      <button class="attach-del" onclick="deleteAttach('${a._k}')" title="Remove">✕</button>
-    </div>`).join('');
-}
-function openLightbox(key){
-  const a=attachRecs.find(x=>x._k===key);if(!a)return;
-  document.getElementById('lightbox-img').src=a.data;
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
-function openPDF(key){
-  const a=attachRecs.find(x=>x._k===key);if(!a)return;
-  const win=window.open();win.document.write(`<iframe src="${a.data}" style="width:100%;height:100%;border:none"></iframe>`);
-}
-
-// ── EXPORT & BACKUP
-function csvRow(arr){
-  return arr.map(v=>{
-    const s=String(v==null?'':v).replace(/"/g,'""');
-    return /[",\n\r]/.test(s)?`"${s}"`:s;
-  }).join(',')+'\r\n';
-}
-function downloadFile(content,filename,mime){
-  const blob=new Blob([content],{type:mime});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=filename;
-  document.body.appendChild(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},500);
-  showExportStatus('✓ '+filename+' downloaded');
-}
-function showExportStatus(msg){
-  const el=document.getElementById('export-status');
-  el.textContent=msg;el.style.display='block';
-  setTimeout(()=>el.style.display='none',3000);
-}
-function todayStr(){return new Date().toISOString().slice(0,10);}
-
-function exportCSV(which){
-  let rows='',filename='';
-  if(which==='out'){
-    filename=`miller-deliveries-out-${todayStr()}.csv`;
-    rows=csvRow(['Ticket #','Customer','Phone','Address','Items','Driver','Status','Date','Window','Received By','Notes','Created','Updated']);
-    outRecs.forEach(r=>rows+=csvRow([r.ticketNum||'',r.customer||'',r.phone||'',r.address||'',r.items||'',r.driver||'',r.status||'',r.date||'',r.window||'',r.receivedBy||'',r.notes||'',r.created?r.created.slice(0,10):'',r.updated?r.updated.slice(0,10):'']));
-  } else if(which==='in'){
-    filename=`miller-deliveries-in-${todayStr()}.csv`;
-    rows=csvRow(['Vendor','PO Number','Items','Quantity','Expected Date','Status','Received Date','Received By','Notes','Created']);
-    inRecs.forEach(r=>rows+=csvRow([r.vendor||'',r.po||'',r.items||'',r.qty||'',r.expected||'',r.status||'',r.receivedDate||'',r.receivedBy||'',r.notes||'',r.created?r.created.slice(0,10):'']));
-  } else if(which==='customers'){
-    filename=`miller-customers-${todayStr()}.csv`;
-    rows=csvRow(['Name','Phone','Address','Notes','Created']);
-    custRecs.forEach(r=>rows+=csvRow([r.name||'',r.phone||'',r.addr||'',r.notes||'',r.created?r.created.slice(0,10):'']));
-  } else if(which==='orderlist'){
-    filename=`miller-order-list-${todayStr()}.csv`;
-    rows=csvRow(['Item','Qty on Hand','Urgency','Added By','Notes','Status','Created']);
-    olRecs.forEach(r=>rows+=csvRow([r.item||'',r.qty||'',r.urgency||'',r.who||'',r.notes||'',r.ordered?'Ordered':'Pending',r.created?r.created.slice(0,10):'']));
-  }
-  if(rows) downloadFile('\uFEFF'+rows, filename, 'text/csv;charset=utf-8');
-}
-
-function exportJSON(){
-  const backup={
-    exportDate: new Date().toISOString(),
-    source: 'Miller Hardware Delivery Log — Yellville',
-    deliveries_out: outRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
-    deliveries_in:  inRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
-    customers:      custRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
-    order_list:     olRecs.map(({_k,...r})=>({firebaseKey:_k,...r}))
-  };
-  downloadFile(JSON.stringify(backup,null,2),`miller-delivery-backup-${todayStr()}.json`,'application/json');
-}
-
-// ── PEOPLE MANAGEMENT
-function addPerson(){
-  const name=document.getElementById('person-inp').value.trim();
-  if(!name)return;
-  // check duplicate
-  if(peopleList.find(p=>p.name.toLowerCase()===name.toLowerCase())){alert('That name is already in the list.');return;}
-  peopleRef.push(name);
-  document.getElementById('person-inp').value='';
-}
-function deletePerson(key){
-  if(!confirm('Remove this person?'))return;
-  peopleRef.child(key).remove();
-}
-function renderPeopleList(){
-  const wrap=document.getElementById('people-list');
-  if(!wrap)return;
-  if(!peopleList.length){wrap.innerHTML='<div style="font-size:.9rem;color:var(--g500);font-style:italic">No people added yet.</div>';return;}
-  wrap.innerHTML=peopleList.map(p=>`
-    <div class="person-row">
-      <span class="person-name">${esc(p.name)}</span>
-      <button class="person-del" onclick="deletePerson('${p._k}')">✕ Remove</button>
-    </div>`).join('');
-}
-function renderWFPersonDropdowns(){
-  // no-op now — person field is a text search input, not a dropdown
-}
-
-// ── WORKFLOW TASKS
-let editWFKey=null;
-const WF_STATUSES=['Open','In Progress','Done'];
-const WF_STATUS_COL={'Open':'purple','In Progress':'blue','Done':'green'};
-const WF_STATUS_BADGE={'Open':'badge-wf-open','In Progress':'badge-wf-progress','Done':'badge-wf-done'};
-const WF_PRI_ICON={High:'🔴',Medium:'🟡',Low:'🟢'};
-const WF_PRI_COL={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
-
+// ── WORKFLOW ──────────────────────────────────────────────────────────────────
 function openWFForm(key){
-  editWFKey=key||null;
+  editKeys.wf=key||null;
   const r=key?wfRecs.find(x=>x._k===key):null;
-  document.getElementById('fwf-title').textContent=key?'Edit Task':'New Task';
+  document.getElementById('form-wf-title').textContent=key?'Edit Task':'New Task';
   document.getElementById('wf-task').value    =r?.task    ||'';
   document.getElementById('wf-person').value  =r?.person  ||'';
   document.getElementById('wf-priority').value=r?.priority||'Medium';
   document.getElementById('wf-due').value     =r?.due     ||'';
   document.getElementById('wf-status').value  =r?.status  ||'Open';
   document.getElementById('wf-notes').value   =r?.notes   ||'';
-  document.getElementById('form-wf').classList.add('open');
+  openOverlay('form-wf');
 }
-function closeWFForm(){document.getElementById('form-wf').classList.remove('open');editWFKey=null;}
-
-// person search dropdown in workflow form
-function wfPersonSearch(val){
-  const drop=document.getElementById('wf-person-drop');
-  if(!val||!val.trim()){drop.style.display='none';return;}
-  const matches=peopleList.filter(p=>(p.name||'').toLowerCase().includes(val.toLowerCase())).slice(0,6);
-  if(!matches.length){drop.style.display='none';return;}
-  drop.innerHTML=matches.map(p=>`
-    <div class="cust-drop-item" onmousedown="fillWFPerson('${esc(p.name)}')">
-      <div class="cdi-name">${esc(p.name)}</div>
-    </div>`).join('');
-  drop.style.display='block';
-}
-function fillWFPerson(name){
-  document.getElementById('wf-person').value=name;
-  hideWFDrop();
-}
-function hideWFDrop(){const d=document.getElementById('wf-person-drop');if(d)d.style.display='none';}
 
 function saveWF(){
   const task=document.getElementById('wf-task').value.trim();
@@ -1792,205 +1253,414 @@ function saveWF(){
     notes:   document.getElementById('wf-notes').value.trim(),
     updated: new Date().toISOString()
   };
-  if(editWFKey){wfRef.child(editWFKey).update(rec);}
-  else{rec.created=new Date().toISOString();wfRef.push(rec);}
-  closeWFForm();
+  if(editKeys.wf){ refs.wf.child(editKeys.wf).update(rec); }
+  else{ rec.created=new Date().toISOString(); refs.wf.push(rec); }
+  closeForm('form-wf');
 }
 
 function setWFStatus(key,status){
-  wfRef.child(key).update({status,updated:new Date().toISOString()});
-  const ov=document.getElementById('det-wf');
-  if(ov.classList.contains('open'))openDetWF(key);
+  refs.wf.child(key).update({status,updated:new Date().toISOString()});
+  openDetWF(key);
 }
 
 function openDetWF(key){
-  const r=wfRecs.find(x=>x._k===key);if(!r)return;
-  document.getElementById('det-wf-title').textContent=r.task.length>40?r.task.slice(0,40)+'…':r.task;
-  const statusBtns=WF_STATUSES.map(s=>`
-    <button class="sbtn ${WF_STATUS_COL[s]}${s===r.status?' active-status':''}"
-      onclick="setWFStatus('${key}','${s}')" ${s===r.status?'disabled':''}>
-      ${s===r.status?'✓ ':''}${esc(s)}
-    </button>`).join('');
+  const r=wfRecs.find(x=>x._k===key); if(!r)return;
+  const WF_S=['Open','In Progress','Done'];
+  const WF_COL={'Open':'#7B2FBE','In Progress':'var(--blue)','Done':'var(--green)'};
+  const statusBtns=WF_S.map(s=>`<button class="sbtn${s===r.status?' dim':''}" style="background:${WF_COL[s]}" onclick="setWFStatus('${key}','${s}')" ${s===r.status?'disabled':''}>${s===r.status?'✓ ':''}${esc(s)}</button>`).join('');
   const overdue=r.due&&r.due<new Date().toISOString().slice(0,10)&&r.status!=='Done';
+  document.getElementById('det-wf-title').textContent=r.task.length>40?r.task.slice(0,40)+'…':r.task;
   document.getElementById('det-wf-body').innerHTML=`
-    <div class="detail-section">
-      <div class="ds-title">Status</div>
-      <div class="status-btns">${statusBtns}</div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-title">Task</div>
-      <div style="font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;margin-bottom:12px">${esc(r.task)}</div>
-      <div class="detail-grid">
-        <div><div class="di-lbl">Assigned To</div><div class="di-val">${esc(r.person||'Unassigned')}</div></div>
-        <div><div class="di-lbl">Priority</div><div class="di-val">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'—')}</div></div>
-        <div><div class="di-lbl">Due Date</div><div class="di-val" style="${overdue?'color:var(--red);font-weight:700':''}">${fmtDate(r.due)}${overdue?' ⚠️':''}</div></div>
-        <div><div class="di-lbl">Created</div><div class="di-val">${fmtDate(r.created?.slice(0,10))}</div></div>
-        ${r.notes?`<div style="grid-column:1/-1"><div class="di-lbl">Notes</div><div class="di-val" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+    <div class="dsec"><div class="dsec-title">Status</div><div class="status-btns">${statusBtns}</div></div>
+    <div class="dsec"><div class="dsec-title">Task</div>
+      <div style="font-size:1rem;font-weight:600;white-space:pre-wrap;margin-bottom:12px">${esc(r.task)}</div>
+      <div class="dgrid">
+        <div><div class="dlbl">Assigned To</div><div class="dval">${esc(r.person||'Unassigned')}</div></div>
+        <div><div class="dlbl">Priority</div><div class="dval">${{High:'🔴',Medium:'🟡',Low:'🟢'}[r.priority]||''} ${esc(r.priority||'—')}</div></div>
+        <div><div class="dlbl">Due</div><div class="dval" style="${overdue?'color:var(--red);font-weight:700':''}">${fmtDate(r.due)}${overdue?' ⚠️':''}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="dlbl">Notes</div><div class="dval" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
       </div>
     </div>`;
-  document.getElementById('det-wf-edit').onclick=()=>{closeDetWF();openWFForm(key);};
-  document.getElementById('det-wf-del').onclick=()=>{if(confirm('Delete this task?')){wfRef.child(key).remove();closeDetWF();}};
-  document.getElementById('det-wf').classList.add('open');
+  document.getElementById('det-wf-del-btn').onclick=()=>{if(confirm('Delete this task?')){refs.wf.child(key).remove();closeDet('det-wf');}};
+  document.getElementById('det-wf-edit-btn').onclick=()=>{closeDet('det-wf');openWFForm(key);};
+  openOverlay('det-wf');
 }
-function closeDetWF(){document.getElementById('det-wf').classList.remove('open');}
 
 function wfCardHtml(r){
-  const today=new Date().toISOString().slice(0,10);
-  const overdue=r.due&&r.due<today&&r.status!=='Done';
-  const isDone=r.status==='Done';
+  const overdue=r.due&&r.due<new Date().toISOString().slice(0,10)&&r.status!=='Done';
+  const PRI_COL={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
   const meta=[r.person?'👤 '+r.person:'',r.due?(overdue?'⚠️ Overdue: ':'Due: ')+fmtDate(r.due):''].filter(Boolean).join(' · ');
-  return`<div class="wf-card p-${r.priority||'Medium'} s-${(r.status||'').replace(' ','-')}" onclick="openDetWF('${r._k}')">
+  return`<div class="wf-card p-${r.priority||'Medium'}" onclick="openDetWF('${r._k}')">
     <div class="wf-row">
-      <div class="wf-row-left">
-        <div class="wf-task-name${isDone?' done-strike':''}">${esc(r.task)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="wf-task${r.status==='Done'?' struck':''}">${esc(r.task)}</div>
         <div class="wf-meta" style="${overdue?'color:var(--red)':''}">${meta||'No assignment'}</div>
       </div>
-      <div class="wf-row-right">
-        <span class="badge ${WF_STATUS_BADGE[r.status]||''}">${r.status}</span>
-        <span style="font-size:.8rem;color:${WF_PRI_COL[r.priority]||'var(--g500)'};font-weight:600">${WF_PRI_ICON[r.priority]||''} ${esc(r.priority||'')}</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+        <span class="badge ${BDGE_CLS[r.status]||''}">${r.status}</span>
+        <span style="font-size:.78rem;color:${PRI_COL[r.priority]||'var(--g5)'};font-weight:600">${{High:'🔴',Medium:'🟡',Low:'🟢'}[r.priority]||''} ${esc(r.priority||'')}</span>
       </div>
-      <div class="card-chevron">›</div>
+      <div class="chev">›</div>
     </div>
   </div>`;
 }
 
 function renderWF(){
-  const search=(document.getElementById('srch-wf')?.value||'').toLowerCase();
-  const fStatus=(document.getElementById('filt-wf-status-txt')?.value||'').toLowerCase();
-  const fPriority=(document.getElementById('filt-wf-priority-txt')?.value||'').toLowerCase();
-  const rows=wfRecs.filter(r=>{
-    if(fStatus   &&!(r.status  ||'').toLowerCase().includes(fStatus))   return false;
-    if(fPriority &&!(r.priority||'').toLowerCase().includes(fPriority)) return false;
-    if(search    &&!`${r.task} ${r.person}`.toLowerCase().includes(search)) return false;
-    return true;
-  });
-  const wrap=document.getElementById('cards-wf');
-  const empty=document.getElementById('empty-wf');
+  const srch=(document.getElementById('srch-wf')?.value||'').toLowerCase();
+  const rows=wfRecs.filter(r=>!srch||`${r.task} ${r.person}`.toLowerCase().includes(srch));
+  const wrap=document.getElementById('wf-list');
+  const empty=document.getElementById('wf-empty');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{empty.style.display='none';wrap.innerHTML=rows.map(wfCardHtml).join('');}
-  const active=wfRecs.filter(r=>r.status!=='Done').length;
-  document.getElementById('cwf').textContent=active;
+  const p=document.getElementById('p-wf'); if(p)p.textContent=wfRecs.filter(r=>r.status!=='Done').length;
 }
 
-// ── DASHBOARD RENDERS
-function renderDashOut(){
-  const search=(document.getElementById('srch-dash-out')?.value||'').toLowerCase();
-  const fStatus=(document.getElementById('filt-dash-status')?.value||'').toLowerCase();
-  const rows=outRecs.filter(r=>{
-    if(r.status==='Completed')return false;
-    if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
-    if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
-    return true;
-  });
-  const wrap=document.getElementById('cards-dash-out');
-  const empty=document.getElementById('empty-dash-out');
+// ── ORDER LIST ────────────────────────────────────────────────────────────────
+function openOLForm(key){
+  editKeys.ol=key||null;
+  const r=key?olRecs.find(x=>x._k===key):null;
+  document.getElementById('form-ol-title').textContent=key?'Edit Item':'Add to Order List';
+  document.getElementById('ol-item').value =r?.item    ||'';
+  document.getElementById('ol-qty').value  =r?.qty     ||'';
+  document.getElementById('ol-urg').value  =r?.urgency ||'Medium';
+  document.getElementById('ol-who').value  =r?.who     ||'';
+  document.getElementById('ol-notes').value=r?.notes   ||'';
+  openOverlay('form-ol');
+}
+
+function saveOL(){
+  const item=document.getElementById('ol-item').value.trim();
+  if(!item){alert('Item name is required.');return;}
+  const rec={item,
+    qty:     document.getElementById('ol-qty').value.trim(),
+    urgency: document.getElementById('ol-urg').value,
+    who:     document.getElementById('ol-who').value.trim(),
+    notes:   document.getElementById('ol-notes').value.trim(),
+    ordered: editKeys.ol?(olRecs.find(x=>x._k===editKeys.ol)?.ordered||false):false,
+    updated: new Date().toISOString()
+  };
+  if(editKeys.ol){ refs.ol.child(editKeys.ol).update(rec); }
+  else{ rec.created=new Date().toISOString(); refs.ol.push(rec); }
+  closeForm('form-ol');
+}
+
+function toggleOrdered(key){
+  const r=olRecs.find(x=>x._k===key); if(!r)return;
+  refs.ol.child(key).update({ordered:!r.ordered});
+  openDetOL(key);
+}
+
+function openDetOL(key){
+  const r=olRecs.find(x=>x._k===key); if(!r)return;
+  const UIC={High:'🔴',Medium:'🟡',Low:'🟢'};
+  document.getElementById('det-ol-title').textContent=r.item;
+  document.getElementById('det-ol-body').innerHTML=`
+    <div class="dsec"><div class="dsec-title">Status</div>
+      <div class="status-btns">
+        <button class="sbtn${r.ordered?' dim':''}" style="background:var(--green)" onclick="toggleOrdered('${key}')" ${r.ordered?'disabled':''}>✓ Mark Ordered</button>
+        ${r.ordered?`<button class="sbtn" style="background:var(--amber)" onclick="toggleOrdered('${key}')">↩ Mark Pending</button>`:''}
+      </div>
+    </div>
+    <div class="dsec"><div class="dsec-title">Item Info</div>
+      <div class="dgrid">
+        <div style="grid-column:1/-1"><div class="dlbl">Item</div><div class="dval">${esc(r.item)}</div></div>
+        <div><div class="dlbl">Qty on Hand</div><div class="dval">${esc(r.qty||'—')}</div></div>
+        <div><div class="dlbl">Urgency</div><div class="dval">${UIC[r.urgency]||''} ${esc(r.urgency||'—')}</div></div>
+        <div><div class="dlbl">Added By</div><div class="dval">${esc(r.who||'—')}</div></div>
+        <div><div class="dlbl">Date Added</div><div class="dval">${fmtDate(r.created?.slice(0,10))}</div></div>
+        ${r.notes?`<div style="grid-column:1/-1"><div class="dlbl">Notes</div><div class="dval" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>`;
+  document.getElementById('det-ol-del-btn').onclick=()=>{if(confirm('Remove this item?')){refs.ol.child(key).remove();closeDet('det-ol');}};
+  document.getElementById('det-ol-edit-btn').onclick=()=>{closeDet('det-ol');openOLForm(key);};
+  openOverlay('det-ol');
+}
+
+function renderOL(){
+  const srch=(document.getElementById('srch-ol')?.value||'').toLowerCase();
+  const rows=olRecs.filter(r=>!srch||`${r.item} ${r.who}`.toLowerCase().includes(srch));
+  const wrap=document.getElementById('ol-list');
+  const empty=document.getElementById('ol-empty');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    wrap.innerHTML=rows.map(r=>{
-      const dots=(OUT_DOT[r.status]||['','','','']).map(c=>`<div class="pdot${c?' '+c:''}"></div>`).join('');
-      return`<div class="del-card ${S_CARD[r.status]||''}" onclick="openDetOut('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${r.ticketNum?`<span style="font-size:.85rem;color:var(--g500);font-weight:400;margin-right:6px">#${esc(r.ticketNum)}</span>`:''}${esc(r.customer||'—')}</div>
-            <div class="card-line2">${[r.address,r.date?fmtDate(r.date):'',r.window].filter(Boolean).map(esc).join(' · ')}</div>
-          </div>
-          <div class="card-row-right">
-            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
-            <div class="prog">${dots}</div>
-          </div>
-          <div class="card-chevron">›</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  // summary
-  const total=outRecs.length,orderIn=outRecs.filter(r=>r.status==='Order In').length,
-    loading=outRecs.filter(r=>r.status==='Loading').length,
-    enRoute=outRecs.filter(r=>r.status==='Out for Delivery').length,
-    completed=outRecs.filter(r=>r.status==='Completed').length;
-  document.getElementById('sum-dash-out').innerHTML=`
-    <div class="sc red"><div class="sc-lbl">Total</div><div class="sc-val">${total}</div></div>
-    <div class="sc purple"><div class="sc-lbl">Order In</div><div class="sc-val">${orderIn}</div></div>
-    <div class="sc amber"><div class="sc-lbl">Loading</div><div class="sc-val">${loading}</div></div>
-    <div class="sc blue"><div class="sc-lbl">En Route</div><div class="sc-val">${enRoute}</div></div>
-    <div class="sc green"><div class="sc-lbl">Done</div><div class="sc-val">${completed}</div></div>`;
-}
-
-function renderDashIn(){
-  const search=(document.getElementById('srch-dash-in')?.value||'').toLowerCase();
-  const today=new Date().toISOString().slice(0,10);
-  // show only non-received, flag overdue
-  const rows=inRecs.filter(r=>{
-    if(r.status==='Received')return false;
-    if(search&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search))return false;
-    return true;
-  });
-  const wrap=document.getElementById('cards-dash-in');
-  const empty=document.getElementById('empty-dash-in');
-  if(!wrap)return;
-  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
-  else{
-    empty.style.display='none';
-    const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
+    const PC={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
     wrap.innerHTML=rows.map(r=>`
-      <div class="del-card ${IN_CARD[r.status]||''}" onclick="openDetIn('${r._k}')">
-        <div class="card-row">
-          <div class="card-row-left">
-            <div class="card-name">${esc(r.vendor)}</div>
-            <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
+      <div class="dcard" style="border-left-color:${r.ordered?'var(--green)':PC[r.urgency]||'var(--g3)'}${r.ordered?';opacity:.6':''}" onclick="openDetOL('${r._k}')">
+        <div class="crow">
+          <div class="crow-left">
+            <div class="cname" style="${r.ordered?'text-decoration:line-through;color:var(--g5)':''}">${esc(r.item)}</div>
+            <div class="cmeta">${r.qty?'On hand: '+esc(r.qty)+'  ·  ':''} ${r.who?'Added by '+esc(r.who):''}</div>
           </div>
-          <div class="card-row-right">
-            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
-            ${r.status==='Overdue'?`<span style="font-size:.78rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
+          <div class="crow-right">
+            ${r.ordered?`<span class="badge b-received">✓ Ordered</span>`:`<span class="badge" style="background:${PC[r.urgency]+'22'};color:${PC[r.urgency]}">${{High:'🔴',Medium:'🟡',Low:'🟢'}[r.urgency]||''} ${esc(r.urgency||'')}</span>`}
           </div>
-          <div class="card-chevron">›</div>
+          <div class="chev">›</div>
+        </div>
+      </div>`).join('');
+  }
+  const pend=olRecs.filter(r=>!r.ordered).length;
+  const p=document.getElementById('p-ol'); if(p)p.textContent=pend;
+}
+
+// ── CUSTOMERS ─────────────────────────────────────────────────────────────────
+function openCustForm(key){
+  editKeys.cust=key||null;
+  const r=key?custRecs.find(x=>x._k===key):null;
+  document.getElementById('form-cust-title').textContent=key?'Edit Customer':'Add Customer';
+  document.getElementById('c-name').value  =r?.name  ||'';
+  document.getElementById('c-phone').value =r?.phone ||'';
+  document.getElementById('c-addr').value  =r?.addr  ||'';
+  document.getElementById('c-notes').value =r?.notes ||'';
+  openOverlay('form-cust');
+}
+
+function saveCust(){
+  const name=document.getElementById('c-name').value.trim();
+  if(!name){alert('Customer name is required.');return;}
+  const rec={name,
+    phone: document.getElementById('c-phone').value.trim(),
+    addr:  document.getElementById('c-addr').value.trim(),
+    notes: document.getElementById('c-notes').value.trim(),
+    updated:new Date().toISOString()
+  };
+  if(editKeys.cust){ refs.custs.child(editKeys.cust).update(rec); }
+  else{ rec.created=new Date().toISOString(); refs.custs.push(rec); }
+  closeForm('form-cust');
+  // if opened from delivery form, fill in the name
+  const custFld=document.getElementById('o-cust');
+  if(custFld&&document.getElementById('form-out').classList.contains('open')){
+    custFld.value=name;
+    const r2=custRecs.find(c=>c.name===name);
+    if(r2){document.getElementById('o-phone').value=r2.phone||'';document.getElementById('o-addr').value=r2.addr||'';}
+  }
+}
+
+function openDetCust(key){
+  const r=custRecs.find(x=>x._k===key); if(!r)return;
+  const delCount=outRecs.filter(d=>(d.customer||'').toLowerCase().trim()===(r.name||'').toLowerCase().trim()).length;
+  document.getElementById('det-cust-title').textContent=r.name;
+  document.getElementById('det-cust-body').innerHTML=`
+    <div class="dsec"><div class="dsec-title">Customer Info</div>
+      <div class="dgrid">
+        <div><div class="dlbl">Name</div><div class="dval">${esc(r.name)}</div></div>
+        <div><div class="dlbl">Phone</div><div class="dval">${esc(r.phone||'—')}</div></div>
+        <div style="grid-column:1/-1"><div class="dlbl">Address</div><div class="dval">${esc(r.addr||'—')}</div></div>
+        <div><div class="dlbl">Total Deliveries</div><div class="dval">${delCount}</div></div>
+      </div>
+    </div>
+    ${r.notes?`<div class="dsec"><div class="dsec-title">📌 Notes</div><div style="background:#FFF8E1;border:2px solid #F0C040;border-radius:5px;padding:10px 13px;font-size:.97rem;font-weight:600;line-height:1.5;white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}`;
+  document.getElementById('det-cust-del-btn').onclick=()=>pwDelete(()=>{refs.custs.child(key).remove();closeDet('det-cust');});
+  document.getElementById('det-cust-edit-btn').onclick=()=>{closeDet('det-cust');openCustForm(key);};
+  openOverlay('det-cust');
+}
+
+function renderCusts(){
+  const srch=(document.getElementById('srch-custs')?.value||'').toLowerCase();
+  const rows=custRecs.filter(r=>!srch||`${r.name} ${r.phone} ${r.addr}`.toLowerCase().includes(srch));
+  const wrap=document.getElementById('custs-list');
+  const empty=document.getElementById('custs-empty');
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    wrap.innerHTML=rows.map(r=>`
+      <div class="dcard" style="border-left-color:var(--amber)" onclick="openDetCust('${r._k}')">
+        <div class="crow">
+          <div class="crow-left">
+            <div class="cname">${esc(r.name)}</div>
+            <div class="cmeta">${[r.phone,r.addr].filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <div class="crow-right" style="max-width:140px;text-align:right">
+            <div style="font-size:.8rem;color:var(--g5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc((r.notes||'').slice(0,35)+(r.notes&&r.notes.length>35?'…':''))}</div>
+          </div>
+          <div class="chev">›</div>
         </div>
       </div>`).join('');
   }
 }
 
-function renderDashWF(){
-  const search=(document.getElementById('srch-dash-wf')?.value||'').toLowerCase();
-  // on dashboard show only open/in-progress tasks
-  const rows=wfRecs.filter(r=>{
-    if(r.status==='Done')return false;
-    if(search&&!`${r.task} ${r.person}`.toLowerCase().includes(search))return false;
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+function renderHistory(){
+  const srch=(document.getElementById('srch-hist')?.value||'').toLowerCase();
+  const month=document.getElementById('filt-hist-month')?.value||'';
+  const rows=outRecs.filter(r=>{
+    if(r.status!=='Completed')return false;
+    if(month&&r.date&&!r.date.startsWith(month))return false;
+    if(srch&&!`${r.customer} ${r.address} ${r.driver}`.toLowerCase().includes(srch))return false;
     return true;
-  });
-  const wrap=document.getElementById('cards-dash-wf');
-  const empty=document.getElementById('empty-dash-wf');
+  }).sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
+  const wrap=document.getElementById('hist-list');
+  const empty=document.getElementById('hist-empty');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
-  else{empty.style.display='none';wrap.innerHTML=rows.map(wfCardHtml).join('');}
-}
-
-// ── PASSWORD-PROTECTED DELETE
-let _pwCallback=null;
-const PW='8704494255';
-function pwDelete(cb){
-  _pwCallback=cb;
-  document.getElementById('pw-input').value='';
-  const pwe=document.getElementById('pw-error');if(pwe)pwe.style.display='none';
-  document.getElementById('pw-overlay').classList.add('open');
-  setTimeout(()=>document.getElementById('pw-input').focus(),100);
-}
-function submitPW(){
-  if(document.getElementById('pw-input').value===PW){
-    closePW();
-    if(_pwCallback)_pwCallback();
-    _pwCallback=null;
-  } else {
-    const pwe=document.getElementById('pw-error');if(pwe)pwe.style.display='block';
-    document.getElementById('pw-input').value='';
-    document.getElementById('pw-input').focus();
+  else{
+    empty.style.display='none';
+    wrap.innerHTML=rows.map(r=>`
+      <div class="hist-card" onclick="openDetOut('${r._k}')">
+        <div class="crow">
+          <div class="crow-left">
+            <div class="cname">${r.ticket?`<span style="font-size:.85rem;color:var(--g5);font-weight:500;margin-right:5px">#${esc(r.ticket)}</span>`:''}${esc(r.customer||'—')}</div>
+            <div class="cmeta">${[r.address,fmtDate(r.date),r.driver?'Driver: '+r.driver:''].filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <div class="crow-right">
+            <span class="badge b-completed">Completed</span>
+            ${attachRecs.filter(a=>a.delivKey===r._k).length?'<span style="font-size:.85rem">📷</span>':''}
+          </div>
+          <div class="chev">›</div>
+        </div>
+      </div>`).join('');
   }
 }
-function closePW(){document.getElementById('pw-overlay').classList.remove('open');_pwCallback=null;}
 
-// ── HELPERS
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDash(){
+  // stats row
+  const total=outRecs.length, oi=outRecs.filter(r=>r.status==='Order In').length,
+    ld=outRecs.filter(r=>r.status==='Loading').length,
+    or=outRecs.filter(r=>r.status==='Out for Delivery').length,
+    cp=outRecs.filter(r=>r.status==='Completed').length;
+  const ds=document.getElementById('dash-stats');
+  if(ds)ds.innerHTML=`<div class="stat red"><div class="stat-lbl">Total Out</div><div class="stat-val">${total}</div></div><div class="stat"><div class="stat-lbl">Order In</div><div class="stat-val">${oi}</div></div><div class="stat amber"><div class="stat-lbl">Loading</div><div class="stat-val">${ld}</div></div><div class="stat blue"><div class="stat-lbl">En Route</div><div class="stat-val">${or}</div></div><div class="stat green"><div class="stat-lbl">Completed</div><div class="stat-val">${cp}</div></div>`;
+  // active deliveries
+  const active=outRecs.filter(r=>r.status!=='Completed');
+  const dol=document.getElementById('dash-out-list');
+  const doe=document.getElementById('dash-out-empty');
+  if(dol){
+    if(!active.length){dol.innerHTML='';if(doe)doe.style.display='block';}
+    else{if(doe)doe.style.display='none';dol.innerHTML=active.map(r=>outCardHtml(r)).join('');}
+  }
+  // due in (non-received)
+  const pending=inRecs.filter(r=>r.status!=='Received');
+  const dil=document.getElementById('dash-in-list');
+  const die=document.getElementById('dash-in-empty');
+  if(dil){
+    if(!pending.length){dil.innerHTML='';if(die)die.style.display='block';}
+    else{
+      if(die)die.style.display='none';
+      dil.innerHTML=pending.map(r=>`
+        <div class="dcard ${S_CARD_CLS[r.status]||''}" onclick="openDetIn('${r._k}')">
+          <div class="crow">
+            <div class="crow-left">
+              <div class="cname">${esc(r.vendor||'—')}</div>
+              <div class="cmeta">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
+            </div>
+            <div class="crow-right"><span class="badge ${BDGE_CLS[r.status]||''}">${r.status}</span></div>
+            <div class="chev">›</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+  // open tasks
+  const openTasks=wfRecs.filter(r=>r.status!=='Done');
+  const dwl=document.getElementById('dash-wf-list');
+  const dwe=document.getElementById('dash-wf-empty');
+  if(dwl){
+    if(!openTasks.length){dwl.innerHTML='';if(dwe)dwe.style.display='block';}
+    else{if(dwe)dwe.style.display='none';dwl.innerHTML=openTasks.map(wfCardHtml).join('');}
+  }
+}
+
+// ── PEOPLE ────────────────────────────────────────────────────────────────────
+function addPerson(){
+  const name=document.getElementById('person-inp').value.trim();
+  if(!name)return;
+  if(peopleList.find(p=>p.name.toLowerCase()===name.toLowerCase())){alert('Already in the list.');return;}
+  refs.people.push(name);
+  document.getElementById('person-inp').value='';
+}
+function renderPeople(){
+  const wrap=document.getElementById('people-list'); if(!wrap)return;
+  if(!peopleList.length){wrap.innerHTML='<div style="font-size:.9rem;color:var(--g5);font-style:italic;margin-bottom:8px">No people added yet.</div>';return;}
+  wrap.innerHTML=peopleList.map(p=>`
+    <div class="person-row">
+      <span class="person-name">${esc(p.name)}</span>
+      <button class="person-del" onclick="if(confirm('Remove?'))refs.people.child('${p._k}').remove()">✕ Remove</button>
+    </div>`).join('');
+}
+
+// ── PRINT ─────────────────────────────────────────────────────────────────────
+function printTicket(key){
+  const r=outRecs.find(x=>x._k===key); if(!r)return;
+  const now=new Date();
+  const custNote=custRecs.find(c=>(c.name||'').toLowerCase().trim()===(r.customer||'').toLowerCase().trim());
+  const photos=attachRecs.filter(a=>a.delivKey===key);
+  const pa=document.getElementById('print-area');
+  pa.style.display='block';
+  pa.innerHTML=`<div class="pt">
+    <div class="pt-hdr">
+      <div class="pt-logo">MILLER <span>HARDWARE</span><small>EST. 1931 · YELLVILLE, AR</small></div>
+      <div class="pt-meta">Delivery Ticket<br>${now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}<br>${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>
+    <div class="pt-sec-title">Customer</div>
+    <div class="pt-grid">
+      <div class="pt-field"><label>Name</label><span>${esc(r.customer||'—')}</span></div>
+      <div class="pt-field"><label>Phone</label><span>${esc(r.phone||'—')}</span></div>
+      <div class="pt-field" style="grid-column:1/-1"><label>Address</label><span>${esc(r.address||'—')}</span></div>
+    </div>
+    <div class="pt-sec-title">Order</div>
+    <div class="pt-items">${esc(r.items||'—')}</div>
+    <div class="pt-grid" style="margin-top:8px">
+      <div class="pt-field"><label>Date</label><span>${fmtDate(r.date)}</span></div>
+      <div class="pt-field"><label>Time Window</label><span>${esc(r.window||'—')}</span></div>
+      <div class="pt-field"><label>Driver</label><span>${esc(r.driver||'—')}</span></div>
+      <div class="pt-field"><label>Ticket #</label><span>${esc(r.ticket||'—')}</span></div>
+      ${r.notes?`<div class="pt-field" style="grid-column:1/-1"><label>Notes</label><span>${esc(r.notes)}</span></div>`:''}
+    </div>
+    ${custNote?.notes?`<div class="pt-sec-title">📌 Customer Notes</div><div style="background:#FFF8E1;border:1px solid #F0C040;padding:8px 12px;font-size:.9rem;font-weight:600">${esc(custNote.notes)}</div>`:''}
+    <div class="pt-sec-title">Proof of Delivery</div>
+    <div class="pt-field"><label>Received By (print name)</label><span>${esc(r.rcvby||'')}</span></div>
+    ${photos.length?`<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">${photos.map(a=>`<img src="${a.data}" style="height:120px;border:1px solid #ddd;border-radius:3px">`).join('')}</div>`:
+    `<div class="pt-sig"><div class="pt-sig-line">Customer Signature</div></div>`}
+    <div class="pt-foot">MILLER HARDWARE CO. · YELLVILLE &amp; HARRISON, AR · EST. 1931</div>
+  </div>`;
+  setTimeout(()=>{window.print();pa.style.display='none';},100);
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+function dlFile(content,name,mime){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type:mime}));
+  a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+  const s=document.getElementById('exp-status');
+  if(s){s.textContent='✓ '+name+' downloaded';s.style.display='block';setTimeout(()=>s.style.display='none',3000);}
+}
+function csvRow(arr){return arr.map(v=>{const s=String(v==null?'':v).replace(/"/g,'""');return/[",\n]/.test(s)?`"${s}"`:s;}).join(',')+'\r\n';}
+function today(){return new Date().toISOString().slice(0,10);}
+function exportCSV(which){
+  let rows='',name='';
+  if(which==='out'){
+    name=`miller-deliveries-out-${today()}.csv`;
+    rows=csvRow(['Ticket','Customer','Phone','Address','Items','Driver','Status','Date','Window','Received By','Notes','Created']);
+    outRecs.forEach(r=>rows+=csvRow([r.ticket||'',r.customer||'',r.phone||'',r.address||'',r.items||'',r.driver||'',r.status||'',r.date||'',r.window||'',r.rcvby||'',r.notes||'',r.created?.slice(0,10)||'']));
+  }else if(which==='in'){
+    name=`miller-deliveries-in-${today()}.csv`;
+    rows=csvRow(['Vendor','PO','Items','Qty','Expected','Status','Received Date','Received By','Notes']);
+    inRecs.forEach(r=>rows+=csvRow([r.vendor||'',r.po||'',r.items||'',r.qty||'',r.expected||'',r.status||'',r.rcvdate||'',r.rcvby||'',r.notes||'']));
+  }else if(which==='custs'){
+    name=`miller-customers-${today()}.csv`;
+    rows=csvRow(['Name','Phone','Address','Notes']);
+    custRecs.forEach(r=>rows+=csvRow([r.name||'',r.phone||'',r.addr||'',r.notes||'']));
+  }else if(which==='ol'){
+    name=`miller-order-list-${today()}.csv`;
+    rows=csvRow(['Item','Qty on Hand','Urgency','Added By','Notes','Status']);
+    olRecs.forEach(r=>rows+=csvRow([r.item||'',r.qty||'',r.urgency||'',r.who||'',r.notes||'',r.ordered?'Ordered':'Pending']));
+  }
+  if(rows)dlFile('\uFEFF'+rows,name,'text/csv;charset=utf-8');
+}
+function exportJSON(){
+  const data={exportDate:new Date().toISOString(),source:'Miller Hardware Delivery Log — Yellville',
+    deliveries_out:outRecs.map(({_k,...r})=>({key:_k,...r})),
+    deliveries_in:inRecs.map(({_k,...r})=>({key:_k,...r})),
+    customers:custRecs.map(({_k,...r})=>({key:_k,...r})),
+    order_list:olRecs.map(({_k,...r})=>({key:_k,...r})),
+    workflow:wfRecs.map(({_k,...r})=>({key:_k,...r}))
+  };
+  dlFile(JSON.stringify(data,null,2),`miller-delivery-backup-${today()}.json`,'application/json');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtDate(d){if(!d)return'—';const[y,m,day]=d.split('-');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+(+day)+', '+y;}
-function fmtDT(iso){if(!iso)return'';const d=new Date(iso);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
 </script>
 </body>
 </html>
