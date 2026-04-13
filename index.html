@@ -799,7 +799,15 @@ function switchTab(id, btn){
 function openOverlay(id){ document.getElementById(id).classList.add('open'); }
 function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
 function closeDet(id){ closeOverlay(id); attachDelivKey=null; }
-function closeForm(id){ closeOverlay(id); }
+function closeForm(id){
+  closeOverlay(id);
+  // always reset the matching edit key when closing any form
+  if(id==='form-out') editKeys.out=null;
+  if(id==='form-in')  editKeys.in=null;
+  if(id==='form-wf')  editKeys.wf=null;
+  if(id==='form-ol')  editKeys.ol=null;
+  if(id==='form-cust')editKeys.cust=null;
+}
 
 // ── CUSTOMER SEARCH ───────────────────────────────────────────────────────────
 function custSearch(val, dropId){
@@ -1021,8 +1029,8 @@ function saveOut(){
     rcvby:    document.getElementById('o-rcvby').value.trim(),
     updated:  new Date().toISOString()
   };
-  if(editKeys.out){ refs.out.child(editKeys.out).update(rec); }
-  else{ rec.created=new Date().toISOString(); refs.out.push(rec); }
+  if(editKeys.out){ refs.out.child(editKeys.out).update(rec).catch(e=>alert('Update error: '+e.message)); }
+  else{ rec.created=new Date().toISOString(); refs.out.push(rec).catch(e=>alert('Save error: '+e.message)); }
   closeForm('form-out');
 }
 
