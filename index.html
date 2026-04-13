@@ -57,23 +57,39 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   .out-sidebar{position:static}
 }
 
-/* NOTICE BOARD */
-.notice-board{background:var(--green-bg);border:2px solid var(--green-bd);border-radius:6px;padding:12px 13px}
-.notice-board.empty{background:var(--g50);border-color:var(--bd)}
-.nb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.nb-label{font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
-.notice-board.empty .nb-label{color:var(--g500)}
+/* FLOATING NOTICE BOARD */
+.nb-float{
+  position:fixed;bottom:0;right:20px;width:300px;z-index:500;
+  box-shadow:0 -2px 20px rgba(0,0,0,.18);border-radius:8px 8px 0 0;overflow:hidden;
+  font-family:'Open Sans',sans-serif;
+}
+.nb-float-bar{
+  background:var(--green);color:var(--white);
+  padding:10px 14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  user-select:none;-webkit-user-select:none;
+}
+.nb-float-bar:hover{background:#155230}
+.nb-float-label{font-family:'Oswald',sans-serif;font-size:0.92rem;letter-spacing:1px;font-weight:600;display:flex;align-items:center;gap:8px}
+.nb-float-count{background:var(--red);color:#fff;font-size:0.65rem;padding:2px 7px;border-radius:12px;font-weight:700;font-family:'Open Sans',sans-serif}
+.nb-float-arrow{font-size:0.75rem;transition:transform .2s;opacity:.8}
+.nb-float.collapsed .nb-float-arrow{transform:rotate(180deg)}
+.nb-float-body{max-height:320px;overflow-y:auto;transition:max-height .25s ease}
+.nb-float.collapsed .nb-float-body{max-height:0;overflow:hidden}
+.notice-board{background:var(--white);padding:10px 12px}
+.notice-board.empty{background:var(--g50)}
 .msg-list{display:flex;flex-direction:column;gap:6px;margin-bottom:9px}
-.msg-item{background:var(--white);border-left:3px solid var(--green);padding:7px 10px;border-radius:0 4px 4px 0}
-.msg-text{font-size:0.92rem;font-weight:600;color:var(--ink);line-height:1.4}
-.msg-meta{font-size:0.72rem;color:var(--g500);margin-top:2px}
-.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.95rem;padding:0 0 0 6px}
+.msg-item{background:var(--green-bg);border-left:3px solid var(--green);padding:7px 10px;border-radius:0 4px 4px 0}
+.msg-text{font-size:0.9rem;font-weight:600;color:var(--ink);line-height:1.4}
+.msg-meta{font-size:0.7rem;color:var(--g500);margin-top:2px}
+.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.9rem;padding:0 0 0 6px}
 .msg-del:hover{color:var(--red)}
 .msg-row{display:flex;gap:6px}
-.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.9rem;padding:7px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0}
+.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.88rem;padding:7px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0;background:var(--white)}
 .msg-inp:focus{border-color:var(--green)}
-.msg-post{font-family:'Oswald',sans-serif;font-size:0.8rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:7px 11px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
+.msg-post{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:7px 11px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
 .msg-post:hover{background:#155230}
+@media(max-width:380px){.nb-float{right:0;left:0;width:100%;border-radius:8px 8px 0 0}}
 
 /* HOURS BANNER */
 .hrs-banner{background:var(--amber-bg);border:1px solid #E8C070;border-radius:6px;padding:11px 15px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -365,16 +381,6 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   <!-- DASHBOARD TAB -->
   <div id="panel-dash" class="tab-panel active">
 
-    <!-- NOTICE BOARD on dashboard -->
-    <div class="notice-board empty" id="nb" style="margin-bottom:18px">
-      <div class="nb-header"><span class="nb-label" id="nb-label">📋 Notices</span></div>
-      <div class="msg-list" id="msg-list"></div>
-      <div class="msg-row">
-        <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice for the team…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
-        <button class="msg-post" onclick="postMsg()">Post</button>
-      </div>
-    </div>
-
     <!-- DELIVERIES OUT — dominant section -->
     <div class="dash-section-hdr">
       <div class="dash-section-title">🚚 Deliveries Out</div>
@@ -387,6 +393,17 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
       </div>
       <div class="card-list" id="cards-dash-out"></div>
       <div id="empty-dash-out" class="empty-state" style="display:none"><span class="empty-icon">🚚</span>No active deliveries.</div>
+    </div>
+
+    <!-- DELIVERIES DUE IN — middle section -->
+    <div class="dash-section-hdr" style="margin-top:28px">
+      <div class="dash-section-title">📦 Deliveries Due In</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <input class="search-box" type="text" placeholder="Search vendor, PO…" oninput="renderDashIn()" id="srch-dash-in" style="flex:1;width:auto">
+        <button class="btn-new" style="background:var(--blue)" onclick="openInForm()">+ New Inbound</button>
+      </div>
+      <div class="card-list" id="cards-dash-in"></div>
+      <div id="empty-dash-in" class="empty-state" style="display:none"><span class="empty-icon">📦</span>No pending inbound deliveries.</div>
     </div>
 
     <!-- WORKFLOW TASKS — secondary section -->
@@ -860,6 +877,26 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   </div>
 </div>
 
+<!-- ══ FLOATING NOTICE BOARD ══ -->
+<div id="nb-float" class="nb-float collapsed">
+  <div class="nb-float-bar" onclick="toggleNB()">
+    <span class="nb-float-label">
+      📋 Notices
+      <span class="nb-float-count" id="nb-float-count" style="display:none"></span>
+    </span>
+    <span class="nb-float-arrow" id="nb-float-arrow">▲</span>
+  </div>
+  <div class="nb-float-body" id="nb-float-body">
+    <div class="notice-board empty" id="nb">
+      <div class="msg-list" id="msg-list"></div>
+      <div class="msg-row">
+        <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a notice…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
+        <button class="msg-post" onclick="postMsg()">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- PASSWORD OVERLAY -->
 <div class="overlay" id="pw-overlay" style="z-index:1500">
   <div class="modal" style="max-width:360px">
@@ -952,8 +989,15 @@ function switchTab(t,btn){
 }
 
 // listeners
-outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));outRecs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderOut();renderDashOut();});
-inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();});
+outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}));
+  outRecs.sort((a,b)=>{
+    const ad=a.date||'9999', bd=b.date||'9999';
+    if(ad!==bd)return ad<bd?-1:1;
+    return(a.created||'')<(b.created||'')?-1:1;
+  });
+  renderOut();renderDashOut();
+});
+inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();renderDashIn();});
 msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
@@ -975,13 +1019,37 @@ function postMsg(){
   const t=document.getElementById('msg-inp').value.trim();if(!t)return;
   msgRef.push({text:t,created:new Date().toISOString()});
   document.getElementById('msg-inp').value='';
+  // auto-open panel when posting
+  const nb=document.getElementById('nb-float');
+  if(nb.classList.contains('collapsed'))toggleNB();
 }
 function delMsg(k){msgRef.child(k).remove();}
+
+function purgeOldMsgs(){
+  const cutoff=new Date(Date.now()-24*60*60*1000).toISOString();
+  msgs.forEach(m=>{if((m.created||'')< cutoff)msgRef.child(m._k).remove();});
+}
+
+function toggleNB(){
+  const nb=document.getElementById('nb-float');
+  nb.classList.toggle('collapsed');
+  document.getElementById('nb-float-arrow').textContent=nb.classList.contains('collapsed')?'▲':'▼';
+}
+
 function renderMsgs(){
+  purgeOldMsgs();
   const list=document.getElementById('msg-list');
   const nb=document.getElementById('nb');
-  if(!msgs.length){list.innerHTML='';nb.className='notice-board empty';return;}
+  const countEl=document.getElementById('nb-float-count');
+  if(!msgs.length){
+    list.innerHTML='<div style="font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0">No notices posted.</div>';
+    nb.className='notice-board empty';
+    countEl.style.display='none';
+    return;
+  }
   nb.className='notice-board';
+  countEl.textContent=msgs.length;
+  countEl.style.display='inline-block';
   list.innerHTML=msgs.map(m=>`<div class="msg-item">
     <button class="msg-del" onclick="delMsg('${m._k}')">✕</button>
     <div class="msg-text">${esc(m.text)}</div>
@@ -1166,6 +1234,7 @@ function renderOut(){
   const search=(document.getElementById('srch-out').value||'').toLowerCase();
   const fStatus=(document.getElementById('filt-out-txt')?.value||'').toLowerCase();
   let rows=outRecs.filter(r=>{
+    if(r.status==='Completed')return false;
     if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
     if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
     return true;
@@ -1921,15 +1990,12 @@ function renderWF(){
 function renderDashOut(){
   const search=(document.getElementById('srch-dash-out')?.value||'').toLowerCase();
   const fStatus=(document.getElementById('filt-dash-status')?.value||'').toLowerCase();
-  // show non-completed first, then show last 5 completed
-  let active=outRecs.filter(r=>{
+  const rows=outRecs.filter(r=>{
     if(r.status==='Completed')return false;
     if(fStatus&&!(r.status||'').toLowerCase().includes(fStatus))return false;
     if(search&&!`${r.customer} ${r.address} ${r.items} ${r.driver} ${r.ticketNum||''}`.toLowerCase().includes(search))return false;
     return true;
   });
-  let recent=!fStatus&&!search?outRecs.filter(r=>r.status==='Completed').slice(0,3):[];
-  const rows=[...active,...recent];
   const wrap=document.getElementById('cards-dash-out');
   const empty=document.getElementById('empty-dash-out');
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
@@ -1963,6 +2029,39 @@ function renderDashOut(){
     <div class="sc amber"><div class="sc-lbl">Loading</div><div class="sc-val">${loading}</div></div>
     <div class="sc blue"><div class="sc-lbl">En Route</div><div class="sc-val">${enRoute}</div></div>
     <div class="sc green"><div class="sc-lbl">Done</div><div class="sc-val">${completed}</div></div>`;
+}
+
+function renderDashIn(){
+  const search=(document.getElementById('srch-dash-in')?.value||'').toLowerCase();
+  const today=new Date().toISOString().slice(0,10);
+  // show only non-received, flag overdue
+  const rows=inRecs.filter(r=>{
+    if(r.status==='Received')return false;
+    if(search&&!`${r.vendor} ${r.po} ${r.items}`.toLowerCase().includes(search))return false;
+    return true;
+  });
+  const wrap=document.getElementById('cards-dash-in');
+  const empty=document.getElementById('empty-dash-in');
+  if(!wrap)return;
+  if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    const IN_CARD={'Expected':'s-expected','Partial':'s-partial','Received':'s-received','Overdue':'s-overdue'};
+    wrap.innerHTML=rows.map(r=>`
+      <div class="del-card ${IN_CARD[r.status]||''}" onclick="openDetIn('${r._k}')">
+        <div class="card-row">
+          <div class="card-row-left">
+            <div class="card-name">${esc(r.vendor)}</div>
+            <div class="card-line2">${[r.po?'PO: '+r.po:'',r.expected?fmtDate(r.expected):''].filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <div class="card-row-right">
+            <span class="badge ${BDGE[r.status]||''}">${r.status}</span>
+            ${r.status==='Overdue'?`<span style="font-size:.78rem;color:var(--red);font-weight:700">${fmtDate(r.expected)}</span>`:''}
+          </div>
+          <div class="card-chevron">›</div>
+        </div>
+      </div>`).join('');
+  }
 }
 
 function renderDashWF(){
