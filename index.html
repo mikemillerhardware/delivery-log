@@ -986,6 +986,7 @@ function saveHours(){
 function renderHrsBanner(){
   const banner=document.getElementById('hrs-banner');
   const text=document.getElementById('hrs-text');
+  if(!banner||!text)return;
   const today=new Date().toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
   const h=hoursConfig[today];
   if(!h){banner.style.display='none';return;}
