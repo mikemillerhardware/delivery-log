@@ -722,7 +722,9 @@ refs.out.on('value', s => {
   outRecs = [];
   s.forEach(c => outRecs.push({_k:c.key, ...c.val()}));
   outRecs.sort((a,b) => { const ad=a.date||'9999', bd=b.date||'9999'; return ad<bd?-1:ad>bd?1:0; });
-  renderOut(); renderDash();
+  console.log('outRecs updated, count=', outRecs.length);
+  try{ renderOut(); } catch(e){ console.error('renderOut error:', e); }
+  try{ renderDash(); } catch(e){ console.error('renderDash error:', e); }
 });
 refs.in.on('value', s => {
   inRecs = [];
