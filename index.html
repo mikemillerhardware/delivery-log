@@ -768,6 +768,15 @@ refs.hours.on('value', s => {
   if(s.val()) hoursConfig = s.val();
 });
 
+// Run overdue check once after page loads — NOT inside a listener
+setTimeout(()=>{
+  const today=new Date().toISOString().slice(0,10);
+  inRecs.forEach(r=>{
+    if(r.status==='Expected'&&r.expected&&r.expected<today)
+      refs.in.child(r._k).update({status:'Overdue'});
+  });
+}, 4000);
+
 // ── CLOCK ─────────────────────────────────────────────────────────────────────
 function tick(){
   const n=new Date();
@@ -1193,7 +1202,6 @@ function openDetIn(key){
 
 function renderIn(){
   const today=new Date().toISOString().slice(0,10);
-  inRecs.forEach(r=>{if(r.status==='Expected'&&r.expected&&r.expected<today)refs.in.child(r._k).update({status:'Overdue'});});
   const srch=(document.getElementById('srch-in')?.value||'').toLowerCase();
   const rows=inRecs.filter(r=>{
     if(r.status==='Received')return false;
