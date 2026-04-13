@@ -720,9 +720,9 @@ let attachDelivKey = null, tmpAttachData = null;
 // ── LISTENERS ────────────────────────────────────────────────────────────────
 refs.out.on('value', s => {
   outRecs = [];
-  s.forEach(c => outRecs.push({_k:c.key, ...c.val()}));
+  s.forEach(c => { const v=c.val(); if(v) outRecs.push({_k:c.key, ...v}); });
   outRecs.sort((a,b) => { const ad=a.date||'9999', bd=b.date||'9999'; return ad<bd?-1:ad>bd?1:0; });
-  console.log('outRecs updated, count=', outRecs.length);
+  console.log('outRecs updated, count=', outRecs.length, 'keys=', outRecs.map(r=>r._k), 'statuses=', outRecs.map(r=>r.status));
   try{ renderOut(); } catch(e){ console.error('renderOut error:', e); }
   try{ renderDash(); } catch(e){ console.error('renderDash error:', e); }
 });
@@ -1122,7 +1122,10 @@ function renderOut(){
   if(!rows.length){wrap.innerHTML='';empty.style.display='block';}
   else{
     empty.style.display='none';
-    wrap.innerHTML=rows.map(r=>outCardHtml(r)).join('');
+    wrap.innerHTML=rows.map(r=>{
+      try{ return outCardHtml(r); }
+      catch(e){ console.error('outCardHtml error on record', r._k, e); return ''; }
+    }).join('');
   }
   const total=outRecs.length, oi=outRecs.filter(r=>r.status==='Order In').length,
     ld=outRecs.filter(r=>r.status==='Loading').length,
