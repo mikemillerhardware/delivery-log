@@ -58,70 +58,6 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 }
 
 /* FLOATING NOTICE BOARD */
-/* MESSAGE BOARD SIDEBAR — fixed right side */
-.mb-sidebar{
-  position:fixed;
-  top:0;right:0;
-  width:260px;
-  height:100vh;
-  background:var(--white);
-  border-left:3px solid var(--green);
-  display:flex;flex-direction:column;
-  z-index:400;
-  box-shadow:-3px 0 16px rgba(0,0,0,.1);
-}
-.mb-sidebar-hdr{
-  background:var(--green);
-  padding:12px 14px;
-  flex-shrink:0;
-  display:flex;align-items:center;gap:10px;
-}
-.mb-sidebar-title{
-  font-family:'Oswald',sans-serif;font-size:1rem;
-  font-weight:700;letter-spacing:1px;color:var(--white);
-  text-transform:uppercase;
-}
-.mb-count{
-  background:var(--red);color:#fff;
-  font-size:0.65rem;padding:2px 8px;
-  border-radius:12px;font-weight:700;
-  font-family:'Open Sans',sans-serif;
-}
-.mb-msgs{
-  flex:1;
-  overflow-y:auto;
-  padding:10px 12px;
-  display:flex;flex-direction:column;gap:8px;
-}
-.msg-item{
-  background:var(--green-bg);
-  border-left:3px solid var(--green);
-  padding:8px 10px;border-radius:0 4px 4px 0;
-}
-.msg-text{font-size:0.9rem;font-weight:600;color:var(--ink);line-height:1.4;word-break:break-word}
-.msg-meta{font-size:0.7rem;color:var(--g500);margin-top:3px}
-.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:1rem;padding:0 0 2px 6px;line-height:1}
-.msg-del:hover{color:var(--red)}
-.msg-empty{font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0}
-.mb-input-row{
-  flex-shrink:0;
-  padding:10px 12px;
-  border-top:2px solid var(--green);
-  background:var(--white);
-  display:flex;gap:6px;
-}
-.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.88rem;padding:8px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0}
-.msg-inp:focus{border-color:var(--green)}
-.msg-post{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:8px 11px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
-.msg-post:hover{background:#155230}
-
-/* Push main content left to make room for sidebar */
-body{padding-right:260px}
-@media(max-width:700px){
-  .mb-sidebar{display:none}
-  body{padding-right:0}
-}
-
 /* HOURS BANNER */
 .hrs-banner{background:var(--amber-bg);border:1px solid #E8C070;border-radius:6px;padding:11px 15px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .hrs-text{font-family:'Oswald',sans-serif;font-size:0.97rem;color:var(--amber);letter-spacing:1px}
@@ -908,19 +844,6 @@ body{padding-right:260px}
   </div>
 </div>
 
-<!-- ══ MESSAGE BOARD SIDEBAR ══ -->
-<div id="mb-sidebar" class="mb-sidebar">
-  <div class="mb-sidebar-hdr">
-    <span class="mb-sidebar-title">📋 Message Board</span>
-    <span class="mb-count" id="mb-count" style="display:none"></span>
-  </div>
-  <div class="mb-msgs" id="msg-list"></div>
-  <div class="mb-input-row">
-    <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a message…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
-    <button class="msg-post" onclick="postMsg()">Post</button>
-  </div>
-</div>
-
 <!-- PASSWORD OVERLAY -->
 <div class="overlay" id="pw-overlay" style="z-index:1500">
   <div class="modal" style="max-width:360px">
@@ -964,7 +887,6 @@ firebase.initializeApp({
 const db=firebase.database();
 const outRef=db.ref('deliveries_out');
 const inRef =db.ref('deliveries_in');
-const msgRef=db.ref('delivery_messages');
 const hrsRef=db.ref('delivery_hours');
 const olRef =db.ref('order_list');
 const custRef=db.ref('delivery_customers');
@@ -982,7 +904,7 @@ db.ref('.info/connected').on('value',s=>{
 });
 
 // state
-let outRecs=[],inRecs=[],msgs=[],olRecs=[],custRecs=[],attachRecs=[],wfRecs=[],peopleList=[];
+let outRecs=[],inRecs=[],olRecs=[],custRecs=[],attachRecs=[],wfRecs=[],peopleList=[];
 let currentDetKey=null; // which delivery is open in detail overlay
 let tmpAttachData=null,tmpAttachType=null;
 let editOutKey=null,editInKey=null;
@@ -1022,7 +944,6 @@ outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}
   renderOut();renderDashOut();
 });
 inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();renderDashIn();});
-msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>{ const ac=a.created||'', bc=b.created||''; return bc>ac?1:bc<ac?-1:0; });renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
 custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
@@ -1037,43 +958,6 @@ peopleRef.on('value',s=>{peopleList=[];s.forEach(c=>peopleList.push({_k:c.key,na
   peopleList.sort((a,b)=>a.name.localeCompare(b.name));
   renderPeopleList();renderWFPersonDropdowns();
 });
-
-// ── MESSAGES
-function postMsg(){
-  const t=document.getElementById('msg-inp').value.trim();if(!t)return;
-  msgRef.push({text:t,created:new Date().toISOString()});
-  document.getElementById('msg-inp').value='';
-}
-function delMsg(k){msgRef.child(k).remove();}
-
-function purgeOldMsgs(){
-  const cutoff=Date.now()-24*60*60*1000;
-  msgs.forEach(m=>{
-    if(m.created && new Date(m.created).getTime() < cutoff){
-      msgRef.child(m._k).remove();
-    }
-  });
-}
-
-// run purge once on load and then every 15 minutes — never during render
-setTimeout(purgeOldMsgs, 3000);
-setInterval(purgeOldMsgs, 15*60*1000);
-
-function renderMsgs(){
-  const list=document.getElementById('msg-list');
-  const countEl=document.getElementById('mb-count');
-  if(!msgs.length){
-    list.innerHTML='<div class="msg-empty">No messages yet.</div>';
-    if(countEl)countEl.style.display='none';
-    return;
-  }
-  if(countEl){countEl.textContent=msgs.length;countEl.style.display='inline-block';}
-  list.innerHTML=msgs.map(m=>`<div class="msg-item">
-    <button class="msg-del" onclick="delMsg('${m._k}')">✕</button>
-    <div class="msg-text">${esc(m.text)}</div>
-    <div class="msg-meta">${fmtDT(m.created)}</div>
-  </div>`).join('');
-}
 
 // ── HOURS
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -1840,8 +1724,7 @@ function exportJSON(){
     deliveries_out: outRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
     deliveries_in:  inRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
     customers:      custRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
-    order_list:     olRecs.map(({_k,...r})=>({firebaseKey:_k,...r})),
-    messages:       msgs.map(({_k,...r})=>({firebaseKey:_k,...r}))
+    order_list:     olRecs.map(({_k,...r})=>({firebaseKey:_k,...r}))
   };
   downloadFile(JSON.stringify(backup,null,2),`miller-delivery-backup-${todayStr()}.json`,'application/json');
 }
