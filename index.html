@@ -1029,7 +1029,7 @@ outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}
   renderOut();renderDashOut();
 });
 inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();renderDashIn();});
-msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);renderMsgs();});
+msgRef.on('value',s=>{msgs=[];s.forEach(c=>msgs.push({_k:c.key,...c.val()}));msgs.sort((a,b)=>{ const ac=a.created||'', bc=b.created||''; return bc>ac?1:bc<ac?-1:0; });renderMsgs();});
 hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
 custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
