@@ -58,72 +58,68 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 }
 
 /* FLOATING NOTICE BOARD */
-.nb-float{
-  position:fixed;bottom:0;right:20px;width:320px;z-index:500;
-  box-shadow:0 -4px 24px rgba(0,0,0,.22);border-radius:8px 8px 0 0;
+/* MESSAGE BOARD SIDEBAR — fixed right side */
+.mb-sidebar{
+  position:fixed;
+  top:0;right:0;
+  width:260px;
+  height:100vh;
+  background:var(--white);
+  border-left:3px solid var(--green);
+  display:flex;flex-direction:column;
+  z-index:400;
+  box-shadow:-3px 0 16px rgba(0,0,0,.1);
+}
+.mb-sidebar-hdr{
+  background:var(--green);
+  padding:12px 14px;
+  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+}
+.mb-sidebar-title{
+  font-family:'Oswald',sans-serif;font-size:1rem;
+  font-weight:700;letter-spacing:1px;color:var(--white);
+  text-transform:uppercase;
+}
+.mb-count{
+  background:var(--red);color:#fff;
+  font-size:0.65rem;padding:2px 8px;
+  border-radius:12px;font-weight:700;
   font-family:'Open Sans',sans-serif;
 }
-.nb-float-bar{
-  background:var(--green);color:var(--white);
-  padding:11px 15px;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  border-radius:8px 8px 0 0;
-  user-select:none;-webkit-user-select:none;
-}
-.nb-float-bar:hover{background:#155230}
-.nb-float-label{font-family:'Oswald',sans-serif;font-size:0.95rem;letter-spacing:1px;font-weight:600;display:flex;align-items:center;gap:8px}
-.nb-float-count{background:var(--red);color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:12px;font-weight:700;font-family:'Open Sans',sans-serif}
-.nb-float-arrow{font-size:0.8rem;transition:transform .2s;opacity:.8}
-.nb-float.collapsed .nb-float-arrow{transform:rotate(180deg)}
-
-/* Body — fixed height, flex column so list scrolls and input stays pinned */
-.nb-float-body{
-  display:none;
-  height:360px;
-  background:var(--white);
-  border:2px solid var(--green);
-  border-top:none;
-}
-.nb-float:not(.collapsed) .nb-float-body{
-  display:flex;
-  flex-direction:column;
-}
-
-/* Message list — takes remaining height, scrolls */
-.msg-list{
-  flex:1 1 0;
-  min-height:0;
+.mb-msgs{
+  flex:1;
   overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding:10px 12px 6px;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+  padding:10px 12px;
+  display:flex;flex-direction:column;gap:8px;
 }
-.msg-item{background:var(--green-bg);border-left:3px solid var(--green);padding:8px 10px;border-radius:0 4px 4px 0;flex-shrink:0}
-.msg-text{font-size:0.92rem;font-weight:600;color:var(--ink);line-height:1.4}
-.msg-meta{font-size:0.72rem;color:var(--g500);margin-top:3px}
-.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:0.95rem;padding:0 0 0 8px;line-height:1}
+.msg-item{
+  background:var(--green-bg);
+  border-left:3px solid var(--green);
+  padding:8px 10px;border-radius:0 4px 4px 0;
+}
+.msg-text{font-size:0.9rem;font-weight:600;color:var(--ink);line-height:1.4;word-break:break-word}
+.msg-meta{font-size:0.7rem;color:var(--g500);margin-top:3px}
+.msg-del{float:right;background:none;border:none;color:var(--g300);cursor:pointer;font-size:1rem;padding:0 0 2px 6px;line-height:1}
 .msg-del:hover{color:var(--red)}
 .msg-empty{font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0}
-
-/* Input row — pinned to bottom, never shrinks */
-.msg-row{
+.mb-input-row{
   flex-shrink:0;
-  display:flex;gap:6px;
-  padding:8px 10px;
-  border-top:1px solid var(--bd);
+  padding:10px 12px;
+  border-top:2px solid var(--green);
   background:var(--white);
+  display:flex;gap:6px;
 }
-.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.9rem;padding:8px 10px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0}
+.msg-inp{flex:1;font-family:'Open Sans',sans-serif;font-size:0.88rem;padding:8px 9px;border:1px solid var(--bd);border-radius:4px;outline:none;min-width:0}
 .msg-inp:focus{border-color:var(--green)}
-.msg-post{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:8px 12px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
+.msg-post{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;background:var(--green);color:var(--white);border:none;padding:8px 11px;border-radius:4px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
 .msg-post:hover{background:#155230}
 
-@media(max-width:380px){
-  .nb-float{right:0;left:0;width:100%;border-radius:8px 8px 0 0}
-  .nb-float-body{height:300px}
+/* Push main content left to make room for sidebar */
+body{padding-right:260px}
+@media(max-width:700px){
+  .mb-sidebar{display:none}
+  body{padding-right:0}
 }
 
 /* HOURS BANNER */
@@ -912,21 +908,16 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   </div>
 </div>
 
-<!-- ══ FLOATING NOTICE BOARD ══ -->
-<div id="nb-float" class="nb-float collapsed">
-  <div class="nb-float-bar" onclick="toggleNB()">
-    <span class="nb-float-label">
-      📋 Message Board
-      <span class="nb-float-count" id="nb-float-count" style="display:none"></span>
-    </span>
-    <span class="nb-float-arrow" id="nb-float-arrow">▲</span>
+<!-- ══ MESSAGE BOARD SIDEBAR ══ -->
+<div id="mb-sidebar" class="mb-sidebar">
+  <div class="mb-sidebar-hdr">
+    <span class="mb-sidebar-title">📋 Message Board</span>
+    <span class="mb-count" id="mb-count" style="display:none"></span>
   </div>
-  <div class="nb-float-body" id="nb-float-body">
-    <div class="msg-list" id="msg-list"></div>
-    <div class="msg-row">
-      <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a message for the team…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
-      <button class="msg-post" onclick="postMsg()">Post</button>
-    </div>
+  <div class="mb-msgs" id="msg-list"></div>
+  <div class="mb-input-row">
+    <input class="msg-inp" type="text" id="msg-inp" placeholder="Post a message…" maxlength="200" onkeydown="if(event.key==='Enter')postMsg()">
+    <button class="msg-post" onclick="postMsg()">Post</button>
   </div>
 </div>
 
@@ -1052,9 +1043,6 @@ function postMsg(){
   const t=document.getElementById('msg-inp').value.trim();if(!t)return;
   msgRef.push({text:t,created:new Date().toISOString()});
   document.getElementById('msg-inp').value='';
-  // auto-open panel when posting
-  const nb=document.getElementById('nb-float');
-  if(nb.classList.contains('collapsed'))toggleNB();
 }
 function delMsg(k){msgRef.child(k).remove();}
 
@@ -1071,22 +1059,15 @@ function purgeOldMsgs(){
 setTimeout(purgeOldMsgs, 3000);
 setInterval(purgeOldMsgs, 15*60*1000);
 
-function toggleNB(){
-  const nb=document.getElementById('nb-float');
-  nb.classList.toggle('collapsed');
-  document.getElementById('nb-float-arrow').textContent=nb.classList.contains('collapsed')?'▲':'▼';
-}
-
 function renderMsgs(){
   const list=document.getElementById('msg-list');
-  const countEl=document.getElementById('nb-float-count');
+  const countEl=document.getElementById('mb-count');
   if(!msgs.length){
     list.innerHTML='<div class="msg-empty">No messages yet.</div>';
-    countEl.style.display='none';
+    if(countEl)countEl.style.display='none';
     return;
   }
-  countEl.textContent=msgs.length;
-  countEl.style.display='inline-block';
+  if(countEl){countEl.textContent=msgs.length;countEl.style.display='inline-block';}
   list.innerHTML=msgs.map(m=>`<div class="msg-item">
     <button class="msg-del" onclick="delMsg('${m._k}')">✕</button>
     <div class="msg-text">${esc(m.text)}</div>
