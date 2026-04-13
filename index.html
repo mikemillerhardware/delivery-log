@@ -62,13 +62,12 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
   position:fixed;bottom:0;right:20px;width:320px;z-index:500;
   box-shadow:0 -4px 24px rgba(0,0,0,.22);border-radius:8px 8px 0 0;
   font-family:'Open Sans',sans-serif;
-  display:flex;flex-direction:column;
 }
 .nb-float-bar{
   background:var(--green);color:var(--white);
   padding:11px 15px;cursor:pointer;
   display:flex;align-items:center;justify-content:space-between;gap:8px;
-  border-radius:8px 8px 0 0;flex-shrink:0;
+  border-radius:8px 8px 0 0;
   user-select:none;-webkit-user-select:none;
 }
 .nb-float-bar:hover{background:#155230}
@@ -77,27 +76,30 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .nb-float-arrow{font-size:0.8rem;transition:transform .2s;opacity:.8}
 .nb-float.collapsed .nb-float-arrow{transform:rotate(180deg)}
 
-/* The body is a flex column: scrollable list + pinned input */
+/* Body — fixed height, flex column so list scrolls and input stays pinned */
 .nb-float-body{
   display:none;
-  flex-direction:column;
   height:360px;
   background:var(--white);
   border:2px solid var(--green);
   border-top:none;
-  border-radius:0 0 0 0;
 }
-.nb-float:not(.collapsed) .nb-float-body{display:flex}
+.nb-float:not(.collapsed) .nb-float-body{
+  display:flex;
+  flex-direction:column;
+}
 
-/* Scrollable message list fills available space */
+/* Message list — takes remaining height, scrolls */
 .msg-list{
-  flex:1;
-  overflow-y:scroll;
+  flex:1 1 0;
+  min-height:0;
+  overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
   padding:10px 12px 6px;
-  display:flex;flex-direction:column;gap:7px;
-  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
 }
 .msg-item{background:var(--green-bg);border-left:3px solid var(--green);padding:8px 10px;border-radius:0 4px 4px 0;flex-shrink:0}
 .msg-text{font-size:0.92rem;font-weight:600;color:var(--ink);line-height:1.4}
@@ -106,7 +108,7 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 .msg-del:hover{color:var(--red)}
 .msg-empty{font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0}
 
-/* Input pinned at bottom */
+/* Input row — pinned to bottom, never shrinks */
 .msg-row{
   flex-shrink:0;
   display:flex;gap:6px;
