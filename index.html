@@ -777,7 +777,13 @@ setTimeout(()=>{
   });
 }, 4000);
 
-// ── CLOCK ─────────────────────────────────────────────────────────────────────
+// close overlays on backdrop click or Escape key
+document.addEventListener('click', e=>{
+  if(e.target.classList.contains('overlay')) closeAllOverlays();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') closeAllOverlays();
+});
 function tick(){
   const n=new Date();
   document.getElementById('clock').textContent =
@@ -796,17 +802,17 @@ function switchTab(id, btn){
 }
 
 // ── OVERLAY HELPERS ───────────────────────────────────────────────────────────
-function openOverlay(id){ document.getElementById(id).classList.add('open'); }
+function openOverlay(id){
+  // close any other open overlays first to prevent stacking
+  document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open'));
+  document.getElementById(id).classList.add('open');
+}
 function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
-function closeDet(id){ closeOverlay(id); attachDelivKey=null; }
+function closeAllOverlays(){ document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open')); }
+function closeDet(id){ closeAllOverlays(); attachDelivKey=null; }
 function closeForm(id){
-  closeOverlay(id);
-  // always reset the matching edit key when closing any form
-  if(id==='form-out') editKeys.out=null;
-  if(id==='form-in')  editKeys.in=null;
-  if(id==='form-wf')  editKeys.wf=null;
-  if(id==='form-ol')  editKeys.ol=null;
-  if(id==='form-cust')editKeys.cust=null;
+  closeAllOverlays();
+  editKeys.out=null; editKeys.in=null; editKeys.wf=null; editKeys.ol=null; editKeys.cust=null;
 }
 
 // ── CUSTOMER SEARCH ───────────────────────────────────────────────────────────
@@ -1029,8 +1035,17 @@ function saveOut(){
     rcvby:    document.getElementById('o-rcvby').value.trim(),
     updated:  new Date().toISOString()
   };
-  if(editKeys.out){ refs.out.child(editKeys.out).update(rec).catch(e=>alert('Update error: '+e.message)); }
-  else{ rec.created=new Date().toISOString(); refs.out.push(rec).catch(e=>alert('Save error: '+e.message)); }
+  console.log('saveOut called, editKeys.out=', editKeys.out, 'rec=', rec);
+  if(editKeys.out){
+    refs.out.child(editKeys.out).update(rec)
+      .then(()=>console.log('update ok'))
+      .catch(e=>{console.error(e);alert('Firebase error: '+e.message);});
+  } else {
+    rec.created=new Date().toISOString();
+    refs.out.push(rec)
+      .then(()=>console.log('push ok'))
+      .catch(e=>{console.error(e);alert('Firebase error: '+e.message);});
+  }
   closeForm('form-out');
 }
 
