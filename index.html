@@ -722,41 +722,33 @@ refs.out.on('value', s => {
   outRecs = [];
   s.forEach(c => { const v=c.val(); if(v) outRecs.push({_k:c.key, ...v}); });
   outRecs.sort((a,b) => { const ad=a.date||'9999', bd=b.date||'9999'; return ad<bd?-1:ad>bd?1:0; });
-  console.log('outRecs updated, count=', outRecs.length, 'keys=', outRecs.map(r=>r._k), 'statuses=', outRecs.map(r=>r.status));
-  try{ renderOut(); } catch(e){ console.error('renderOut error:', e); }
-  try{ renderDash(); } catch(e){ console.error('renderDash error:', e); }
+  renderOut(); renderDash();
 });
 refs.in.on('value', s => {
   inRecs = [];
   s.forEach(c => { const v=c.val(); if(v) inRecs.push({_k:c.key, ...v}); });
   inRecs.sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
-  console.log('inRecs count=',inRecs.length,'statuses=',inRecs.map(r=>r.status));
-  try{ renderIn(); } catch(e){ console.error('renderIn error:',e); }
-  try{ renderDash(); } catch(e){ console.error('renderDash error:',e); }
+  renderIn(); renderDash();
 });
 refs.wf.on('value', s => {
   wfRecs = [];
   s.forEach(c => { const v=c.val(); if(v) wfRecs.push({_k:c.key, ...v}); });
   const po = {High:0,Medium:1,Low:2};
   wfRecs.sort((a,b) => ((po[a.priority]??1)-(po[b.priority]??1)) || ((a.due||'9')<(b.due||'9')?-1:1));
-  console.log('wfRecs count=',wfRecs.length);
-  try{ renderWF(); } catch(e){ console.error('renderWF error:',e); }
-  try{ renderDash(); } catch(e){ console.error('renderDash error:',e); }
+  renderWF(); renderDash();
 });
 refs.ol.on('value', s => {
   olRecs = [];
   s.forEach(c => { const v=c.val(); if(v) olRecs.push({_k:c.key, ...v}); });
   const uo = {High:0,Medium:1,Low:2};
   olRecs.sort((a,b) => (uo[a.urgency]??1)-(uo[b.urgency]??1));
-  console.log('olRecs count=',olRecs.length);
-  try{ renderOL(); } catch(e){ console.error('renderOL error:',e); }
+  renderOL();
 });
 refs.custs.on('value', s => {
   custRecs = [];
   s.forEach(c => { const v=c.val(); if(v) custRecs.push({_k:c.key, ...v}); });
   custRecs.sort((a,b) => (a.name||'').localeCompare(b.name||''));
-  console.log('custRecs count=',custRecs.length);
-  try{ renderCusts(); } catch(e){ console.error('renderCusts error:',e); }
+  renderCusts();
 });
 refs.attach.on('value', s => {
   attachRecs = [];
@@ -1043,16 +1035,11 @@ function saveOut(){
     rcvby:    document.getElementById('o-rcvby').value.trim(),
     updated:  new Date().toISOString()
   };
-  console.log('saveOut called, editKeys.out=', editKeys.out, 'rec=', rec);
   if(editKeys.out){
-    refs.out.child(editKeys.out).update(rec)
-      .then(()=>console.log('update ok'))
-      .catch(e=>{console.error(e);alert('Firebase error: '+e.message);});
+    refs.out.child(editKeys.out).update(rec).catch(e=>console.error('update error:',e));
   } else {
     rec.created=new Date().toISOString();
-    refs.out.push(rec)
-      .then(()=>console.log('push ok'))
-      .catch(e=>{console.error(e);alert('Firebase error: '+e.message);});
+    refs.out.push(rec).catch(e=>console.error('push error:',e));
   }
   closeForm('form-out');
 }
@@ -1195,9 +1182,8 @@ function saveIn(){
     photo:   tmpPhotos.i||'',
     updated: new Date().toISOString()
   };
-  console.log('saveIn editKeys.in=',editKeys.in,'rec=',rec);
-  if(editKeys.in){ refs.in.child(editKeys.in).update(rec).catch(e=>alert('saveIn update error: '+e.message)); }
-  else{ rec.created=new Date().toISOString(); refs.in.push(rec).then(()=>console.log('saveIn push ok')).catch(e=>alert('saveIn push error: '+e.message)); }
+  if(editKeys.in){ refs.in.child(editKeys.in).update(rec).catch(e=>console.error(e)); }
+  else{ rec.created=new Date().toISOString(); refs.in.push(rec).catch(e=>console.error(e)); }
   closeForm('form-in');
 }
 
