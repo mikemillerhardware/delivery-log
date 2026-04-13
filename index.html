@@ -58,12 +58,6 @@ header{background:var(--ink);padding:12px 16px 8px;border-bottom:4px solid var(-
 }
 
 /* FLOATING NOTICE BOARD */
-/* HOURS BANNER */
-.hrs-banner{background:var(--amber-bg);border:1px solid #E8C070;border-radius:6px;padding:11px 15px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.hrs-text{font-family:'Oswald',sans-serif;font-size:0.97rem;color:var(--amber);letter-spacing:1px}
-.hrs-edit{font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:1px;background:transparent;border:1px solid var(--amber);color:var(--amber);padding:4px 11px;cursor:pointer;border-radius:3px;text-transform:uppercase}
-.hrs-edit:hover{background:var(--amber);color:var(--white)}
-
 /* SUMMARY */
 .summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:16px}
 .sc{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:12px 14px;border-left:5px solid var(--g300)}
@@ -944,7 +938,7 @@ outRef.on('value',s=>{outRecs=[];s.forEach(c=>outRecs.push({_k:c.key,...c.val()}
   renderOut();renderDashOut();
 });
 inRef.on('value',s=>{inRecs=[];s.forEach(c=>inRecs.push({_k:c.key,...c.val()}));inRecs.sort((a,b)=>(a.expected||'9')<(b.expected||'9')?-1:1);renderIn();renderDashIn();});
-hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();renderHrsBanner();});
+hrsRef.on('value',s=>{if(s.val())hoursConfig=s.val();});
 olRef.on('value',s=>{olRecs=[];s.forEach(c=>olRecs.push({_k:c.key,...c.val()}));olRecs.sort((a,b)=>{const urgOrder={High:0,Medium:1,Low:2};return(urgOrder[a.urgency]??1)-(urgOrder[b.urgency]??1)||(b.created||'')>(a.created||'')?1:-1;});renderOL();});
 custRef.on('value',s=>{custRecs=[];s.forEach(c=>custRecs.push({_k:c.key,...c.val()}));custRecs.sort((a,b)=>(a.name||'').localeCompare(b.name||''));renderCusts();});
 attachRef.on('value',s=>{attachRecs=[];s.forEach(c=>attachRecs.push({_k:c.key,...c.val()}));
@@ -982,16 +976,6 @@ function saveHours(){
   const cfg={};
   DAYS.forEach(d=>{cfg[d]={open:document.getElementById('ho-'+d).value,close:document.getElementById('hc-'+d).value,closed:document.getElementById('hx-'+d).checked};});
   hrsRef.set(cfg);alert('Hours saved!');
-}
-function renderHrsBanner(){
-  const banner=document.getElementById('hrs-banner');
-  const text=document.getElementById('hrs-text');
-  if(!banner||!text)return;
-  const today=new Date().toLocaleDateString('en-US',{weekday:'short'}).slice(0,3);
-  const h=hoursConfig[today];
-  if(!h){banner.style.display='none';return;}
-  banner.style.display='flex';
-  text.innerHTML=h.closed?`<strong>🚫 No Deliveries Today (${today})</strong>`:`<strong>Today's Hours (${today}):</strong> ${fmt12(h.open)} – ${fmt12(h.close)}`;
 }
 function fmt12(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;const ap=hr>=12?'pm':'am';return(hr%12||12)+(m!=='00'?':'+m:'')+ap;}
 function chkWarn(){
@@ -1093,7 +1077,7 @@ function setOutStatus(key,status){
 function openOutForm(key){
   editOutKey=key||null;tmpOPhoto=null;
   document.getElementById('o-prev').innerHTML='';document.getElementById('o-photo').value='';
-  document.getElementById('o-warn').style.display='none';
+  const ow=document.getElementById('o-warn');if(ow)ow.style.display='none';
   const r=key?outRecs.find(x=>x._k===key):null;
   document.getElementById('fot-title').textContent=key?'Edit Delivery':'New Delivery Out';
   document.getElementById('o-ticket').value =r?.ticketNum ||'';
@@ -1594,7 +1578,7 @@ function fillCust(key){
   document.getElementById('o-addr').value=c.addr||'';
   hideCustDrop();
 }
-function hideCustDrop(){document.getElementById('cust-drop').style.display='none';}
+function hideCustDrop(){const d=document.getElementById('cust-drop');if(d)d.style.display='none';}
 
 // ── ATTACHMENTS
 let attachDeliveryKey=null;
@@ -1986,7 +1970,7 @@ const PW='8704494255';
 function pwDelete(cb){
   _pwCallback=cb;
   document.getElementById('pw-input').value='';
-  document.getElementById('pw-error').style.display='none';
+  const pwe=document.getElementById('pw-error');if(pwe)pwe.style.display='none';
   document.getElementById('pw-overlay').classList.add('open');
   setTimeout(()=>document.getElementById('pw-input').focus(),100);
 }
@@ -1996,7 +1980,7 @@ function submitPW(){
     if(_pwCallback)_pwCallback();
     _pwCallback=null;
   } else {
-    document.getElementById('pw-error').style.display='block';
+    const pwe=document.getElementById('pw-error');if(pwe)pwe.style.display='block';
     document.getElementById('pw-input').value='';
     document.getElementById('pw-input').focus();
   }
