@@ -728,29 +728,35 @@ refs.out.on('value', s => {
 });
 refs.in.on('value', s => {
   inRecs = [];
-  s.forEach(c => inRecs.push({_k:c.key, ...c.val()}));
+  s.forEach(c => { const v=c.val(); if(v) inRecs.push({_k:c.key, ...v}); });
   inRecs.sort((a,b) => (a.expected||'9') < (b.expected||'9') ? -1 : 1);
-  renderIn(); renderDash();
+  console.log('inRecs count=',inRecs.length,'statuses=',inRecs.map(r=>r.status));
+  try{ renderIn(); } catch(e){ console.error('renderIn error:',e); }
+  try{ renderDash(); } catch(e){ console.error('renderDash error:',e); }
 });
 refs.wf.on('value', s => {
   wfRecs = [];
-  s.forEach(c => wfRecs.push({_k:c.key, ...c.val()}));
+  s.forEach(c => { const v=c.val(); if(v) wfRecs.push({_k:c.key, ...v}); });
   const po = {High:0,Medium:1,Low:2};
   wfRecs.sort((a,b) => ((po[a.priority]??1)-(po[b.priority]??1)) || ((a.due||'9')<(b.due||'9')?-1:1));
-  renderWF(); renderDash();
+  console.log('wfRecs count=',wfRecs.length);
+  try{ renderWF(); } catch(e){ console.error('renderWF error:',e); }
+  try{ renderDash(); } catch(e){ console.error('renderDash error:',e); }
 });
 refs.ol.on('value', s => {
   olRecs = [];
-  s.forEach(c => olRecs.push({_k:c.key, ...c.val()}));
+  s.forEach(c => { const v=c.val(); if(v) olRecs.push({_k:c.key, ...v}); });
   const uo = {High:0,Medium:1,Low:2};
   olRecs.sort((a,b) => (uo[a.urgency]??1)-(uo[b.urgency]??1));
-  renderOL();
+  console.log('olRecs count=',olRecs.length);
+  try{ renderOL(); } catch(e){ console.error('renderOL error:',e); }
 });
 refs.custs.on('value', s => {
   custRecs = [];
-  s.forEach(c => custRecs.push({_k:c.key, ...c.val()}));
+  s.forEach(c => { const v=c.val(); if(v) custRecs.push({_k:c.key, ...v}); });
   custRecs.sort((a,b) => (a.name||'').localeCompare(b.name||''));
-  renderCusts();
+  console.log('custRecs count=',custRecs.length);
+  try{ renderCusts(); } catch(e){ console.error('renderCusts error:',e); }
 });
 refs.attach.on('value', s => {
   attachRecs = [];
@@ -1189,8 +1195,9 @@ function saveIn(){
     photo:   tmpPhotos.i||'',
     updated: new Date().toISOString()
   };
-  if(editKeys.in){ refs.in.child(editKeys.in).update(rec); }
-  else{ rec.created=new Date().toISOString(); refs.in.push(rec); }
+  console.log('saveIn editKeys.in=',editKeys.in,'rec=',rec);
+  if(editKeys.in){ refs.in.child(editKeys.in).update(rec).catch(e=>alert('saveIn update error: '+e.message)); }
+  else{ rec.created=new Date().toISOString(); refs.in.push(rec).then(()=>console.log('saveIn push ok')).catch(e=>alert('saveIn push error: '+e.message)); }
   closeForm('form-in');
 }
 
