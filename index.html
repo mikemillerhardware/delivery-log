@@ -1026,9 +1026,17 @@ function postMsg(){
 function delMsg(k){msgRef.child(k).remove();}
 
 function purgeOldMsgs(){
-  const cutoff=new Date(Date.now()-24*60*60*1000).toISOString();
-  msgs.forEach(m=>{if((m.created||'')< cutoff)msgRef.child(m._k).remove();});
+  const cutoff=Date.now()-24*60*60*1000;
+  msgs.forEach(m=>{
+    if(m.created && new Date(m.created).getTime() < cutoff){
+      msgRef.child(m._k).remove();
+    }
+  });
 }
+
+// run purge once on load and then every 15 minutes — never during render
+setTimeout(purgeOldMsgs, 3000);
+setInterval(purgeOldMsgs, 15*60*1000);
 
 function toggleNB(){
   const nb=document.getElementById('nb-float');
@@ -1037,12 +1045,11 @@ function toggleNB(){
 }
 
 function renderMsgs(){
-  purgeOldMsgs();
   const list=document.getElementById('msg-list');
   const nb=document.getElementById('nb');
   const countEl=document.getElementById('nb-float-count');
   if(!msgs.length){
-    list.innerHTML='<div style="font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0">No notices posted.</div>';
+    list.innerHTML='<div style="font-size:.85rem;color:var(--g500);font-style:italic;padding:4px 0">No messages posted.</div>';
     nb.className='notice-board empty';
     countEl.style.display='none';
     return;
