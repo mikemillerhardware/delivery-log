@@ -722,7 +722,7 @@ refs.out.on('value', s => {
   outRecs = [];
   s.forEach(c => { const v=c.val(); if(v) outRecs.push({_k:c.key, ...v}); });
   outRecs.sort((a,b) => { const ad=a.date||'9999', bd=b.date||'9999'; return ad<bd?-1:ad>bd?1:0; });
-  renderOut(); renderDash();
+  renderOut(); renderDash(); renderHistory();
 });
 refs.in.on('value', s => {
   inRecs = [];
