@@ -130,6 +130,7 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
 .cal-chip.red{background:#FDECEC;color:var(--red)}
 .cal-chip.blue{background:var(--blue-bg);color:var(--blue)}
 .cal-chip.green{background:var(--green-bg);color:var(--green)}
+.cal-chip.amber{background:var(--amber-bg);color:var(--amber)}
 @media(max-width:480px){
   .cal-cell{min-height:52px;padding:4px 3px}
   .cal-chips{display:none}
@@ -250,6 +251,19 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
 .hist-card{background:var(--white);border:1px solid var(--bd);border-radius:8px;border-left:5px solid var(--green);cursor:pointer}
 .hist-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.1)}
 
+/* ── TASKS ── */
+.card.s-task-open{border-left-color:var(--amber)}
+.card.s-task-overdue{border-left-color:var(--red);background:#FFF5F5}
+.card.s-task-done{border-left-color:var(--green);opacity:.55}
+.b-task-open{background:var(--amber-bg);color:var(--amber)}
+.b-task-overdue{background:#FDECEC;color:var(--red)}
+.b-task-done{background:var(--green-bg);color:var(--green)}
+.task-done-toggle{width:26px;height:26px;border:2px solid var(--bd);border-radius:50%;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--white)}
+.task-done-toggle.checked{background:var(--green);border-color:var(--green)}
+.task-done-toggle.checked::after{content:'✓';color:#fff;font-size:.9rem;font-weight:700}
+.tasks-section-hdr{display:flex;align-items:center;gap:10px;margin:14px 0 8px}
+.recur-freq-badge{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:10px;background:var(--blue-bg);color:var(--blue);font-weight:700;flex-shrink:0}
+
 /* LIGHTBOX */
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;align-items:center;justify-content:center;padding:16px}
 .lightbox.open{display:flex}
@@ -257,7 +271,7 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
 .lb-close{position:absolute;top:16px;right:18px;color:#fff;font-size:2rem;background:none;border:none;cursor:pointer;line-height:1}
 
 /* ── TODAY STRIP ── */
-.today-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.today-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
 .tstat{background:var(--white);border:1px solid var(--bd);border-radius:8px;padding:11px 8px;text-align:center;border-top:3px solid var(--g3);transition:border-color .2s}
 .tstat.t-active{border-top-color:var(--blue)}
 .tstat.t-alert{border-top-color:var(--red);background:#FFF5F5}
@@ -274,7 +288,7 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
 .chk-count{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:1px;text-transform:uppercase;background:var(--g1);border:1px solid var(--bd);color:var(--g5);padding:2px 9px;border-radius:10px;white-space:nowrap}
 .chk-count.done{background:var(--green-bg);border-color:var(--green);color:var(--green)}
 
-@media(max-width:480px){.fr{grid-template-columns:1fr}.dgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.fr{grid-template-columns:1fr}.dgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.today-strip{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -294,6 +308,7 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
     <button class="tab" onclick="switchTab('out',this)">Deliveries <span class="pill" id="p-out">0</span></button>
     <button class="tab" onclick="switchTab('in',this)">Due In <span class="pill" id="p-in">0</span></button>
     <button class="tab" onclick="switchTab('orders',this)">Order List <span class="pill" id="p-ol">0</span></button>
+    <button class="tab" onclick="switchTab('tasks',this)">Tasks <span class="pill" id="p-tasks">0</span></button>
     <button class="tab" onclick="switchTab('history',this)">History</button>
     <button class="tab" onclick="switchTab('settings',this)">Settings</button>
   </div>
@@ -371,6 +386,25 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
   <div id="ol-empty" class="empty" style="display:none"><span class="empty-ico">📋</span>Nothing on the order list.</div>
 </div>
 
+<!-- TASKS -->
+<div id="panel-tasks" class="panel">
+  <div class="bar">
+    <div class="bar-left">
+      <input class="srch" type="text" placeholder="Search tasks, people…" oninput="renderTasks()" id="srch-tasks">
+    </div>
+    <button class="btn btn-ink" onclick="openTaskForm()" style="background:var(--amber)">+ New Task</button>
+  </div>
+  <div id="tasks-open-list" class="card-list"></div>
+  <div id="tasks-done-section" style="display:none">
+    <div class="tasks-section-hdr">
+      <span class="sec-title" style="color:var(--g5)">✓ Completed</span>
+      <span class="sec-line"></span>
+    </div>
+    <div id="tasks-done-list" class="card-list"></div>
+  </div>
+  <div id="tasks-empty" class="empty" style="display:none"><span class="empty-ico">📋</span>No tasks yet.</div>
+</div>
+
 <!-- HISTORY -->
 <div id="panel-history" class="panel">
   <div class="bar">
@@ -389,9 +423,17 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
     <div class="sbox-title">☑ Recurring Checklist Tasks</div>
     <p style="font-size:.9rem;color:var(--g5);margin-bottom:14px">These tasks auto-populate every day. Employees check them off; they reset each morning.</p>
     <div id="recur-list"></div>
-    <div style="display:flex;gap:8px;margin-top:4px">
-      <input type="text" id="recur-inp" placeholder="Task name…" style="flex:1;font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 12px;border:1px solid var(--bd);border-radius:6px;outline:none" onkeydown="if(event.key==='Enter')addRecur()">
-      <button class="btn-save" onclick="addRecur()">Add</button>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <input type="text" id="recur-inp" placeholder="Task name…" style="flex:1;font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 12px;border:1px solid var(--bd);border-radius:6px;outline:none;width:100%" onkeydown="if(event.key==='Enter')addRecur()">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <select id="recur-freq" onchange="updateRecurFreqUI()" style="font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 12px;border:1px solid var(--bd);border-radius:6px;outline:none;background:var(--white);flex:1;min-width:120px">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <div id="recur-freq-detail" style="flex:1;min-width:140px;display:none"></div>
+      </div>
+      <button class="btn-save" onclick="addRecur()">Add Task</button>
     </div>
   </div>
   <div class="sbox">
@@ -536,6 +578,40 @@ nav{background:var(--g8);overflow-x:auto;white-space:nowrap;-webkit-overflow-scr
   </div>
 </div>
 
+<!-- FORM: TASK -->
+<div class="overlay" id="form-task">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="form-task-title">New Task</span><button class="mclose" onclick="closeAll()">×</button></div>
+    <div class="mbody">
+      <div class="fg">
+        <div class="fgrp"><label>Task Title *</label><input type="text" id="tk-title" placeholder="What needs to be done?"></div>
+        <div class="fr">
+          <div class="fgrp"><label>Due Date</label><input type="date" id="tk-due"></div>
+          <div class="fgrp"><label>Priority</label>
+            <select id="tk-priority"><option value="High">🔴 High</option><option value="Medium" selected>🟡 Medium</option><option value="Low">🟢 Low</option></select>
+          </div>
+        </div>
+        <div class="fgrp"><label>Assigned To</label><input type="text" id="tk-who" placeholder="Employee name"></div>
+        <div class="fgrp"><label>Notes</label><textarea id="tk-notes" placeholder="Details, instructions…"></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeAll()">Cancel</button><button class="btn-save" style="background:var(--amber)" onclick="saveTask()">Save Task</button></div>
+  </div>
+</div>
+
+<!-- DETAIL: TASK -->
+<div class="overlay" id="det-task">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle" id="det-task-title">Task</span><button class="mclose" onclick="closeAll()">×</button></div>
+    <div class="mbody" id="det-task-body"></div>
+    <div class="mfoot">
+      <button class="sbtn-danger" id="det-task-del">Delete</button>
+      <button class="sbtn-ghost" id="det-task-edit">Edit</button>
+      <button class="sbtn-done" id="det-task-toggle">Mark Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- CALENDAR DAY POPUP -->
 <div class="overlay" id="cal-popup">
   <div class="modal center" style="max-width:420px;border-radius:8px;margin:auto">
@@ -586,7 +662,8 @@ const R = {
   ol:     db.ref('dlv2_ol'),
   chk:    db.ref('dlv2_chk'),
   recur:  db.ref('dlv2_recur'),
-  hours:  db.ref('dlv2_hours')
+  hours:  db.ref('dlv2_hours'),
+  tasks:  db.ref('dlv2_tasks')
 };
 
 db.ref('.info/connected').on('value', s => {
@@ -598,9 +675,9 @@ db.ref('.info/connected').on('value', s => {
 });
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let outRecs=[], inRecs=[], olRecs=[], chkRecs=[], recurTasks=[];
+let outRecs=[], inRecs=[], olRecs=[], chkRecs=[], recurTasks=[], taskRecs=[];
 let hoursConfig = {Mon:{o:'07:00',c:'17:00',x:false},Tue:{o:'07:00',c:'17:00',x:false},Wed:{o:'07:00',c:'17:00',x:false},Thu:{o:'07:00',c:'17:00',x:false},Fri:{o:'07:00',c:'17:00',x:false},Sat:{o:'08:00',c:'12:00',x:false},Sun:{o:'08:00',c:'12:00',x:true}};
-let editKey = {out:null, in:null, ol:null};
+let editKey = {out:null, in:null, ol:null, task:null};
 let tmpReceipt = {o:null, oType:null};
 const TODAY = ()=>new Date().toISOString().slice(0,10);
 
@@ -640,6 +717,12 @@ R.recur.on('value', s => {
   ensureTodaysChk();
 });
 R.hours.on('value', s => { if(s.val()) hoursConfig = s.val(); });
+R.tasks.on('value', s => {
+  taskRecs = [];
+  s.forEach(c => { const v=c.val(); if(v) taskRecs.push({_k:c.key,...v}); });
+  taskRecs.sort((a,b) => (a.dueDate||'9999') < (b.dueDate||'9999') ? -1 : 1);
+  renderTasks(); renderCal(); renderDash();
+});
 
 // ── OVERLAY ───────────────────────────────────────────────────────────────────
 function openOv(id){
@@ -648,7 +731,7 @@ function openOv(id){
 }
 function closeAll(){
   document.querySelectorAll('.overlay').forEach(el=>el.classList.remove('open'));
-  editKey = {out:null, in:null, ol:null};
+  editKey = {out:null, in:null, ol:null, task:null};
 }
 document.addEventListener('click', e=>{ if(e.target.classList.contains('overlay')) closeAll(); });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAll(); });
@@ -690,6 +773,7 @@ function renderCal(){
   };
   outRecs.filter(r=>r.status!=='Delivered').forEach(r => addEv(r.date, 'red', r.name||'Delivery', r._k));
   inRecs.filter(r=>r.status!=='Received').forEach(r => addEv(r.expected, 'blue', r.vendor||'Inbound', r._k));
+  taskRecs.filter(r=>!r.done).forEach(r => addEv(r.dueDate, 'amber', r.title||'Task', r._k));
 
   let cells = '';
   // prev month days
@@ -723,6 +807,7 @@ function renderDash(){
   const delToday=outRecs.filter(r=>r.date===today&&r.status!=='Delivered').length;
   const inToday=inRecs.filter(r=>r.expected===today&&r.status!=='Received').length;
   const ovdCount=inRecs.filter(r=>effectiveInStatus(r)==='Overdue').length;
+  const tasksDue=taskRecs.filter(r=>r.dueDate===today&&!r.done).length;
   el.innerHTML=`
     <div class="tstat${delToday?' t-active':''}">
       <div class="tstat-lbl">Out Today</div>
@@ -735,6 +820,10 @@ function renderDash(){
     <div class="tstat${ovdCount?' t-alert':''}">
       <div class="tstat-lbl">Overdue</div>
       <div class="tstat-val${ovdCount?' flash':' dim'}">${ovdCount}</div>
+    </div>
+    <div class="tstat${tasksDue?' t-active':''}">
+      <div class="tstat-lbl">Tasks Due</div>
+      <div class="tstat-val${!tasksDue?' dim':''}">${tasksDue}</div>
     </div>`;
 }
 
@@ -742,6 +831,7 @@ function openCalDay(ds){
   const evs = [];
   outRecs.filter(r=>r.date===ds).forEach(r=>evs.push({type:'red',label:(r.name||'Delivery')+' — '+(r.status||''),tag:'Delivery Out',key:r._k,tab:'out'}));
   inRecs.filter(r=>r.expected===ds).forEach(r=>evs.push({type:'blue',label:(r.vendor||'Inbound')+' — '+(r.status||''),tag:'Due In',key:r._k,tab:'in'}));
+  taskRecs.filter(r=>r.dueDate===ds).forEach(r=>evs.push({type:'amber',label:(r.title||'Task')+(r.assignedTo?' — '+r.assignedTo:''),tag:'Task'+(r.done?' · Done':''),key:r._k,tab:'task'}));
 
   const [y,m,d] = ds.split('-');
   const label = MONTHS[+m-1]+' '+(+d)+', '+y;
@@ -761,9 +851,10 @@ function openCalDay(ds){
       </div>`).join('');
   }
   // quick add buttons
-  body += `<div class="cal-popup-add">
-    <button class="btn btn-red" style="flex:1;font-size:.85rem;padding:9px" onclick="calQuickAdd('out','${ds}')">+ Delivery Out</button>
-    <button class="btn btn-blue" style="flex:1;font-size:.85rem;padding:9px" onclick="calQuickAdd('in','${ds}')">+ Due In</button>
+  body += `<div class="cal-popup-add" style="flex-wrap:wrap;gap:6px">
+    <button class="btn btn-red" style="flex:1;font-size:.85rem;padding:9px;min-width:110px" onclick="calQuickAdd('out','${ds}')">+ Delivery Out</button>
+    <button class="btn btn-blue" style="flex:1;font-size:.85rem;padding:9px;min-width:90px" onclick="calQuickAdd('in','${ds}')">+ Due In</button>
+    <button class="btn" style="flex:1;font-size:.85rem;padding:9px;min-width:80px;background:var(--amber)" onclick="calQuickAdd('task','${ds}')">+ Task</button>
   </div>`;
   document.getElementById('cal-popup-body').innerHTML = body;
   openOv('cal-popup');
@@ -773,24 +864,34 @@ function calItemClick(tab, key){
   closeAll();
   if(tab==='out'){ const r=outRecs.find(x=>x._k===key); if(r) openDetOut(key); }
   else if(tab==='in'){ const r=inRecs.find(x=>x._k===key); if(r) openDetIn(key); }
+  else if(tab==='task'){ const r=taskRecs.find(x=>x._k===key); if(r) openDetTask(key); }
 }
 
 function calQuickAdd(type, ds){
   closeAll();
   if(type==='out'){ openOutForm(); setTimeout(()=>{ const el=document.getElementById('o-date'); if(el)el.value=ds; },50); }
   else if(type==='in'){ openInForm(); setTimeout(()=>{ const el=document.getElementById('i-exp'); if(el)el.value=ds; },50); }
+  else if(type==='task'){ openTaskForm(); setTimeout(()=>{ const el=document.getElementById('tk-due'); if(el)el.value=ds; },50); }
 }
 
 // ── CHECKLIST ─────────────────────────────────────────────────────────────────
+function shouldFireToday(t){
+  const now = new Date();
+  if(t.freq==='weekly') return now.getDay() === (t.weekday??-1);
+  if(t.freq==='monthly') return now.getDate() === (t.monthDay??-1);
+  return true; // daily (default)
+}
+
 function ensureTodaysChk(){
   if(!recurTasks.length) return;
   const today = TODAY();
   R.chk.once('value', snap => {
-    let hasRecurringToday = false;
-    snap.forEach(c => { const v=c.val(); if(v&&v.date===today&&v.recurring) hasRecurringToday=true; });
-    if(hasRecurringToday) return;
+    const existingRecurKeys = new Set();
+    snap.forEach(c => { const v=c.val(); if(v&&v.date===today&&v.recurKey) existingRecurKeys.add(v.recurKey); });
     recurTasks.forEach(t=>{
-      R.chk.push({text:t.text, date:today, recurring:true, done:false, created:new Date().toISOString()});
+      if(!shouldFireToday(t)) return;
+      if(existingRecurKeys.has(t._k)) return;
+      R.chk.push({text:t.text, date:today, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()});
     });
   });
 }
@@ -852,15 +953,53 @@ setTimeout(()=>{
 }, 5000);
 
 // ── RECURRING TASKS (Settings) ────────────────────────────────────────────────
+const WEEKDAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+function updateRecurFreqUI(){
+  const freq = document.getElementById('recur-freq')?.value;
+  const detail = document.getElementById('recur-freq-detail');
+  if(!detail) return;
+  if(freq==='weekly'){
+    detail.style.display='block';
+    detail.innerHTML=`<select id="recur-weekday" style="font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 12px;border:1px solid var(--bd);border-radius:6px;outline:none;background:var(--white);width:100%">
+      ${WEEKDAY_NAMES.map((n,i)=>`<option value="${i}">${n}</option>`).join('')}
+    </select>`;
+  } else if(freq==='monthly'){
+    detail.style.display='block';
+    const opts = Array.from({length:31},(_,i)=>`<option value="${i+1}">Day ${i+1}</option>`).join('');
+    detail.innerHTML=`<select id="recur-monthday" style="font-family:'Barlow',sans-serif;font-size:1rem;padding:10px 12px;border:1px solid var(--bd);border-radius:6px;outline:none;background:var(--white);width:100%">${opts}</select>`;
+  } else {
+    detail.style.display='none';
+    detail.innerHTML='';
+  }
+}
+
 function addRecur(){
   const inp = document.getElementById('recur-inp');
   const text = inp.value.trim();
   if(!text) return;
   if(recurTasks.find(t=>t.text.toLowerCase()===text.toLowerCase())){ alert('Already in the list.'); return; }
-  R.recur.push({text, created:new Date().toISOString()});
+  const freq = document.getElementById('recur-freq')?.value || 'daily';
+  const rec = {text, freq, created:new Date().toISOString()};
+  if(freq==='weekly'){
+    rec.weekday = parseInt(document.getElementById('recur-weekday')?.value??'1');
+  } else if(freq==='monthly'){
+    rec.monthDay = parseInt(document.getElementById('recur-monthday')?.value??'1');
+  }
+  R.recur.push(rec);
   inp.value = '';
+  document.getElementById('recur-freq').value = 'daily';
+  updateRecurFreqUI();
 }
+
 function deleteRecur(key){ R.recur.child(key).remove(); }
+
+function recurFreqLabel(t){
+  if(t.freq==='weekly') return 'Every ' + (WEEKDAY_NAMES[t.weekday]||'week');
+  if(t.freq==='monthly') return 'Monthly · Day ' + (t.monthDay||1);
+  return 'Daily';
+}
+
 function renderRecurList(){
   const wrap = document.getElementById('recur-list'); if(!wrap) return;
   if(!recurTasks.length){
@@ -870,6 +1009,7 @@ function renderRecurList(){
   wrap.innerHTML = recurTasks.map(t=>`
     <div class="recur-row">
       <span class="recur-name">${esc(t.text)}</span>
+      <span class="recur-freq-badge">${esc(recurFreqLabel(t))}</span>
       <button class="recur-del" onclick="deleteRecur('${t._k}')">✕ Remove</button>
     </div>`).join('');
 }
@@ -1027,6 +1167,121 @@ function renderOut(){
   const s=document.getElementById('out-stats');
   if(s)s.innerHTML=`<div class="stat red"><div class="stat-lbl">Total</div><div class="stat-val">${total}</div></div><div class="stat"><div class="stat-lbl">Scheduled</div><div class="stat-val">${sch}</div></div><div class="stat blue"><div class="stat-lbl">En Route</div><div class="stat-val">${enr}</div></div><div class="stat green"><div class="stat-lbl">Delivered</div><div class="stat-val">${del}</div></div>`;
   const p=document.getElementById('p-out'); if(p)p.textContent=outRecs.filter(r=>r.status!=='Delivered').length;
+}
+
+// ── TASKS ─────────────────────────────────────────────────────────────────────
+const TASK_URG_COL={High:'var(--red)',Medium:'var(--amber)',Low:'var(--green)'};
+const TASK_URG_ICO={High:'🔴',Medium:'🟡',Low:'🟢'};
+
+function taskStatus(r){
+  if(r.done) return 'done';
+  if(r.dueDate && r.dueDate < TODAY()) return 'overdue';
+  return 'open';
+}
+
+function openTaskForm(key){
+  editKey.task = key||null;
+  const r = key ? taskRecs.find(x=>x._k===key) : null;
+  document.getElementById('form-task-title').textContent = key ? 'Edit Task' : 'New Task';
+  document.getElementById('tk-title').value    = r?.title    ||'';
+  document.getElementById('tk-due').value      = r?.dueDate  ||'';
+  document.getElementById('tk-priority').value = r?.priority ||'Medium';
+  document.getElementById('tk-who').value      = r?.assignedTo||'';
+  document.getElementById('tk-notes').value    = r?.notes    ||'';
+  openOv('form-task');
+}
+
+function saveTask(){
+  const title = document.getElementById('tk-title').value.trim();
+  if(!title){alert('Task title is required.');return;}
+  const rec = {
+    title,
+    dueDate:    document.getElementById('tk-due').value,
+    priority:   document.getElementById('tk-priority').value,
+    assignedTo: document.getElementById('tk-who').value.trim(),
+    notes:      document.getElementById('tk-notes').value.trim(),
+    done:       editKey.task ? (taskRecs.find(x=>x._k===editKey.task)?.done||false) : false,
+    updated:    new Date().toISOString()
+  };
+  if(editKey.task){ R.tasks.child(editKey.task).update(rec).catch(e=>console.error(e)); }
+  else{ rec.created=new Date().toISOString(); R.tasks.push(rec).catch(e=>console.error(e)); }
+  closeAll();
+}
+
+function toggleTaskDone(key){
+  const r = taskRecs.find(x=>x._k===key); if(!r) return;
+  R.tasks.child(key).update({done:!r.done, updated:new Date().toISOString()});
+  closeAll();
+}
+
+function openDetTask(key){
+  const r = taskRecs.find(x=>x._k===key); if(!r) return;
+  const st = taskStatus(r);
+  const badgeCls = st==='done'?'b-task-done':st==='overdue'?'b-task-overdue':'b-task-open';
+  const badgeTxt = st==='done'?'Done':st==='overdue'?'Overdue':'Open';
+  document.getElementById('det-task-title').textContent = r.title||'Task';
+  document.getElementById('det-task-body').innerHTML=`
+    <div class="dsec"><div class="dsec-title">Status</div>
+      <div style="margin-top:6px"><span class="badge ${badgeCls}">${badgeTxt}</span></div>
+    </div>
+    <div class="dsec"><div class="dsec-title">Details</div>
+      <div class="dgrid">
+        <div style="grid-column:1/-1"><div class="dlbl">Title</div><div class="dval">${esc(r.title||'—')}</div></div>
+        ${r.dueDate?`<div><div class="dlbl">Due Date</div><div class="dval" style="${st==='overdue'?'color:var(--red);font-weight:700':''}">${fmtDate(r.dueDate)}${st==='overdue'?' ⚠️':''}</div></div>`:''}
+        ${r.priority?`<div><div class="dlbl">Priority</div><div class="dval">${TASK_URG_ICO[r.priority]||''} ${esc(r.priority)}</div></div>`:''}
+        ${r.assignedTo?`<div><div class="dlbl">Assigned To</div><div class="dval">${esc(r.assignedTo)}</div></div>`:''}
+        ${r.notes?`<div style="grid-column:1/-1"><div class="dlbl">Notes</div><div class="dval" style="white-space:pre-wrap">${esc(r.notes)}</div></div>`:''}
+      </div>
+    </div>`;
+  const toggleBtn = document.getElementById('det-task-toggle');
+  toggleBtn.textContent = r.done ? 'Mark Open' : 'Mark Done';
+  toggleBtn.style.background = r.done ? 'var(--amber)' : 'var(--green)';
+  toggleBtn.onclick = ()=>toggleTaskDone(key);
+  document.getElementById('det-task-del').onclick = ()=>pwDelete(()=>{R.tasks.child(key).remove();closeAll();});
+  document.getElementById('det-task-edit').onclick = ()=>{closeAll();openTaskForm(key);};
+  openOv('det-task');
+}
+
+function renderTasks(){
+  const srch=(document.getElementById('srch-tasks')?.value||'').toLowerCase();
+  const filtered = taskRecs.filter(r=>!srch||`${r.title} ${r.assignedTo||''} ${r.notes||''}`.toLowerCase().includes(srch));
+  const open = filtered.filter(r=>!r.done);
+  const done = filtered.filter(r=>r.done);
+
+  const openWrap  = document.getElementById('tasks-open-list');
+  const doneWrap  = document.getElementById('tasks-done-list');
+  const doneSec   = document.getElementById('tasks-done-section');
+  const emptyEl   = document.getElementById('tasks-empty');
+  if(!openWrap) return;
+
+  const makeCard = r => {
+    const st = taskStatus(r);
+    const cls = st==='done'?'s-task-done':st==='overdue'?'s-task-overdue':'s-task-open';
+    const badgeCls = st==='done'?'b-task-done':st==='overdue'?'b-task-overdue':'b-task-open';
+    const badgeTxt = st==='done'?'Done':st==='overdue'?'Overdue':'Open';
+    return `<div class="card ${cls}" onclick="openDetTask('${r._k}')">
+      <div class="crow">
+        <div class="crow-body">
+          <div class="cname">${esc(r.title||'—')}</div>
+          <div class="cmeta">${[r.dueDate?'Due: '+fmtDate(r.dueDate):'',r.assignedTo?'→ '+r.assignedTo:'',r.priority?TASK_URG_ICO[r.priority]+' '+r.priority:''].filter(Boolean).map(esc).join(' · ')}</div>
+        </div>
+        <div class="crow-right"><span class="badge ${badgeCls}">${badgeTxt}</span></div>
+        <div class="chev">›</div>
+      </div>
+    </div>`;
+  };
+
+  if(!filtered.length){
+    openWrap.innerHTML=''; if(doneSec)doneSec.style.display='none';
+    if(emptyEl)emptyEl.style.display='block';
+  } else {
+    if(emptyEl)emptyEl.style.display='none';
+    openWrap.innerHTML = open.map(makeCard).join('');
+    if(done.length){ if(doneSec)doneSec.style.display='block'; doneWrap.innerHTML=done.map(makeCard).join(''); }
+    else { if(doneSec)doneSec.style.display='none'; }
+  }
+  const p=document.getElementById('p-tasks');
+  if(p) p.textContent=taskRecs.filter(r=>!r.done).length;
 }
 
 // ── INBOUND ───────────────────────────────────────────────────────────────────
