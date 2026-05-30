@@ -875,27 +875,47 @@ function calQuickAdd(type, ds){
 }
 
 // ── CHECKLIST ─────────────────────────────────────────────────────────────────
-function shouldFireToday(t){
+function getWeekKey(){
   const now = new Date();
-  if(t.freq==='weekly') return now.getDay() === (t.weekday??-1);
-  if(t.freq==='monthly') return now.getDate() === (t.monthDay??-1);
-  return true; // daily (default)
+  const day = now.getDay();
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - (day===0?6:day-1));
+  return mon.toISOString().slice(0,10);
 }
+function getMonthKey(){ return TODAY().slice(0,7); }
 
 const _chkPushedThisSession = new Set();
 
 function ensureTodaysChk(){
   if(!recurTasks.length) return;
   const today = TODAY();
+  const weekKey = getWeekKey();
+  const monthKey = getMonthKey();
   R.chk.once('value', snap => {
-    const existingRecurKeys = new Set();
-    snap.forEach(c => { const v=c.val(); if(v&&v.date===today&&v.recurKey) existingRecurKeys.add(v.recurKey); });
+    const existing = new Set();
+    snap.forEach(c => {
+      const v=c.val(); if(!v||!v.recurKey) return;
+      if(v.weekKey)       existing.add(v.recurKey+':w:'+v.weekKey);
+      else if(v.monthKey) existing.add(v.recurKey+':m:'+v.monthKey);
+      else if(v.date)     existing.add(v.recurKey+':d:'+v.date);
+    });
     recurTasks.forEach(t=>{
-      if(!shouldFireToday(t)) return;
-      if(existingRecurKeys.has(t._k)) return;
-      if(_chkPushedThisSession.has(t._k)) return;
-      _chkPushedThisSession.add(t._k);
-      R.chk.push({text:t.text, date:today, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()});
+      const freq = t.freq||'daily';
+      let periodTag, item;
+      if(freq==='weekly'){
+        periodTag = t._k+':w:'+weekKey;
+        item = {text:t.text, date:today, weekKey, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
+      } else if(freq==='monthly'){
+        periodTag = t._k+':m:'+monthKey;
+        item = {text:t.text, date:today, monthKey, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
+      } else {
+        periodTag = t._k+':d:'+today;
+        item = {text:t.text, date:today, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
+      }
+      if(existing.has(periodTag)) return;
+      if(_chkPushedThisSession.has(periodTag)) return;
+      _chkPushedThisSession.add(periodTag);
+      R.chk.push(item);
     });
   });
 }
@@ -920,10 +940,24 @@ function toggleChk(key){
 
 function deleteChkItem(key){ R.chk.child(key).remove(); }
 
+function chkFreqLabel(c){
+  if(c.weekKey)  return 'Weekly';
+  if(c.monthKey) return 'Monthly';
+  if(c.recurring) return 'Daily';
+  return '';
+}
+
 function renderChk(){
   const today = TODAY();
+  const wk = getWeekKey();
+  const mk = getMonthKey();
   const wrap = document.getElementById('chk-list'); if(!wrap) return;
-  const items = chkRecs.filter(c=>c.date===today);
+  // show daily items for today, weekly items for this week, monthly items for this month
+  const items = chkRecs.filter(c=>{
+    if(c.weekKey)  return c.weekKey===wk;
+    if(c.monthKey) return c.monthKey===mk;
+    return c.date===today;
+  });
   const countEl = document.getElementById('chk-remaining');
   if(!items.length){
     wrap.innerHTML = '<div style="color:var(--g5);font-size:.9rem;margin-bottom:8px;font-style:italic">No tasks for today yet.</div>';
@@ -941,19 +975,26 @@ function renderChk(){
     if(a.recurring!==b.recurring) return a.recurring?-1:1;
     return 0;
   });
-  wrap.innerHTML = items.map(c=>`
-    <div class="chk-item${c.done?' done':''}">
+  wrap.innerHTML = items.map(c=>{
+    const lbl = chkFreqLabel(c);
+    return `<div class="chk-item${c.done?' done':''}">
       <div class="chk-box${c.done?' checked':''}" onclick="toggleChk('${c._k}')"></div>
       <span class="chk-label">${esc(c.text)}</span>
-      ${c.recurring?`<span class="chk-recur">Daily</span>`:''}
+      ${lbl?`<span class="chk-recur">${lbl}</span>`:''}
       <button class="chk-del" onclick="deleteChkItem('${c._k}')">✕</button>
-    </div>`).join('');
+    </div>`;}).join('');
 }
 
-// cleanup old checklist items (older than 2 days) — runs once on load
+// cleanup old checklist items — runs once on load
 setTimeout(()=>{
   const cutoff = new Date(Date.now()-2*24*60*60*1000).toISOString().slice(0,10);
-  chkRecs.forEach(c=>{ if((c.date||'9999')<cutoff) R.chk.child(c._k).remove(); });
+  const wk = getWeekKey();
+  const mk = getMonthKey();
+  chkRecs.forEach(c=>{
+    if(c.weekKey)       { if(c.weekKey  !== wk) R.chk.child(c._k).remove(); }
+    else if(c.monthKey) { if(c.monthKey !== mk) R.chk.child(c._k).remove(); }
+    else                { if((c.date||'9999') < cutoff) R.chk.child(c._k).remove(); }
+  });
 }, 5000);
 
 // ── RECURRING TASKS (Settings) ────────────────────────────────────────────────
