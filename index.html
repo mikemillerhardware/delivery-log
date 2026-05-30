@@ -884,39 +884,28 @@ function getWeekKey(){
 }
 function getMonthKey(){ return TODAY().slice(0,7); }
 
-const _chkPushedThisSession = new Set();
-
 function ensureTodaysChk(){
   if(!recurTasks.length) return;
   const today = TODAY();
   const weekKey = getWeekKey();
   const monthKey = getMonthKey();
-  R.chk.once('value', snap => {
-    const existing = new Set();
-    snap.forEach(c => {
-      const v=c.val(); if(!v||!v.recurKey) return;
-      if(v.weekKey)       existing.add(v.recurKey+':w:'+v.weekKey);
-      else if(v.monthKey) existing.add(v.recurKey+':m:'+v.monthKey);
-      else if(v.date)     existing.add(v.recurKey+':d:'+v.date);
-    });
-    recurTasks.forEach(t=>{
-      const freq = t.freq||'daily';
-      let periodTag, item;
-      if(freq==='weekly'){
-        periodTag = t._k+':w:'+weekKey;
-        item = {text:t.text, date:today, weekKey, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
-      } else if(freq==='monthly'){
-        periodTag = t._k+':m:'+monthKey;
-        item = {text:t.text, date:today, monthKey, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
-      } else {
-        periodTag = t._k+':d:'+today;
-        item = {text:t.text, date:today, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()};
-      }
-      if(existing.has(periodTag)) return;
-      if(_chkPushedThisSession.has(periodTag)) return;
-      _chkPushedThisSession.add(periodTag);
-      R.chk.push(item);
-    });
+  recurTasks.forEach(t=>{
+    const freq = t.freq||'daily';
+    let item, suffix;
+    if(freq==='weekly'){
+      suffix = 'w'+weekKey.replace(/-/g,'');
+      item = {text:t.text, date:today, weekKey, recurring:true, recurKey:t._k, done:false};
+    } else if(freq==='monthly'){
+      suffix = 'm'+monthKey.replace(/-/g,'');
+      item = {text:t.text, date:today, monthKey, recurring:true, recurKey:t._k, done:false};
+    } else {
+      suffix = 'd'+today.replace(/-/g,'');
+      item = {text:t.text, date:today, recurring:true, recurKey:t._k, done:false};
+    }
+    // deterministic key = same task + same period always hits the same Firebase path
+    const chkKey = 'rc' + t._k.replace(/[^a-zA-Z0-9]/g,'') + suffix;
+    // transaction: only write if the slot is empty — won't overwrite a checked-off item
+    R.chk.child(chkKey).transaction(cur => cur === null ? item : undefined);
   });
 }
 
@@ -953,7 +942,14 @@ function renderChk(){
   const mk = getMonthKey();
   const wrap = document.getElementById('chk-list'); if(!wrap) return;
   // show daily items for today, weekly items for this week, monthly items for this month
+  // skip legacy recurring items (no recurKey) — they predate deterministic keys and would duplicate
+  const seenRecurKeys = new Set();
   const items = chkRecs.filter(c=>{
+    if(c.recurring && !c.recurKey) return false;
+    if(c.recurKey){
+      if(seenRecurKeys.has(c.recurKey)) return false;
+      seenRecurKeys.add(c.recurKey);
+    }
     if(c.weekKey)  return c.weekKey===wk;
     if(c.monthKey) return c.monthKey===mk;
     return c.date===today;
@@ -991,7 +987,8 @@ setTimeout(()=>{
   const wk = getWeekKey();
   const mk = getMonthKey();
   chkRecs.forEach(c=>{
-    if(c.weekKey)       { if(c.weekKey  !== wk) R.chk.child(c._k).remove(); }
+    if(c.recurring && !c.recurKey) { R.chk.child(c._k).remove(); } // legacy items
+    else if(c.weekKey)       { if(c.weekKey  !== wk) R.chk.child(c._k).remove(); }
     else if(c.monthKey) { if(c.monthKey !== mk) R.chk.child(c._k).remove(); }
     else                { if((c.date||'9999') < cutoff) R.chk.child(c._k).remove(); }
   });
