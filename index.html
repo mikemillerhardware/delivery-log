@@ -882,6 +882,8 @@ function shouldFireToday(t){
   return true; // daily (default)
 }
 
+const _chkPushedThisSession = new Set();
+
 function ensureTodaysChk(){
   if(!recurTasks.length) return;
   const today = TODAY();
@@ -891,6 +893,8 @@ function ensureTodaysChk(){
     recurTasks.forEach(t=>{
       if(!shouldFireToday(t)) return;
       if(existingRecurKeys.has(t._k)) return;
+      if(_chkPushedThisSession.has(t._k)) return;
+      _chkPushedThisSession.add(t._k);
       R.chk.push({text:t.text, date:today, recurring:true, recurKey:t._k, done:false, created:new Date().toISOString()});
     });
   });
